@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Mobile Device Scanner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #6dd5ed 100%);
+            min-height: 100vh;
+            padding: 10px;
+            line-height: 1.5;
+            font-size: 14px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(20px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .device-type {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .info-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-title {
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon {
+            font-size: 1.2em;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 6px 0;
+            border-bottom: 1px solid #f8f9fa;
+            gap: 10px;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #495057;
+            flex: 1;
+            font-size: 0.9em;
+        }
+
+        .value {
+            color: #212529;
+            flex: 1.5;
+            text-align: right;
+            font-size: 0.9em;
+            word-break: break-word;
+        }
+
+        .status-online { color: #28a745; }
+        .status-offline { color: #dc3545; }
+        .status-unknown { color: #ffc107; }
+
+        .permission-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.3s ease;
+            margin-top: 5px;
+        }
+
+        .permission-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .refresh-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .export-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .export-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            background: #218838;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .live-data {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            margin: 5px 0;
+        }
+
+        .sensor-reading {
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 6px;
+            margin: 5px 0;
+            font-family: monospace;
+            font-size: 0.8em;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px;
+                padding: 30px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .export-section {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Mobile Device Scanner</h1>
+        
+        <div class="summary-card">
+            <div class="device-type" id="deviceType">Analyzing Device...</div>
+            <div id="deviceSummary">Gathering comprehensive device information...</div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+        
+        <div class="info-grid" id="infoGrid">
+            <!-- Information sections will be populated here -->
+        </div>
+
+        <button class="refresh-btn" onclick="refreshAllInfo()">🔄 Refresh All Data</button>
+
+        <div class="export-section">
+            <button class="export-btn" onclick="exportToJSON()">📄 Export JSON</button>
+            <button class="export-btn" onclick="copyToClipboard()">📋 Copy Data</button>
+            <button class="export-btn" onclick="generateFingerprint()">🔍 Fingerprint</button>
+        </div>
+    </div>
+
+    <script>
+        let deviceInfo = {};
+        let totalSections = 0;
+        let completedSections = 0;
+        let sensorData = {};
+        let liveUpdateInterval;
+
+        function updateProgress() {
+            completedSections++;
+            const progress = (completedSections / totalSections) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function createSection(title, icon, items, liveData = null) {
+            const section = document.createElement('div');
+            section.className = 'info-section';
+            
+            let itemsHTML = '';
+            for (const [key, value] of Object.entries(items)) {
+                itemsHTML += `
+                    <div class="info-item">
+                        <span class="label">${key}</span>
+                        <span class="value">${value}</span>
+                    </div>
+                `;
+            }
+
+            if (liveData) {
+                itemsHTML += `<div class="live-data" id="${liveData.id}">${liveData.content}</div>`;
+            }
+
+            section.innerHTML = `
+                <div class="section-title">
+                    <span class="icon">${icon}</span>
+                    ${title}
+                </div>
+                ${itemsHTML}
+            `;
+
+            return section;
+        }
+
+        function detectMobileOS() {
+            const ua = navigator.userAgent;
+            if (/android/i.test(ua)) return { os: 'Android', version: getAndroidVersion(ua) };
+            if (/iPad|iPhone|iPod/.test(ua)) return { os: 'iOS', version: getiOSVersion(ua) };
+            if (/Windows Phone/.test(ua)) return { os: 'Windows Phone', version: 'Unknown' };
+            if (/BlackBerry/.test(ua)) return { os: 'BlackBerry', version: 'Unknown' };
+            return { os: 'Unknown', version: 'Unknown' };
+        }
+
+        function getAndroidVersion(ua) {
+            const match = ua.match(/Android\s([0-9\.]*)/);
+            return match ? match[1] : 'Unknown';
+        }
+
+        function getiOSVersion(ua) {
+            const match = ua.match(/OS (\d+)_(\d+)_?(\d+)?/);
+            return match ? `${match[1]}.${match[2]}.${match[3] || '0'}` : 'Unknown';
+        }
+
+        function detectDeviceType() {
+            const ua = navigator.userAgent;
+            const screenWidth = screen.width;
+            const screenHeight = screen.height;
+            
+            if (/iPad/.test(ua) || (screenWidth >= 768 && screenHeight >= 1024)) return 'Tablet';
+            if (/iPhone|Android.*Mobile|Windows Phone|BlackBerry/.test(ua)) return 'Smartphone';
+            if (screenWidth <= 480) return 'Small Phone';
+            if (screenWidth <= 768) return 'Large Phone';
+            return 'Desktop/Unknown';
+        }
+
+        async function getMobileSystemInfo() {
+            const mobileOS = detectMobileOS();
+            const deviceType = detectDeviceType();
+            
+            const info = {
+                'Device Type': deviceType,
+                'Operating System': mobileOS.os,
+                'OS Version': mobileOS.version,
+                'User Agent': navigator.userAgent,
+                'Platform': navigator.platform,
+                'App Name': navigator.appName,
+                'App Version': navigator.appVersion,
+                'Product': navigator.product || 'N/A',
+                'Vendor': navigator.vendor || 'N/A',
+                'Language': navigator.language,
+                'Languages': navigator.languages?.join(', ') || 'N/A',
+                'Timezone': Intl.DateTimeFormat().resolvedOptions().timeZone,
+                'Timezone Offset': `UTC${new Date().getTimezoneOffset() > 0 ? '-' : '+'}${Math.abs(new Date().getTimezoneOffset() / 60)}`
+            };
+
+            // Update summary
+            document.getElementById('deviceType').textContent = `${deviceType} - ${mobileOS.os}`;
+            document.getElementById('deviceSummary').textContent = `${mobileOS.os} ${mobileOS.version} • ${screen.width}×${screen.height}`;
+
+            deviceInfo.system = info;
+            return createSection('System Information', '📱', info);
+        }
+
+        async function getMobileScreenInfo() {
+            const info = {
+                'Screen Width': `${screen.width}px`,
+                'Screen Height': `${screen.height}px`,
+                'Available Width': `${screen.availWidth}px`,
+                'Available Height': `${screen.availHeight}px`,
+                'Device Pixel Ratio': window.devicePixelRatio || 1,
+                'Physical Width': `${Math.round(screen.width / window.devicePixelRatio)}px`,
+                'Physical Height': `${Math.round(screen.height / window.devicePixelRatio)}px`,
+                'Color Depth': `${screen.colorDepth} bits`,
+                'Pixel Depth': `${screen.pixelDepth} bits`,
+                'Viewport Width': `${window.innerWidth}px`,
+                'Viewport Height': `${window.innerHeight}px`,
+                'Visual Viewport Width': window.visualViewport?.width || 'N/A',
+                'Visual Viewport Height': window.visualViewport?.height || 'N/A',
+                'Orientation Type': screen.orientation?.type || 'N/A',
+                'Orientation Angle': `${screen.orientation?.angle || 0}°`,
+                'PPI (Estimated)': Math.round(Math.sqrt(screen.width**2 + screen.height**2) / getScreenSize())
+            };
+
+            deviceInfo.screen = info;
+            return createSection('Screen & Display', '🖥️', info);
+        }
+
+        function getScreenSize() {
+            // Estimate screen size in inches based on device type and resolution
+            const diagonal = Math.sqrt(screen.width**2 + screen.height**2);
+            if (diagonal < 1000) return 4; // Small phone
+            if (diagonal < 1500) return 5; // Regular phone
+            if (diagonal < 2000) return 6; // Large phone
+            return 10; // Tablet
+        }
+
+        async function getMobileTouchInfo() {
+            const info = {
+                'Max Touch Points': navigator.maxTouchPoints || 0,
+                'Touch Support': 'ontouchstart' in window ? 'Yes' : 'No',
+                'Pointer Events': 'onpointerdown' in window ? 'Yes' : 'No',
+                'Multi-touch': navigator.maxTouchPoints > 1 ? 'Yes' : 'No',
+                'Force Touch': 'TouchEvent' in window && 'force' in TouchEvent.prototype ? 'Yes' : 'No',
+                'Hover Support': window.matchMedia('(hover: hover)').matches ? 'Yes' : 'No',
+                'Primary Input': window.matchMedia('(pointer: coarse)').matches ? 'Touch' : 'Mouse/Trackpad'
+            };
+
+            deviceInfo.touch = info;
+            return createSection('Touch & Input', '👆', info);
+        }
+
+        async function getMobileHardwareInfo() {
+            const info = {
+                'CPU Cores': navigator.hardwareConcurrency || 'Unknown',
+                'Device Memory': navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown',
+                'Vibration Support': 'vibrate' in navigator ? 'Yes' : 'No',
+                'Gamepad Support': 'getGamepads' in navigator ? 'Yes' : 'No',
+                'WebGL Support': getWebGLInfo().support,
+                'WebGL Renderer': getWebGLInfo().renderer,
+                'WebGL Vendor': getWebGLInfo().vendor,
+                'Canvas Support': 'getContext' in document.createElement('canvas') ? 'Yes' : 'No',
+                'WebRTC Support': 'RTCPeerConnection' in window ? 'Yes' : 'No',
+                'WebAssembly': 'WebAssembly' in window ? 'Yes' : 'No'
+            };
+
+            deviceInfo.hardware = info;
+            return createSection('Hardware Capabilities', '⚙️', info);
+        }
+
+        function getWebGLInfo() {
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    return {
+                        support: 'Yes',
+                        renderer: debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'Unknown',
+                        vendor: debugInfo ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) : 'Unknown'
+                    };
+                }
+            } catch (e) {}
+            return { support: 'No', renderer: 'N/A', vendor: 'N/A' };
+        }
+
+        async function getMobileNetworkInfo() {
+            const info = {
+                'Online Status': navigator.onLine ? 'Online' : 'Offline',
+                'Connection Type': navigator.connection?.effectiveType || 'Unknown',
+                'Downlink Speed': navigator.connection?.downlink ? `${navigator.connection.downlink} Mbps` : 'Unknown',
+                'RTT (Latency)': navigator.connection?.rtt ? `${navigator.connection.rtt} ms` : 'Unknown',
+                'Save Data Mode': navigator.connection?.saveData ? 'Enabled' : 'Disabled'
+            };
+
+            // Try to get IP and location info
+            try {
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                info['Public IP'] = ipData.ip;
+                
+                // Get more detailed network info
+                const locationResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+                const locationData = await locationResponse.json();
+                info['ISP'] = locationData.org || 'Unknown';
+                info['Country'] = locationData.country_name || 'Unknown';
+                info['Region'] = locationData.region || 'Unknown';
+                info['City'] = locationData.city || 'Unknown';
+            } catch (e) {
+                info['Network Details'] = 'Unable to fetch';
+            }
+
+            deviceInfo.network = info;
+            return createSection('Network Information', '📶', info);
+        }
+
+        async function getMobileSensorsInfo() {
+            const info = {
+                'Device Motion': 'DeviceMotionEvent' in window ? 'Supported' : 'Not supported',
+                'Device Orientation': 'DeviceOrientationEvent' in window ? 'Supported' : 'Not supported',
+                'Ambient Light': 'AmbientLightSensor' in window ? 'Supported' : 'Not supported',
+                'Accelerometer': 'Accelerometer' in window ? 'Supported' : 'Not supported',
+                'Gyroscope': 'Gyroscope' in window ? 'Supported' : 'Not supported',
+                'Magnetometer': 'Magnetometer' in window ? 'Supported' : 'Not supported',
+                'Proximity Sensor': 'ProximitySensor' in window ? 'Supported' : 'Not supported'
+            };
+
+            const liveData = {
+                id: 'sensorReadings',
+                content: 'Click "Start Sensors" to get live readings'
+            };
+
+            deviceInfo.sensors = info;
+            return createSection('Sensors & Motion', '🧭', info, liveData);
+        }
+
+        async function startSensorReadings() {
+            if ('DeviceOrientationEvent' in window) {
+                window.addEventListener('deviceorientation', (event) => {
+                    const readings = `
+                        α (Z-axis): ${event.alpha?.toFixed(1) || 'N/A'}°
+                        β (X-axis): ${event.beta?.toFixed(1) || 'N/A'}°  
+                        γ (Y-axis): ${event.gamma?.toFixed(1) || 'N/A'}°
+                    `;
+                    const element = document.getElementById('sensorReadings');
+                    if (element) element.innerHTML = `<strong>Orientation:</strong><br>${readings}`;
+                });
+            }
+
+            if ('DeviceMotionEvent' in window) {
+                window.addEventListener('devicemotion', (event) => {
+                    const acc = event.acceleration;
+                    const rot = event.rotationRate;
+                    if (acc && rot) {
+                        const readings = `
+                            <strong>Acceleration:</strong><br>
+                            X: ${acc.x?.toFixed(2) || 'N/A'} m/s²
+                            Y: ${acc.y?.toFixed(2) || 'N/A'} m/s²
+                            Z: ${acc.z?.toFixed(2) || 'N/A'} m/s²
+                            <br><strong>Rotation:</strong><br>
+                            α: ${rot.alpha?.toFixed(2) || 'N/A'}°/s
+                            β: ${rot.beta?.toFixed(2) || 'N/A'}°/s
+                            γ: ${rot.gamma?.toFixed(2) || 'N/A'}°/s
+                        `;
+                        const element = document.getElementById('sensorReadings');
+                        if (element) element.innerHTML = readings;
+                    }
+                });
+            }
+        }
+
+        async function getMobileMediaInfo() {
+            const info = {
+                'Media Devices API': 'mediaDevices' in navigator ? 'Supported' : 'Not supported',
+                'WebRTC': 'RTCPeerConnection' in window ? 'Supported' : 'Not supported',
+                'Screen Capture': 'getDisplayMedia' in (navigator.mediaDevices || {}) ? 'Supported' : 'Not supported'
+            };
+
+            if ('mediaDevices' in navigator) {
+                try {
+                    const devices = await navigator.mediaDevices.enumerateDevices();
+                    const videoInputs = devices.filter(d => d.kind === 'videoinput');
+                    const audioInputs = devices.filter(d => d.kind === 'audioinput');
+                    const audioOutputs = devices.filter(d => d.kind === 'audiooutput');
+                    
+                    info['Camera Inputs'] = videoInputs.length.toString();
+                    info['Audio Inputs'] = audioInputs.length.toString();
+                    info['Audio Outputs'] = audioOutputs.length.toString();
+
+                    // Try to get camera capabilities
+                    if (videoInputs.length > 0) {
+                        try {
+                            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                            const track = stream.getVideoTracks()[0];
+                            const capabilities = track.getCapabilities();
+                            
+                            info['Camera Resolution'] = `${capabilities.width?.max || 'Unknown'}×${capabilities.height?.max || 'Unknown'}`;
+                            info['Camera Zoom'] = capabilities.zoom ? 'Supported' : 'Not supported';
+                            info['Camera Flash'] = capabilities.torch ? 'Supported' : 'Not supported';
+                            
+                            track.stop();
+                        } catch (e) {
+                            info['Camera Access'] = 'Permission required';
+                        }
+                    }
+                } catch (e) {
+                    info['Media Devices'] = 'Permission denied';
+                }
+            }
+
+            deviceInfo.media = info;
+            return createSection('Camera & Media', '📷', info);
+        }
+
+        async function getMobileBatteryInfo() {
+            const info = {};
+
+            if ('getBattery' in navigator) {
+                try {
+                    const battery = await navigator.getBattery();
+                    info['Battery Level'] = `${Math.round(battery.level * 100)}%`;
+                    info['Charging Status'] = battery.charging ? 'Charging' : 'Not charging';
+                    info['Charging Time'] = battery.chargingTime !== Infinity ? `${Math.round(battery.chargingTime / 60)} min` : 'N/A';
+                    info['Discharging Time'] = battery.dischargingTime !== Infinity ? `${Math.round(battery.dischargingTime / 60)} min` : 'N/A';
+                    
+                    // Set up battery monitoring
+                    battery.addEventListener('chargingchange', () => {
+                        info['Charging Status'] = battery.charging ? 'Charging' : 'Not charging';
+                    });
+                    
+                    battery.addEventListener('levelchange', () => {
+                        info['Battery Level'] = `${Math.round(battery.level * 100)}%`;
+                    });
+                } catch (e) {
+                    info['Battery API'] = 'Not supported or access denied';
+                }
+            } else {
+                info['Battery API'] = 'Not supported on this device';
+            }
+
+            deviceInfo.battery = info;
+            return createSection('Battery Information', '🔋', info);
+        }
+
+        async function getMobileStorageInfo() {
+            const info = {
+                'Local Storage': testStorage('localStorage'),
+                'Session Storage': testStorage('sessionStorage'),
+                'IndexedDB': 'indexedDB' in window ? 'Supported' : 'Not supported',
+                'WebSQL': 'openDatabase' in window ? 'Supported (Deprecated)' : 'Not supported',
+                'Cache API': 'caches' in window ? 'Supported' : 'Not supported',
+                'Cookies': navigator.cookieEnabled ? 'Enabled' : 'Disabled'
+            };
+
+            // Test storage quota
+            if ('storage' in navigator && 'estimate' in navigator.storage) {
+                try {
+                    const quota = await navigator.storage.estimate();
+                    info['Storage Quota'] = `${(quota.quota / 1024 / 1024 / 1024).toFixed(2)} GB`;
+                    info['Storage Used'] = `${(quota.usage / 1024 / 1024).toFixed(2)} MB`;
+                    info['Usage Percentage'] = `${((quota.usage / quota.quota) * 100).toFixed(1)}%`;
+                } catch (e) {
+                    info['Storage Quota'] = 'Unable to determine';
+                }
+            }
+
+            // Test actual storage capacity
+            info['localStorage Test'] = testStorageCapacity('localStorage');
+            info['sessionStorage Test'] = testStorageCapacity('sessionStorage');
+
+            deviceInfo.storage = info;
+            return createSection('Storage & Cache', '💾', info);
+        }
+
+        function testStorage(type) {
+            try {
+                const storage = window[type];
+                const testKey = '__test__';
+                storage.setItem(testKey, 'test');
+                storage.removeItem(testKey);
+                return 'Available';
+            } catch (e) {
+                return 'Not available';
+            }
+        }
+
+        function testStorageCapacity(type) {
+            try {
+                const storage = window[type];
+                let size = 0;
+                const testKey = '__capacity_test__';
+                const testData = 'x'.repeat(1024); // 1KB chunks
+                
+                while (size < 10240) { // Test up to 10MB
+                    try {
+                        storage.setItem(testKey + size, testData);
+                        size += 1;
+                    } catch (e) {
+                        break;
+                    }
+                }
+                
+                // Clean up
+                for (let i = 0; i < size; i++) {
+                    storage.removeItem(testKey + i);
+                }
+                
+                return `~${size} KB available`;
+            } catch (e) {
+                return 'Unable to test';
+            }
+        }
+
+        async function getMobileLocationInfo() {
+            const info = {
+                'Geolocation API': 'geolocation' in navigator ? 'Available' : 'Not available',
+                'Permissions API': 'permissions' in navigator ? 'Supported' : 'Not supported'
+            };
+
+            if ('permissions' in navigator) {
+                try {
+                    const permission = await navigator.permissions.query({name: 'geolocation'});
+                    info['Location Permission'] = permission.state;
+                } catch (e) {
+                    info['Location Permission'] = 'Unable to check';
+                }
+            }
+
+            deviceInfo.location = info;
+            const liveData = {
+                id: 'locationData',
+                content: '<button class="permission-btn" onclick="getCurrentLocation()">Get Current Location</button>'
+            };
+            
+            return createSection('Location Services', '📍', info, liveData);
+        }
+
+        async function getCurrentLocation() {
+            if ('geolocation' in navigator) {
+                const element = document.getElementById('locationData');
+                element.innerHTML = 'Getting location...';
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const coords = position.coords;
+                        element.innerHTML = `
+                            <strong>Location Found:</strong><br>
+                            Lat: ${coords.latitude.toFixed(6)}<br>
+                            Lng: ${coords.longitude.toFixed(6)}<br>
+                            Accuracy: ${coords.accuracy.toFixed(0)}m<br>
+                            ${coords.altitude ? `Altitude: ${coords.altitude.toFixed(0)}m<br>` : ''}
+                            ${coords.speed ? `Speed: ${coords.speed.toFixed(1)} m/s<br>` : ''}
+                            Timestamp: ${new Date(position.timestamp).toLocaleTimeString()}
+                        `;
+                    },
+                    (error) => {
+                        element.innerHTML = `<span class="warning">Location Error: ${error.message}</span>`;
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+                );
+            }
+        }
+
+        async function getMobilePerformanceInfo() {
+            const info = {};
+
+            if ('performance' in window) {
+                const perf = performance;
+                info['Performance API'] = 'Available';
+                info['Navigation Type'] = perf.navigation?.type || 'Unknown';
+                info['Page Load Time'] = `${Math.round(perf.timing?.loadEventEnd - perf.timing?.navigationStart) || 0}ms`;
+                
+                if (perf.memory) {
+                    info['JS Heap Used'] = `${(perf.memory.usedJSHeapSize / 1024 / 1024).toFixed(1)} MB`;
+                    info['JS Heap Total'] = `${(perf.memory.totalJSHeapSize / 1024 / 1024).toFixed(1)} MB`;
+                    info['JS Heap Limit'] = `${(perf.memory.jsHeapSizeLimit / 1024 / 1024).toFixed(1)} MB`;
+                }
+
+                // Device timing
+                if (perf.timing) {
+                    const timing = perf.timing;
+                    info['DNS Lookup'] = `${timing.domainLookupEnd - timing.domainLookupStart}ms`;
+                    info['TCP Connection'] = `${timing.connectEnd - timing.connectStart}ms`;
+                    info['Server Response'] = `${timing.responseEnd - timing.requestStart}ms`;
+                    info['DOM Processing'] = `${timing.domComplete - timing.domLoading}ms`;
+                }
+            }
+
+            deviceInfo.performance = info;
+            return createSection('Performance Metrics', '⚡', info);
+        }
+
+        async function getMobileSecurityInfo() {
+            const info = {
+                'HTTPS': location.protocol === 'https:' ? 'Yes' : 'No',
+                'Secure Context': window.isSecureContext ? 'Yes' : 'No',
+                'Cross Origin Isolated': window.crossOriginIsolated ? 'Yes' : 'No',
+                'Permissions API': 'permissions' in navigator ? 'Supported' : 'Not supported',
+                'Credential Management': 'credentials' in navigator ? 'Supported' : 'Not supported',
+                'Web Authentication': 'PublicKeyCredential' in window ? 'Supported' : 'Not supported',
+                'Payment Request': 'PaymentRequest' in window ? 'Supported' : 'Not supported',
+                'Notification API': 'Notification' in window ? 'Supported' : 'Not supported'
+            };
+
+            // Check notification permission
+            if ('Notification' in window) {
+                info['Notification Permission'] = Notification.permission;
+            }
+
+            // Check for secure payment methods
+            if ('PaymentRequest' in window) {
+                try {
+                    const methods = [{ supportedMethods: 'basic-card' }];
+                    const details = { total: { label: 'Test', amount: { currency: 'USD', value: '0.01' } } };
+                    const request = new PaymentRequest(methods, details);
+                    info['Payment Methods'] = 'Basic card supported';
+                } catch (e) {
+                    info['Payment Methods'] = 'Not available';
+                }
+            }
+
+            deviceInfo.security = info;
+            return createSection('Security & Privacy', '🔒', info);
+        }
+
+        async function getAllDeviceInfo() {
+            const grid = document.getElementById('infoGrid');
+            grid.innerHTML = '';
+            deviceInfo = {};
+            completedSections = 0;
+
+            const sections = [
+                getMobileSystemInfo,
+                getMobileScreenInfo,
+                getMobileTouchInfo,
+                getMobileHardwareInfo,
+                getMobileNetworkInfo,
+                getMobileSensorsInfo,
+                getMobileMediaInfo,
+                getMobileBatteryInfo,
+                getMobileStorageInfo,
+                getMobileLocationInfo,
+                getMobilePerformanceInfo,
+                getMobileSecurityInfo
+            ];
+
+            totalSections = sections.length;
+
+            for (const getSection of sections) {
+                try {
+                    const section = await getSection();
+                    grid.appendChild(section);
+                } catch (e) {
+                    console.error('Error getting section info:', e);
+                }
+                updateProgress();
+            }
+
+            // Start sensor readings after all sections are loaded
+            setTimeout(() => {
+                if (document.getElementById('sensorReadings')) {
+                    startSensorReadings();
+                    document.getElementById('sensorReadings').innerHTML += '<br><button class="permission-btn" onclick="requestSensorPermissions()">Request Sensor Access</button>';
+                }
+            }, 1000);
+        }
+
+        async function requestSensorPermissions() {
+            if ('DeviceOrientationEvent' in window && DeviceOrientationEvent.requestPermission) {
+                try {
+                    const permission = await DeviceOrientationEvent.requestPermission();
+                    if (permission === 'granted') {
+                        startSensorReadings();
+                    }
+                } catch (e) {
+                    console.error('Sensor permission error:', e);
+                }
+            }
+        }
+
+        function refreshAllInfo() {
+            getAllDeviceInfo();
+        }
+
+        function exportToJSON() {
+            const timestamp = new Date().toISOString();
+            const exportData = {
+                timestamp,
+                deviceInfo,
+                fingerprint: generateDeviceFingerprint()
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', `mobile_device_info_${timestamp.split('T')[0]}.json`);
+            linkElement.click();
+        }
+
+        function copyToClipboard() {
+            const exportData = {
+                timestamp: new Date().toISOString(),
+                deviceInfo,
+                fingerprint: generateDeviceFingerprint()
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(dataStr).then(() => {
+                    alert('Device information copied to clipboard!');
+                }).catch(() => {
+                    fallbackCopyTextToClipboard(dataStr);
+                });
+            } else {
+                fallbackCopyTextToClipboard(dataStr);
+            }
+        }
+
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                alert('Device information copied to clipboard!');
+            } catch (err) {
+                alert('Unable to copy to clipboard');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        function generateDeviceFingerprint() {
+            const fingerprint = {
+                screen: `${screen.width}x${screen.height}x${screen.colorDepth}`,
+                timezone: new Date().getTimezoneOffset(),
+                language: navigator.language,
+                platform: navigator.platform,
+                userAgent: navigator.userAgent,
+                devicePixelRatio: window.devicePixelRatio,
+                hardwareConcurrency: navigator.hardwareConcurrency,
+                maxTouchPoints: navigator.maxTouchPoints,
+                deviceMemory: navigator.deviceMemory,
+                webgl: getWebGLInfo().renderer
+            };
+
+            // Create a simple hash
+            const str = JSON.stringify(fingerprint);
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32-bit integer
+            }
+            
+            return {
+                hash: Math.abs(hash).toString(16),
+                data: fingerprint
+            };
+        }
+
+        function generateFingerprint() {
+            const fingerprint = generateDeviceFingerprint();
+            alert(`Device Fingerprint: ${fingerprint.hash}\n\nThis unique identifier is based on your device characteristics.`);
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', getAllDeviceInfo);
+
+        // Update on orientation change
+        window.addEventListener('orientationchange', () => {
+            setTimeout(getAllDeviceInfo, 1000);
+        });
+
+        // Update network status
+        window.addEventListener('online', () => {
+            setTimeout(getAllDeviceInfo, 500);
+        });
+
+        window.addEventListener('offline', () => {
+            setTimeout(getAllDeviceInfo, 500);
+        });
+    </script>
+</body>
+</html>
