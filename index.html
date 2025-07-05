@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Advanced Device Fingerprinting Scanner</title>
+    <title>Complete Mobile Device Scanner</title>
     <style>
         * {
             margin: 0;
@@ -40,17 +40,7 @@
             font-weight: 600;
         }
 
-        .privacy-notice {
-            background: #fff3cd;
-            color: #856404;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 0.9em;
-            border-left: 4px solid #ffc107;
-        }
-
-        .fingerprint-card {
+        .summary-card {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             padding: 20px;
@@ -59,16 +49,19 @@
             text-align: center;
         }
 
-        .fingerprint-id {
-            font-size: 1.2em;
+        .device-type {
+            font-size: 1.5em;
             font-weight: bold;
             margin-bottom: 10px;
-            font-family: 'Courier New', monospace;
         }
 
-        .fingerprint-confidence {
-            font-size: 0.9em;
-            opacity: 0.9;
+        .fingerprint-id {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
         }
 
         .info-grid {
@@ -134,6 +127,8 @@
             word-break: break-word;
         }
 
+        .status-online { color: #28a745; }
+        .status-offline { color: #dc3545; }
         .fingerprint-hash {
             font-family: 'Courier New', monospace;
             font-size: 0.8em;
@@ -141,18 +136,6 @@
             padding: 2px 4px;
             border-radius: 3px;
         }
-
-        .stability-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-
-        .stable { background-color: #28a745; }
-        .semi-stable { background-color: #ffc107; }
-        .unstable { background-color: #dc3545; }
 
         .permission-btn {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -226,6 +209,24 @@
             transition: width 0.3s ease;
         }
 
+        .live-data {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            margin: 5px 0;
+        }
+
         .canvas-container {
             background: #f8f9fa;
             padding: 10px;
@@ -239,24 +240,6 @@
             height: auto;
             border: 1px solid #dee2e6;
             border-radius: 5px;
-        }
-
-        .timing-info {
-            background: #e8f5e8;
-            padding: 8px;
-            border-radius: 6px;
-            margin: 5px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.8em;
-        }
-
-        .warning {
-            background: #fff3cd;
-            color: #856404;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 0.8em;
-            margin: 5px 0;
         }
 
         @media (min-width: 768px) {
@@ -277,15 +260,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔍 Advanced Device Fingerprinting Scanner</h1>
+        <h1>📱 Complete Mobile Device Scanner</h1>
         
-        <div class="privacy-notice">
-            <strong>Privacy Notice:</strong> This tool demonstrates advanced browser fingerprinting techniques. The collected data can uniquely identify your device across sessions and websites. Use responsibly and be aware of privacy implications.
-        </div>
-
-        <div class="fingerprint-card">
-            <div class="fingerprint-id" id="fingerprintDisplay">Generating Unique Device Fingerprint...</div>
-            <div class="fingerprint-confidence" id="confidenceDisplay">Calculating stability score...</div>
+        <div class="summary-card">
+            <div class="device-type" id="deviceType">Analyzing Device...</div>
+            <div id="deviceSummary">Gathering comprehensive device information...</div>
+            <div class="fingerprint-id" id="fingerprintDisplay">Generating Device Fingerprint...</div>
         </div>
 
         <div class="progress-bar">
@@ -296,23 +276,21 @@
             <!-- Information sections will be populated here -->
         </div>
 
-        <button class="refresh-btn" onclick="refreshAllInfo()">🔄 Re-scan Device</button>
+        <button class="refresh-btn" onclick="refreshAllInfo()">🔄 Refresh All Data</button>
 
         <div class="export-section">
             <button class="export-btn" onclick="exportToJSON()">📄 Export JSON</button>
-            <button class="export-btn" onclick="copyFingerprint()">📋 Copy ID</button>
-            <button class="export-btn" onclick="compareFingerprints()">🔄 Compare</button>
+            <button class="export-btn" onclick="copyToClipboard()">📋 Copy Data</button>
+            <button class="export-btn" onclick="generateFingerprint()">🔍 Fingerprint</button>
             <button class="export-btn" onclick="generateReport()">📊 Report</button>
         </div>
     </div>
 
     <script>
-        let deviceFingerprint = {};
-        let persistentData = {};
+        let deviceInfo = {};
         let totalSections = 0;
         let completedSections = 0;
         let fingerprintHash = '';
-        let stabilityScore = 0;
 
         function updateProgress() {
             completedSections++;
@@ -320,24 +298,24 @@
             document.getElementById('progressBar').style.width = progress + '%';
         }
 
-        function createSection(title, icon, items, stability = 'stable') {
+        function createSection(title, icon, items, liveData = null) {
             const section = document.createElement('div');
             section.className = 'info-section';
             
-            const stabilityClass = stability === 'high' ? 'stable' : stability === 'medium' ? 'semi-stable' : 'unstable';
-            
             let itemsHTML = '';
             for (const [key, value] of Object.entries(items)) {
-                const isFingerprint = key.includes('Hash') || key.includes('Fingerprint') || key.includes('Signature');
-                const valueClass = isFingerprint ? 'fingerprint-hash' : '';
-                const stabilityIndicator = `<span class="stability-indicator ${stabilityClass}"></span>`;
-                
+                const isHash = key.includes('Hash') || key.includes('Fingerprint');
+                const valueClass = isHash ? 'fingerprint-hash' : '';
                 itemsHTML += `
                     <div class="info-item">
-                        <span class="label">${stabilityIndicator}${key}</span>
+                        <span class="label">${key}</span>
                         <span class="value ${valueClass}">${value}</span>
                     </div>
                 `;
+            }
+
+            if (liveData) {
+                itemsHTML += `<div class="live-data" id="${liveData.id}">${liveData.content}</div>`;
             }
 
             section.innerHTML = `
@@ -351,601 +329,585 @@
             return section;
         }
 
-        // Canvas Fingerprinting
-        function generateCanvasFingerprint() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 300;
-            canvas.height = 200;
-
-            // Complex drawing operations for unique fingerprinting
-            ctx.textBaseline = 'top';
-            ctx.font = '14px Arial';
-            ctx.fillStyle = '#f60';
-            ctx.fillRect(125, 1, 62, 20);
-            
-            ctx.fillStyle = '#069';
-            ctx.fillText('Device Fingerprint 🔍', 2, 15);
-            
-            ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
-            ctx.fillText('Advanced Browser Detection', 4, 45);
-            
-            ctx.globalCompositeOperation = 'multiply';
-            ctx.fillStyle = 'rgb(255,0,255)';
-            ctx.beginPath();
-            ctx.arc(50, 50, 50, 0, Math.PI * 2, true);
-            ctx.closePath();
-            ctx.fill();
-            
-            ctx.fillStyle = 'rgb(0,255,255)';
-            ctx.beginPath();
-            ctx.arc(100, 50, 50, 0, Math.PI * 2, true);
-            ctx.closePath();
-            ctx.fill();
-
-            // Add emoji and unicode characters
-            ctx.fillStyle = '#000';
-            ctx.font = '16px Arial';
-            ctx.fillText('🌍📱💻🔒', 10, 100);
-
-            const dataURL = canvas.toDataURL();
-            return {
-                hash: hashString(dataURL),
-                dataURL: dataURL,
-                canvas: canvas
-            };
-        }
-
-        // Audio Context Fingerprinting
-        async function generateAudioFingerprint() {
-            return new Promise((resolve) => {
-                try {
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioContext.createOscillator();
-                    const analyser = audioContext.createAnalyser();
-                    const gainNode = audioContext.createGain();
-                    const scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1);
-
-                    oscillator.type = 'triangle';
-                    oscillator.frequency.setValueAtTime(10000, audioContext.currentTime);
-
-                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-
-                    oscillator.connect(analyser);
-                    analyser.connect(scriptProcessor);
-                    scriptProcessor.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-
-                    scriptProcessor.onaudioprocess = function(bins) {
-                        const samples = bins.inputBuffer.getChannelData(0);
-                        let sum = 0;
-                        for (let i = 0; i < samples.length; i++) {
-                            sum += Math.abs(samples[i]);
-                        }
-                        
-                        oscillator.disconnect();
-                        scriptProcessor.disconnect();
-                        audioContext.close();
-                        
-                        resolve({
-                            hash: hashString(sum.toString()),
-                            sum: sum,
-                            sampleRate: audioContext.sampleRate,
-                            maxChannelCount: audioContext.destination.maxChannelCount,
-                            state: audioContext.state
-                        });
-                    };
-
-                    oscillator.start(0);
-                } catch (e) {
-                    resolve({ hash: 'unsupported', error: e.message });
-                }
-            });
-        }
-
-        // WebGL Fingerprinting (Enhanced)
-        function generateWebGLFingerprint() {
-            const canvas = document.createElement('canvas');
-            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-            
-            if (!gl) return { hash: 'unsupported' };
-
-            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-            const vendor = debugInfo ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR);
-            const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
-            
-            const vertexShader = gl.createShader(gl.VERTEX_SHADER);
-            gl.shaderSource(vertexShader, 'attribute vec2 attrVertex;varying vec2 varyinTexCoordinate;uniform vec2 uniformOffset;void main(){varyinTexCoordinate=attrVertex+uniformOffset;gl_Position=vec4(attrVertex,0,1);}');
-            gl.compileShader(vertexShader);
-
-            const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-            gl.shaderSource(fragmentShader, 'precision mediump float;varying vec2 varyinTexCoordinate;void main() {gl_FragColor=vec4(varyinTexCoordinate,0,1);}');
-            gl.compileShader(fragmentShader);
-
-            const program = gl.createProgram();
-            gl.attachShader(program, vertexShader);
-            gl.attachShader(program, fragmentShader);
-            gl.linkProgram(program);
-            gl.useProgram(program);
-
-            const buffer = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-0.2, -0.9, 0, 0.4, -0.26, 0, 0, 0.7321, 0]), gl.STATIC_DRAW);
-
-            gl.enableVertexAttribArray(0);
-            gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
-            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 3);
-
-            const pixels = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
-            gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-
-            return {
-                vendor: vendor,
-                renderer: renderer,
-                version: gl.getParameter(gl.VERSION),
-                shadingLanguageVersion: gl.getParameter(gl.SHADING_LANGUAGE_VERSION),
-                extensions: gl.getSupportedExtensions(),
-                pixelHash: hashString(Array.from(pixels).join(''))
-            };
-        }
-
-        // Font Detection
-        function detectFonts() {
-            const testFonts = [
-                'Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Verdana', 'Georgia', 'Palatino',
-                'Garamond', 'Bookman', 'Tahoma', 'Comic Sans MS', 'Impact', 'Arial Black', 'Helvetica Neue',
-                'Lucida Grande', 'Lucida Sans Unicode', 'Trebuchet MS', 'Microsoft Sans Serif', 'Segoe UI',
-                'Roboto', 'Droid Sans', 'Ubuntu', 'Cantarell', 'DejaVu Sans', 'Liberation Sans',
-                'Noto Sans', 'Source Sans Pro', 'Open Sans', 'Lato', 'Montserrat', 'Raleway',
-                'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Android Emoji'
-            ];
-
-            const baseFonts = ['serif', 'sans-serif', 'monospace'];
-            const testString = 'mmmmmmmmmmlli';
-            const testSize = '72px';
-            const h = document.getElementsByTagName('body')[0];
-
-            const s = document.createElement('span');
-            s.style.fontSize = testSize;
-            s.innerHTML = testString;
-            const defaultWidths = {};
-            const defaultHeights = {};
-
-            for (let i = 0; i < baseFonts.length; i++) {
-                s.style.fontFamily = baseFonts[i];
-                h.appendChild(s);
-                defaultWidths[baseFonts[i]] = s.offsetWidth;
-                defaultHeights[baseFonts[i]] = s.offsetHeight;
-                h.removeChild(s);
-            }
-
-            const detectedFonts = [];
-            for (let i = 0; i < testFonts.length; i++) {
-                let detected = false;
-                for (let j = 0; j < baseFonts.length; j++) {
-                    s.style.fontFamily = testFonts[i] + ',' + baseFonts[j];
-                    h.appendChild(s);
-                    const matched = (s.offsetWidth !== defaultWidths[baseFonts[j]] || s.offsetHeight !== defaultHeights[baseFonts[j]]);
-                    h.removeChild(s);
-                    detected = detected || matched;
-                }
-                if (detected) {
-                    detectedFonts.push(testFonts[i]);
-                }
-            }
-
-            return detectedFonts;
-        }
-
-        // Plugin Detection
-        function detectPlugins() {
-            const plugins = [];
-            for (let i = 0; i < navigator.plugins.length; i++) {
-                const plugin = navigator.plugins[i];
-                plugins.push({
-                    name: plugin.name,
-                    filename: plugin.filename,
-                    description: plugin.description,
-                    version: plugin.version || 'Unknown'
-                });
-            }
-            return plugins;
-        }
-
-        // Timing Attack for CPU Fingerprinting
-        function getCPUFingerprint() {
-            const start = performance.now();
-            let count = 0;
-            
-            // CPU-intensive operation
-            for (let i = 0; i < 100000; i++) {
-                count += Math.random() * Math.random();
-            }
-            
-            const end = performance.now();
-            const duration = end - start;
-            
-            // Memory allocation pattern
-            const arrays = [];
-            const memStart = performance.now();
-            for (let i = 0; i < 1000; i++) {
-                arrays.push(new Array(1000).fill(Math.random()));
-            }
-            const memEnd = performance.now();
-            
-            return {
-                computeTime: Math.round(duration * 1000) / 1000,
-                memoryTime: Math.round((memEnd - memStart) * 1000) / 1000,
-                hardwareConcurrency: navigator.hardwareConcurrency || 1,
-                deviceMemory: navigator.deviceMemory || 'Unknown'
-            };
-        }
-
-        // Mouse/Touch Behavior Fingerprinting
-        function initializeBehaviorTracking() {
-            let mouseMovements = [];
-            let touchPatterns = [];
-            let keyboardTimings = [];
-
-            document.addEventListener('mousemove', (e) => {
-                mouseMovements.push({
-                    x: e.clientX,
-                    y: e.clientY,
-                    time: Date.now()
-                });
-                if (mouseMovements.length > 10) mouseMovements.shift();
-            });
-
-            document.addEventListener('touchmove', (e) => {
-                const touch = e.touches[0];
-                touchPatterns.push({
-                    x: touch.clientX,
-                    y: touch.clientY,
-                    pressure: touch.force || 0,
-                    time: Date.now()
-                });
-                if (touchPatterns.length > 10) touchPatterns.shift();
-            });
-
-            let lastKeyTime = 0;
-            document.addEventListener('keydown', (e) => {
-                const now = Date.now();
-                if (lastKeyTime > 0) {
-                    keyboardTimings.push(now - lastKeyTime);
-                    if (keyboardTimings.length > 10) keyboardTimings.shift();
-                }
-                lastKeyTime = now;
-            });
-
-            return {
-                getMousePattern: () => mouseMovements,
-                getTouchPattern: () => touchPatterns,
-                getKeyboardPattern: () => keyboardTimings
-            };
-        }
-
-        // Advanced Hardware Detection
-        async function getAdvancedHardwareInfo() {
-            const info = {
-                'CPU Cores': navigator.hardwareConcurrency || 'Unknown',
-                'Device Memory': navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown',
-                'Connection Type': navigator.connection?.effectiveType || 'Unknown',
-                'Platform': navigator.platform,
-                'Architecture': navigator.platform.includes('64') ? '64-bit' : '32-bit',
-                'Max Touch Points': navigator.maxTouchPoints || 0
-            };
-
-            // CPU Performance fingerprint
-            const cpuInfo = getCPUFingerprint();
-            info['CPU Performance'] = `${cpuInfo.computeTime}ms`;
-            info['Memory Performance'] = `${cpuInfo.memoryTime}ms`;
-
-            // WebGL capabilities
-            const webglInfo = generateWebGLFingerprint();
-            info['GPU Vendor'] = webglInfo.vendor || 'Unknown';
-            info['GPU Renderer'] = webglInfo.renderer || 'Unknown';
-            info['WebGL Hash'] = webglInfo.pixelHash || 'N/A';
-
-            deviceFingerprint.hardware = info;
-            return createSection('Hardware Fingerprint', '⚙️', info, 'high');
-        }
-
-        // Browser Fingerprinting
-        async function getBrowserFingerprint() {
-            const info = {
-                'User Agent': navigator.userAgent,
-                'Platform': navigator.platform,
-                'Language': navigator.language,
-                'Languages': navigator.languages?.join(', ') || 'N/A',
-                'Timezone': Intl.DateTimeFormat().resolvedOptions().timeZone,
-                'Do Not Track': navigator.doNotTrack || 'Not set',
-                'Cookies Enabled': navigator.cookieEnabled ? 'Yes' : 'No'
-            };
-
-            // Detect installed fonts
-            const fonts = detectFonts();
-            info['Installed Fonts'] = fonts.length.toString();
-            info['Font Hash'] = hashString(fonts.join(','));
-
-            // Plugin detection
-            const plugins = detectPlugins();
-            info['Plugins Count'] = plugins.length.toString();
-            info['Plugin Hash'] = hashString(plugins.map(p => p.name).join(','));
-
-            deviceFingerprint.browser = info;
-            return createSection('Browser Fingerprint', '🌐', info, 'high');
-        }
-
-        // Canvas & Audio Fingerprinting
-        async function getCanvasAudioFingerprint() {
-            const canvasInfo = generateCanvasFingerprint();
-            const audioInfo = await generateAudioFingerprint();
-
-            const info = {
-                'Canvas Hash': canvasInfo.hash,
-                'Audio Hash': audioInfo.hash,
-                'Audio Sample Rate': audioInfo.sampleRate || 'N/A',
-                'Audio Channels': audioInfo.maxChannelCount || 'N/A'
-            };
-
-            // Display canvas image
-            const canvasContainer = document.createElement('div');
-            canvasContainer.className = 'canvas-container';
-            canvasContainer.innerHTML = `
-                <div style="font-size: 0.8em; margin-bottom: 5px;">Canvas Fingerprint Image:</div>
-            `;
-            canvasContainer.appendChild(canvasInfo.canvas);
-
-            deviceFingerprint.canvas = info;
-            const section = createSection('Canvas & Audio', '🎨', info, 'high');
-            section.appendChild(canvasContainer);
-            return section;
-        }
-
-        // Screen & Display Advanced
-        async function getAdvancedScreenInfo() {
-            const info = {
-                'Screen Resolution': `${screen.width}×${screen.height}`,
-                'Available Resolution': `${screen.availWidth}×${screen.availHeight}`,
-                'Color Depth': `${screen.colorDepth} bits`,
-                'Pixel Ratio': window.devicePixelRatio || 1,
-                'Orientation': screen.orientation?.type || 'Unknown'
-            };
-
-            // Detect HDR support
-            if (window.matchMedia) {
-                info['HDR Support'] = window.matchMedia('(color-gamut: p3)').matches ? 'Yes' : 'No';
-                info['High Refresh Rate'] = window.matchMedia('(prefers-reduced-motion: no-preference)').matches ? 'Supported' : 'Limited';
-            }
-
-            // Calculate estimated PPI
-            const diagonal = Math.sqrt(screen.width ** 2 + screen.height ** 2);
-            const estimatedSize = diagonal < 1000 ? 5 : diagonal < 1500 ? 6 : diagonal < 2000 ? 7 : 10;
-            info['Estimated PPI'] = Math.round(diagonal / estimatedSize);
-
-            deviceFingerprint.screen = info;
-            return createSection('Display Fingerprint', '📺', info, 'high');
-        }
-
-        // Network & Location Advanced
-        async function getNetworkLocationFingerprint() {
-            const info = {
-                'Online Status': navigator.onLine ? 'Online' : 'Offline',
-                'Connection Type': navigator.connection?.effectiveType || 'Unknown',
-                'Save Data': navigator.connection?.saveData ? 'Enabled' : 'Disabled'
-            };
-
-            // Try to get WebRTC IP leak
-            try {
-                const ips = await getWebRTCIPs();
-                info['Local IPs'] = ips.join(', ') || 'Not detected';
-            } catch (e) {
-                info['Local IPs'] = 'WebRTC blocked';
-            }
-
-            // Get public IP and location
-            try {
-                const response = await fetch('https://api.ipify.org?format=json');
-                const data = await response.json();
-                info['Public IP'] = data.ip;
-
-                // Get ISP info
-                const locationResponse = await fetch(`https://ipapi.co/${data.ip}/json/`);
-                const locationData = await locationResponse.json();
-                info['ISP'] = locationData.org || 'Unknown';
-                info['Country'] = locationData.country_name || 'Unknown';
-                info['City'] = locationData.city || 'Unknown';
-            } catch (e) {
-                info['Network Info'] = 'Unable to fetch';
-            }
-
-            deviceFingerprint.network = info;
-            return createSection('Network Fingerprint', '🌍', info, 'medium');
-        }
-
-        // WebRTC IP Detection
-        function getWebRTCIPs() {
-            return new Promise((resolve) => {
-                const ips = [];
-                const RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
-                
-                if (!RTCPeerConnection) {
-                    resolve([]);
-                    return;
-                }
-
-                const pc = new RTCPeerConnection({
-                    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
-                });
-
-                pc.createDataChannel('');
-                pc.createOffer().then(offer => pc.setLocalDescription(offer));
-
-                pc.onicecandidate = (event) => {
-                    if (event.candidate) {
-                        const ip = event.candidate.candidate.match(/\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/);
-                        if (ip && !ips.includes(ip[0])) {
-                            ips.push(ip[0]);
-                        }
-                    }
-                };
-
-                setTimeout(() => {
-                    pc.close();
-                    resolve(ips);
-                }, 2000);
-            });
-        }
-
-        // Storage & Persistence
-        async function getStoragePersistenceInfo() {
-            const info = {};
-
-            // Check storage persistence
-            if ('storage' in navigator && 'persist' in navigator.storage) {
-                try {
-                    info['Storage Persistent'] = await navigator.storage.persist() ? 'Yes' : 'No';
-                    const estimate = await navigator.storage.estimate();
-                    info['Storage Quota'] = `${(estimate.quota / 1024 / 1024 / 1024).toFixed(2)} GB`;
-                    info['Storage Used'] = `${(estimate.usage / 1024 / 1024).toFixed(2)} MB`;
-                } catch (e) {
-                    info['Storage API'] = 'Access denied';
-                }
-            } else {
-                info['Storage API'] = 'Not supported';
-            }
-
-            // Test various storage mechanisms
-            info['localStorage'] = testStorageAPI('localStorage');
-            info['sessionStorage'] = testStorageAPI('sessionStorage');
-            info['IndexedDB'] = 'indexedDB' in window ? 'Supported' : 'Not supported';
-
-            // Try to set/get persistent data
-            try {
-                const testKey = '_fingerprint_test_';
-                localStorage.setItem(testKey, Date.now().toString());
-                const stored = localStorage.getItem(testKey);
-                info['Persistence Test'] = stored ? 'Working' : 'Failed';
-                localStorage.removeItem(testKey);
-            } catch (e) {
-                info['Persistence Test'] = 'Blocked';
-            }
-
-            deviceFingerprint.storage = info;
-            return createSection('Storage & Persistence', '💾', info, 'medium');
-        }
-
-        function testStorageAPI(apiName) {
-            try {
-                const storage = window[apiName];
-                const testKey = '__test__';
-                storage.setItem(testKey, 'test');
-                storage.removeItem(testKey);
-                return 'Available';
-            } catch (e) {
-                return 'Blocked/Full';
-            }
-        }
-
-        // Performance & Timing
-        async function getPerformanceFingerprint() {
-            const info = {};
-
-            if ('performance' in window) {
-                const perf = performance;
-                
-                // High-resolution timing
-                const start = perf.now();
-                for (let i = 0; i < 1000; i++) {
-                    Math.random();
-                }
-                const end = perf.now();
-                info['CPU Timing'] = `${(end - start).toFixed(3)}ms`;
-
-                // Memory info
-                if (perf.memory) {
-                    info['JS Heap Used'] = `${(perf.memory.usedJSHeapSize / 1024 / 1024).toFixed(1)} MB`;
-                    info['JS Heap Total'] = `${(perf.memory.totalJSHeapSize / 1024 / 1024).toFixed(1)} MB`;
-                    info['JS Heap Limit'] = `${(perf.memory.jsHeapSizeLimit / 1024 / 1024).toFixed(1)} MB`;
-                }
-
-                // Navigation timing
-                if (perf.timing) {
-                    const nav = perf.timing;
-                    info['Page Load'] = `${nav.loadEventEnd - nav.navigationStart}ms`;
-                    info['DNS Lookup'] = `${nav.domainLookupEnd - nav.domainLookupStart}ms`;
-                    info['TCP Connect'] = `${nav.connectEnd - nav.connectStart}ms`;
-                }
-            }
-
-            deviceFingerprint.performance = info;
-            return createSection('Performance Timing', '⚡', info, 'medium');
-        }
-
-        // Generate comprehensive fingerprint
-        function generateMasterFingerprint() {
-            const components = [
-                deviceFingerprint.hardware?.['CPU Performance'] || '',
-                deviceFingerprint.browser?.['Font Hash'] || '',
-                deviceFingerprint.canvas?.['Canvas Hash'] || '',
-                deviceFingerprint.canvas?.['Audio Hash'] || '',
-                deviceFingerprint.screen?.['Screen Resolution'] || '',
-                deviceFingerprint.network?.['Public IP'] || '',
-                navigator.userAgent,
-                navigator.platform,
-                screen.width + 'x' + screen.height,
-                new Date().getTimezoneOffset().toString()
-            ];
-
-            const masterString = components.filter(c => c).join('|');
-            const hash = hashString(masterString);
-            
-            // Calculate stability score
-            const stableComponents = [
-                'hardware', 'browser', 'canvas', 'screen'
-            ];
-            
-            let stableCount = 0;
-            stableComponents.forEach(comp => {
-                if (deviceFingerprint[comp]) stableCount++;
-            });
-            
-            stabilityScore = Math.round((stableCount / stableComponents.length) * 100);
-            
-            return {
-                hash: hash,
-                components: components.length,
-                stability: stabilityScore
-            };
-        }
-
-        // Simple hash function
         function hashString(str) {
             let hash = 0;
             if (str.length === 0) return hash.toString(16);
             for (let i = 0; i < str.length; i++) {
                 const char = str.charCodeAt(i);
                 hash = ((hash << 5) - hash) + char;
-                hash = hash & hash; // Convert to 32-bit integer
+                hash = hash & hash;
             }
             return Math.abs(hash).toString(16);
         }
 
-        // Main scanning function
+        function detectMobileOS() {
+            const ua = navigator.userAgent;
+            if (/android/i.test(ua)) return { os: 'Android', version: getAndroidVersion(ua) };
+            if (/iPad|iPhone|iPod/.test(ua)) return { os: 'iOS', version: getiOSVersion(ua) };
+            if (/Windows Phone/.test(ua)) return { os: 'Windows Phone', version: 'Unknown' };
+            if (/BlackBerry/.test(ua)) return { os: 'BlackBerry', version: 'Unknown' };
+            return { os: 'Unknown', version: 'Unknown' };
+        }
+
+        function getAndroidVersion(ua) {
+            const match = ua.match(/Android\s([0-9\.]*)/);
+            return match ? match[1] : 'Unknown';
+        }
+
+        function getiOSVersion(ua) {
+            const match = ua.match(/OS (\d+)_(\d+)_?(\d+)?/);
+            return match ? `${match[1]}.${match[2]}.${match[3] || '0'}` : 'Unknown';
+        }
+
+        function detectDeviceType() {
+            const ua = navigator.userAgent;
+            const screenWidth = screen.width;
+            
+            if (/iPad/.test(ua) || (screenWidth >= 768 && screenWidth <= 1024)) return 'Tablet';
+            if (/iPhone|Android.*Mobile|Windows Phone|BlackBerry/.test(ua)) return 'Smartphone';
+            if (screenWidth <= 480) return 'Small Phone';
+            if (screenWidth <= 768) return 'Large Phone';
+            return 'Desktop/Unknown';
+        }
+
+        async function getMobileSystemInfo() {
+            try {
+                const mobileOS = detectMobileOS();
+                const deviceType = detectDeviceType();
+                
+                const info = {
+                    'Device Type': deviceType,
+                    'Operating System': mobileOS.os,
+                    'OS Version': mobileOS.version,
+                    'User Agent': navigator.userAgent,
+                    'Platform': navigator.platform,
+                    'App Name': navigator.appName,
+                    'App Version': navigator.appVersion,
+                    'Product': navigator.product || 'N/A',
+                    'Vendor': navigator.vendor || 'N/A',
+                    'Language': navigator.language,
+                    'Languages': navigator.languages?.join(', ') || 'N/A',
+                    'Timezone': Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    'Timezone Offset': `UTC${new Date().getTimezoneOffset() > 0 ? '-' : '+'}${Math.abs(new Date().getTimezoneOffset() / 60)}`
+                };
+
+                // Update summary
+                document.getElementById('deviceType').textContent = `${deviceType} - ${mobileOS.os}`;
+                document.getElementById('deviceSummary').textContent = `${mobileOS.os} ${mobileOS.version} • ${screen.width}×${screen.height}`;
+
+                deviceInfo.system = info;
+                return createSection('System Information', '📱', info);
+            } catch (e) {
+                console.error('System info error:', e);
+                return createSection('System Information', '📱', {'Error': e.message});
+            }
+        }
+
+        async function getMobileScreenInfo() {
+            try {
+                const info = {
+                    'Screen Width': `${screen.width}px`,
+                    'Screen Height': `${screen.height}px`,
+                    'Available Width': `${screen.availWidth}px`,
+                    'Available Height': `${screen.availHeight}px`,
+                    'Device Pixel Ratio': window.devicePixelRatio || 1,
+                    'Physical Width': `${Math.round(screen.width / window.devicePixelRatio)}px`,
+                    'Physical Height': `${Math.round(screen.height / window.devicePixelRatio)}px`,
+                    'Color Depth': `${screen.colorDepth} bits`,
+                    'Pixel Depth': `${screen.pixelDepth} bits`,
+                    'Viewport Width': `${window.innerWidth}px`,
+                    'Viewport Height': `${window.innerHeight}px`,
+                    'Visual Viewport Width': window.visualViewport?.width || 'N/A',
+                    'Visual Viewport Height': window.visualViewport?.height || 'N/A',
+                    'Orientation Type': screen.orientation?.type || 'N/A',
+                    'Orientation Angle': `${screen.orientation?.angle || 0}°`
+                };
+
+                // Add HDR detection
+                if (window.matchMedia) {
+                    info['HDR Support'] = window.matchMedia('(color-gamut: p3)').matches ? 'Yes' : 'No';
+                }
+
+                deviceInfo.screen = info;
+                return createSection('Screen & Display', '🖥️', info);
+            } catch (e) {
+                console.error('Screen info error:', e);
+                return createSection('Screen & Display', '🖥️', {'Error': e.message});
+            }
+        }
+
+        async function getMobileTouchInfo() {
+            try {
+                const info = {
+                    'Max Touch Points': navigator.maxTouchPoints || 0,
+                    'Touch Support': 'ontouchstart' in window ? 'Yes' : 'No',
+                    'Pointer Events': 'onpointerdown' in window ? 'Yes' : 'No',
+                    'Multi-touch': navigator.maxTouchPoints > 1 ? 'Yes' : 'No',
+                    'Force Touch': 'TouchEvent' in window && TouchEvent.prototype.hasOwnProperty('force') ? 'Yes' : 'No',
+                    'Hover Support': window.matchMedia && window.matchMedia('(hover: hover)').matches ? 'Yes' : 'No',
+                    'Primary Input': window.matchMedia && window.matchMedia('(pointer: coarse)').matches ? 'Touch' : 'Mouse/Trackpad'
+                };
+
+                deviceInfo.touch = info;
+                return createSection('Touch & Input', '👆', info);
+            } catch (e) {
+                console.error('Touch info error:', e);
+                return createSection('Touch & Input', '👆', {'Error': e.message});
+            }
+        }
+
+        async function getMobileHardwareInfo() {
+            try {
+                const info = {
+                    'CPU Cores': navigator.hardwareConcurrency || 'Unknown',
+                    'Device Memory': navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown',
+                    'Vibration Support': 'vibrate' in navigator ? 'Yes' : 'No',
+                    'Gamepad Support': 'getGamepads' in navigator ? 'Yes' : 'No',
+                    'Canvas Support': 'getContext' in document.createElement('canvas') ? 'Yes' : 'No',
+                    'WebRTC Support': 'RTCPeerConnection' in window ? 'Yes' : 'No',
+                    'WebAssembly': 'WebAssembly' in window ? 'Yes' : 'No'
+                };
+
+                // WebGL detection
+                try {
+                    const canvas = document.createElement('canvas');
+                    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                    if (gl) {
+                        info['WebGL Support'] = 'Yes';
+                        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                        if (debugInfo) {
+                            info['GPU Vendor'] = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || 'Unknown';
+                            info['GPU Renderer'] = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || 'Unknown';
+                        }
+                    } else {
+                        info['WebGL Support'] = 'No';
+                    }
+                } catch (e) {
+                    info['WebGL Support'] = 'Error';
+                }
+
+                deviceInfo.hardware = info;
+                return createSection('Hardware Capabilities', '⚙️', info);
+            } catch (e) {
+                console.error('Hardware info error:', e);
+                return createSection('Hardware Capabilities', '⚙️', {'Error': e.message});
+            }
+        }
+
+        async function getMobileNetworkInfo() {
+            try {
+                const info = {
+                    'Online Status': navigator.onLine ? 'Online' : 'Offline',
+                    'Connection Type': navigator.connection?.effectiveType || 'Unknown',
+                    'Downlink Speed': navigator.connection?.downlink ? `${navigator.connection.downlink} Mbps` : 'Unknown',
+                    'RTT (Latency)': navigator.connection?.rtt ? `${navigator.connection.rtt} ms` : 'Unknown',
+                    'Save Data Mode': navigator.connection?.saveData ? 'Enabled' : 'Disabled'
+                };
+
+                // Try to get IP info with timeout
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+                    
+                    const ipResponse = await fetch('https://api.ipify.org?format=json', {
+                        signal: controller.signal
+                    });
+                    clearTimeout(timeoutId);
+                    
+                    const ipData = await ipResponse.json();
+                    info['Public IP'] = ipData.ip;
+                } catch (e) {
+                    info['Public IP'] = 'Unable to fetch';
+                }
+
+                deviceInfo.network = info;
+                return createSection('Network Information', '📶', info);
+            } catch (e) {
+                console.error('Network info error:', e);
+                return createSection('Network Information', '📶', {'Error': e.message});
+            }
+        }
+
+        async function getMobileSensorsInfo() {
+            try {
+                const info = {
+                    'Device Motion': 'DeviceMotionEvent' in window ? 'Supported' : 'Not supported',
+                    'Device Orientation': 'DeviceOrientationEvent' in window ? 'Supported' : 'Not supported',
+                    'Ambient Light': 'AmbientLightSensor' in window ? 'Supported' : 'Not supported',
+                    'Accelerometer': 'Accelerometer' in window ? 'Supported' : 'Not supported',
+                    'Gyroscope': 'Gyroscope' in window ? 'Supported' : 'Not supported',
+                    'Magnetometer': 'Magnetometer' in window ? 'Supported' : 'Not supported',
+                    'Proximity Sensor': 'ProximitySensor' in window ? 'Supported' : 'Not supported'
+                };
+
+                const liveData = {
+                    id: 'sensorReadings',
+                    content: '<button class="permission-btn" onclick="startSensorReadings()">Start Live Sensors</button>'
+                };
+
+                deviceInfo.sensors = info;
+                return createSection('Sensors & Motion', '🧭', info, liveData);
+            } catch (e) {
+                console.error('Sensors info error:', e);
+                return createSection('Sensors & Motion', '🧭', {'Error': e.message});
+            }
+        }
+
+        function startSensorReadings() {
+            const element = document.getElementById('sensorReadings');
+            element.innerHTML = 'Requesting sensor access...';
+
+            try {
+                if ('DeviceOrientationEvent' in window) {
+                    window.addEventListener('deviceorientation', (event) => {
+                        const readings = `
+                            <strong>Orientation:</strong><br>
+                            α (Z-axis): ${event.alpha?.toFixed(1) || 'N/A'}°<br>
+                            β (X-axis): ${event.beta?.toFixed(1) || 'N/A'}°<br>
+                            γ (Y-axis): ${event.gamma?.toFixed(1) || 'N/A'}°
+                        `;
+                        element.innerHTML = readings;
+                    });
+                }
+
+                if ('DeviceMotionEvent' in window) {
+                    window.addEventListener('devicemotion', (event) => {
+                        const acc = event.acceleration;
+                        if (acc) {
+                            const readings = `
+                                <strong>Acceleration:</strong><br>
+                                X: ${acc.x?.toFixed(2) || 'N/A'} m/s²<br>
+                                Y: ${acc.y?.toFixed(2) || 'N/A'} m/s²<br>
+                                Z: ${acc.z?.toFixed(2) || 'N/A'} m/s²
+                            `;
+                            element.innerHTML = readings;
+                        }
+                    });
+                }
+
+                setTimeout(() => {
+                    if (element.innerHTML === 'Requesting sensor access...') {
+                        element.innerHTML = 'No sensor data received. Motion may be restricted on this device.';
+                    }
+                }, 3000);
+            } catch (e) {
+                element.innerHTML = `Sensor error: ${e.message}`;
+            }
+        }
+
+        async function getMobileMediaInfo() {
+            try {
+                const info = {
+                    'Media Devices API': 'mediaDevices' in navigator ? 'Supported' : 'Not supported',
+                    'WebRTC': 'RTCPeerConnection' in window ? 'Supported' : 'Not supported',
+                    'Screen Capture': 'getDisplayMedia' in (navigator.mediaDevices || {}) ? 'Supported' : 'Not supported'
+                };
+
+                if ('mediaDevices' in navigator) {
+                    try {
+                        const devices = await navigator.mediaDevices.enumerateDevices();
+                        const videoInputs = devices.filter(d => d.kind === 'videoinput');
+                        const audioInputs = devices.filter(d => d.kind === 'audioinput');
+                        const audioOutputs = devices.filter(d => d.kind === 'audiooutput');
+                        
+                        info['Camera Inputs'] = videoInputs.length.toString();
+                        info['Audio Inputs'] = audioInputs.length.toString();
+                        info['Audio Outputs'] = audioOutputs.length.toString();
+                    } catch (e) {
+                        info['Media Devices'] = 'Permission denied';
+                    }
+                }
+
+                deviceInfo.media = info;
+                return createSection('Camera & Media', '📷', info);
+            } catch (e) {
+                console.error('Media info error:', e);
+                return createSection('Camera & Media', '📷', {'Error': e.message});
+            }
+        }
+
+        async function getMobileBatteryInfo() {
+            try {
+                const info = {};
+
+                if ('getBattery' in navigator) {
+                    try {
+                        const battery = await navigator.getBattery();
+                        info['Battery Level'] = `${Math.round(battery.level * 100)}%`;
+                        info['Charging Status'] = battery.charging ? 'Charging' : 'Not charging';
+                        info['Charging Time'] = battery.chargingTime !== Infinity ? `${Math.round(battery.chargingTime / 60)} min` : 'N/A';
+                        info['Discharging Time'] = battery.dischargingTime !== Infinity ? `${Math.round(battery.dischargingTime / 60)} min` : 'N/A';
+                    } catch (e) {
+                        info['Battery API'] = 'Not supported or access denied';
+                    }
+                } else {
+                    info['Battery API'] = 'Not supported on this device';
+                }
+
+                deviceInfo.battery = info;
+                return createSection('Battery Information', '🔋', info);
+            } catch (e) {
+                console.error('Battery info error:', e);
+                return createSection('Battery Information', '🔋', {'Error': e.message});
+            }
+        }
+
+        async function getMobileStorageInfo() {
+            try {
+                const info = {
+                    'Local Storage': testStorage('localStorage'),
+                    'Session Storage': testStorage('sessionStorage'),
+                    'IndexedDB': 'indexedDB' in window ? 'Supported' : 'Not supported',
+                    'WebSQL': 'openDatabase' in window ? 'Supported (Deprecated)' : 'Not supported',
+                    'Cache API': 'caches' in window ? 'Supported' : 'Not supported',
+                    'Cookies': navigator.cookieEnabled ? 'Enabled' : 'Disabled'
+                };
+
+                if ('storage' in navigator && 'estimate' in navigator.storage) {
+                    try {
+                        const quota = await navigator.storage.estimate();
+                        info['Storage Quota'] = `${(quota.quota / 1024 / 1024 / 1024).toFixed(2)} GB`;
+                        info['Storage Used'] = `${(quota.usage / 1024 / 1024).toFixed(2)} MB`;
+                        info['Usage Percentage'] = `${((quota.usage / quota.quota) * 100).toFixed(1)}%`;
+                    } catch (e) {
+                        info['Storage Quota'] = 'Unable to determine';
+                    }
+                }
+
+                deviceInfo.storage = info;
+                return createSection('Storage & Cache', '💾', info);
+            } catch (e) {
+                console.error('Storage info error:', e);
+                return createSection('Storage & Cache', '💾', {'Error': e.message});
+            }
+        }
+
+        function testStorage(type) {
+            try {
+                const storage = window[type];
+                const testKey = '__test__';
+                storage.setItem(testKey, 'test');
+                storage.removeItem(testKey);
+                return 'Available';
+            } catch (e) {
+                return 'Not available';
+            }
+        }
+
+        async function getMobileLocationInfo() {
+            try {
+                const info = {
+                    'Geolocation API': 'geolocation' in navigator ? 'Available' : 'Not available',
+                    'Permissions API': 'permissions' in navigator ? 'Supported' : 'Not supported'
+                };
+
+                if ('permissions' in navigator) {
+                    try {
+                        const permission = await navigator.permissions.query({name: 'geolocation'});
+                        info['Location Permission'] = permission.state;
+                    } catch (e) {
+                        info['Location Permission'] = 'Unable to check';
+                    }
+                }
+
+                deviceInfo.location = info;
+                const liveData = {
+                    id: 'locationData',
+                    content: '<button class="permission-btn" onclick="getCurrentLocation()">Get Current Location</button>'
+                };
+                
+                return createSection('Location Services', '📍', info, liveData);
+            } catch (e) {
+                console.error('Location info error:', e);
+                return createSection('Location Services', '📍', {'Error': e.message});
+            }
+        }
+
+        function getCurrentLocation() {
+            if ('geolocation' in navigator) {
+                const element = document.getElementById('locationData');
+                element.innerHTML = 'Getting location...';
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const coords = position.coords;
+                        element.innerHTML = `
+                            <strong>Location Found:</strong><br>
+                            Lat: ${coords.latitude.toFixed(6)}<br>
+                            Lng: ${coords.longitude.toFixed(6)}<br>
+                            Accuracy: ${coords.accuracy.toFixed(0)}m<br>
+                            ${coords.altitude ? `Altitude: ${coords.altitude.toFixed(0)}m<br>` : ''}
+                            ${coords.speed ? `Speed: ${coords.speed.toFixed(1)} m/s<br>` : ''}
+                            Timestamp: ${new Date(position.timestamp).toLocaleTimeString()}
+                        `;
+                    },
+                    (error) => {
+                        element.innerHTML = `<span class="warning">Location Error: ${error.message}</span>`;
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+                );
+            }
+        }
+
+        async function getMobilePerformanceInfo() {
+            try {
+                const info = {};
+
+                if ('performance' in window) {
+                    const perf = performance;
+                    info['Performance API'] = 'Available';
+                    
+                    if (perf.memory) {
+                        info['JS Heap Used'] = `${(perf.memory.usedJSHeapSize / 1024 / 1024).toFixed(1)} MB`;
+                        info['JS Heap Total'] = `${(perf.memory.totalJSHeapSize / 1024 / 1024).toFixed(1)} MB`;
+                        info['JS Heap Limit'] = `${(perf.memory.jsHeapSizeLimit / 1024 / 1024).toFixed(1)} MB`;
+                    }
+
+                    if (perf.timing) {
+                        const timing = perf.timing;
+                        info['Page Load Time'] = `${timing.loadEventEnd - timing.navigationStart}ms`;
+                        info['DNS Lookup'] = `${timing.domainLookupEnd - timing.domainLookupStart}ms`;
+                        info['TCP Connection'] = `${timing.connectEnd - timing.connectStart}ms`;
+                    }
+                }
+
+                deviceInfo.performance = info;
+                return createSection('Performance Metrics', '⚡', info);
+            } catch (e) {
+                console.error('Performance info error:', e);
+                return createSection('Performance Metrics', '⚡', {'Error': e.message});
+            }
+        }
+
+        async function getMobileSecurityInfo() {
+            try {
+                const info = {
+                    'HTTPS': location.protocol === 'https:' ? 'Yes' : 'No',
+                    'Secure Context': window.isSecureContext ? 'Yes' : 'No',
+                    'Cross Origin Isolated': window.crossOriginIsolated ? 'Yes' : 'No',
+                    'Permissions API': 'permissions' in navigator ? 'Supported' : 'Not supported',
+                    'Credential Management': 'credentials' in navigator ? 'Supported' : 'Not supported',
+                    'Web Authentication': 'PublicKeyCredential' in window ? 'Supported' : 'Not supported',
+                    'Payment Request': 'PaymentRequest' in window ? 'Supported' : 'Not supported',
+                    'Notification API': 'Notification' in window ? 'Supported' : 'Not supported'
+                };
+
+                if ('Notification' in window) {
+                    info['Notification Permission'] = Notification.permission;
+                }
+
+                deviceInfo.security = info;
+                return createSection('Security & Privacy', '🔒', info);
+            } catch (e) {
+                console.error('Security info error:', e);
+                return createSection('Security & Privacy', '🔒', {'Error': e.message});
+            }
+        }
+
+        async function generateCanvasFingerprint() {
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 300;
+                canvas.height = 150;
+
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.fillStyle = '#f60';
+                ctx.fillRect(125, 1, 62, 20);
+                
+                ctx.fillStyle = '#069';
+                ctx.fillText('Device Fingerprint 🔍', 2, 15);
+                
+                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+                ctx.fillText('Mobile Scanner', 4, 45);
+
+                const dataURL = canvas.toDataURL();
+                return hashString(dataURL);
+            } catch (e) {
+                return 'canvas-error';
+            }
+        }
+
+        async function getAdvancedFingerprint() {
+            try {
+                const info = {};
+
+                // Canvas fingerprint
+                info['Canvas Hash'] = await generateCanvasFingerprint();
+
+                // Font detection (simplified)
+                const testFonts = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Verdana'];
+                const availableFonts = [];
+                const testString = 'mmmmmmmmmmlli';
+                const testSize = '72px';
+                const h = document.body;
+
+                const s = document.createElement('span');
+                s.style.fontSize = testSize;
+                s.innerHTML = testString;
+                s.style.visibility = 'hidden';
+
+                try {
+                    s.style.fontFamily = 'serif';
+                    h.appendChild(s);
+                    const serifWidth = s.offsetWidth;
+                    h.removeChild(s);
+
+                    for (const font of testFonts) {
+                        s.style.fontFamily = font + ', serif';
+                        h.appendChild(s);
+                        if (s.offsetWidth !== serifWidth) {
+                            availableFonts.push(font);
+                        }
+                        h.removeChild(s);
+                    }
+                } catch (e) {
+                    // Font detection failed
+                }
+
+                info['Font Hash'] = hashString(availableFonts.join(','));
+                info['Available Fonts'] = availableFonts.length.toString();
+
+                // Plugin enumeration
+                const plugins = [];
+                try {
+                    for (let i = 0; i < navigator.plugins.length; i++) {
+                        plugins.push(navigator.plugins[i].name);
+                    }
+                } catch (e) {
+                    // Plugin enumeration failed
+                }
+                info['Plugin Hash'] = hashString(plugins.join(','));
+
+                deviceInfo.fingerprint = info;
+                return createSection('Advanced Fingerprint', '🔍', info);
+            } catch (e) {
+                console.error('Fingerprint error:', e);
+                return createSection('Advanced Fingerprint', '🔍', {'Error': e.message});
+            }
+        }
+
         async function getAllDeviceInfo() {
             const grid = document.getElementById('infoGrid');
             grid.innerHTML = '';
-            deviceFingerprint = {};
+            deviceInfo = {};
             completedSections = 0;
 
             const sections = [
-                getAdvancedHardwareInfo,
-                getBrowserFingerprint,
-                getCanvasAudioFingerprint,
-                getAdvancedScreenInfo,
-                getNetworkLocationFingerprint,
-                getStoragePersistenceInfo,
-                getPerformanceFingerprint
+                getMobileSystemInfo,
+                getMobileScreenInfo,
+                getMobileTouchInfo,
+                getMobileHardwareInfo,
+                getMobileNetworkInfo,
+                getMobileSensorsInfo,
+                getMobileMediaInfo,
+                getMobileBatteryInfo,
+                getMobileStorageInfo,
+                getMobileLocationInfo,
+                getMobilePerformanceInfo,
+                getMobileSecurityInfo,
+                getAdvancedFingerprint
             ];
 
             totalSections = sections.length;
@@ -961,14 +923,24 @@
             }
 
             // Generate master fingerprint
-            const masterFingerprint = generateMasterFingerprint();
-            fingerprintHash = masterFingerprint.hash;
-            
-            document.getElementById('fingerprintDisplay').textContent = `Device ID: ${fingerprintHash.toUpperCase()}`;
-            document.getElementById('confidenceDisplay').textContent = `Stability Score: ${stabilityScore}% • ${masterFingerprint.components} data points`;
+            setTimeout(() => {
+                try {
+                    const components = [
+                        deviceInfo.system?.['User Agent'] || '',
+                        deviceInfo.screen?.['Screen Width'] || '',
+                        deviceInfo.hardware?.['CPU Cores'] || '',
+                        deviceInfo.fingerprint?.['Canvas Hash'] || '',
+                        deviceInfo.fingerprint?.['Font Hash'] || '',
+                        navigator.platform,
+                        new Date().getTimezoneOffset().toString()
+                    ];
 
-            // Initialize behavior tracking
-            initializeBehaviorTracking();
+                    fingerprintHash = hashString(components.filter(c => c).join('|'));
+                    document.getElementById('fingerprintDisplay').textContent = `Device ID: ${fingerprintHash.toUpperCase()}`;
+                } catch (e) {
+                    document.getElementById('fingerprintDisplay').textContent = 'Fingerprint generation complete';
+                }
+            }, 500);
         }
 
         function refreshAllInfo() {
@@ -980,8 +952,7 @@
             const exportData = {
                 timestamp,
                 fingerprintHash,
-                stabilityScore,
-                deviceFingerprint,
+                deviceInfo,
                 sessionInfo: {
                     userAgent: navigator.userAgent,
                     timestamp: timestamp,
@@ -994,87 +965,91 @@
             
             const linkElement = document.createElement('a');
             linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', `device_fingerprint_${fingerprintHash}_${timestamp.split('T')[0]}.json`);
+            linkElement.setAttribute('download', `mobile_device_scan_${timestamp.split('T')[0]}.json`);
             linkElement.click();
         }
 
-        function copyFingerprint() {
-            const fingerprintData = `Device Fingerprint: ${fingerprintHash.toUpperCase()}\nStability: ${stabilityScore}%\nGenerated: ${new Date().toISOString()}`;
+        function copyToClipboard() {
+            const exportData = {
+                timestamp: new Date().toISOString(),
+                fingerprintHash,
+                deviceInfo
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
             
             if (navigator.clipboard) {
-                navigator.clipboard.writeText(fingerprintData).then(() => {
-                    alert('Device fingerprint copied to clipboard!');
+                navigator.clipboard.writeText(dataStr).then(() => {
+                    alert('Device information copied to clipboard!');
+                }).catch(() => {
+                    alert('Unable to copy to clipboard');
                 });
             } else {
-                alert(`Device ID: ${fingerprintHash.toUpperCase()}`);
+                alert('Clipboard not supported');
             }
         }
 
-        function compareFingerprints() {
-            const stored = localStorage.getItem('_device_fingerprint_history_');
-            let history = stored ? JSON.parse(stored) : [];
-            
-            const current = {
-                hash: fingerprintHash,
-                timestamp: new Date().toISOString(),
-                stability: stabilityScore
-            };
-            
-            history.push(current);
-            if (history.length > 10) history.shift(); // Keep last 10
-            
-            localStorage.setItem('_device_fingerprint_history_', JSON.stringify(history));
-            
-            const matches = history.filter(h => h.hash === fingerprintHash).length;
-            alert(`Fingerprint History:\nCurrent ID: ${fingerprintHash.toUpperCase()}\nMatches in history: ${matches}/${history.length}\nFirst seen: ${history[0]?.timestamp || 'Now'}`);
+        function generateFingerprint() {
+            if (fingerprintHash) {
+                alert(`Device Fingerprint: ${fingerprintHash.toUpperCase()}\n\nThis unique identifier is based on your device characteristics and can be used to track you across sessions.`);
+            } else {
+                alert('Fingerprint not ready yet. Please wait for scan to complete.');
+            }
         }
 
         function generateReport() {
             const report = `
-DEVICE FINGERPRINTING REPORT
-============================
+MOBILE DEVICE SCAN REPORT
+========================
 
 Device Identifier: ${fingerprintHash.toUpperCase()}
-Stability Score: ${stabilityScore}%
 Generated: ${new Date().toISOString()}
+Device Type: ${deviceInfo.system?.['Device Type'] || 'Unknown'}
+Operating System: ${deviceInfo.system?.['Operating System'] || 'Unknown'}
 
-FINGERPRINT COMPONENTS:
-- Hardware fingerprint (CPU, GPU, Memory)
-- Canvas rendering signature
-- Audio context fingerprint
-- Font enumeration
-- WebGL capabilities
-- Screen characteristics
-- Network information
-- Browser configuration
+DEVICE CAPABILITIES:
+- Screen: ${deviceInfo.screen?.['Screen Width'] || 'Unknown'} × ${deviceInfo.screen?.['Screen Height'] || 'Unknown'}
+- Touch Points: ${deviceInfo.touch?.['Max Touch Points'] || 'Unknown'}
+- CPU Cores: ${deviceInfo.hardware?.['CPU Cores'] || 'Unknown'}
+- Memory: ${deviceInfo.hardware?.['Device Memory'] || 'Unknown'}
+- Battery: ${deviceInfo.battery?.['Battery Level'] || 'Unknown'}
 
-PRIVACY IMPLICATIONS:
-This fingerprint can potentially track you across:
-- Different websites
-- Private/incognito browsing sessions
-- After clearing cookies
-- Even with VPN usage
+NETWORK INFO:
+- Connection: ${deviceInfo.network?.['Connection Type'] || 'Unknown'}
+- IP Address: ${deviceInfo.network?.['Public IP'] || 'Unknown'}
 
-PROTECTION RECOMMENDATIONS:
-- Use browsers with fingerprinting protection
-- Enable privacy-focused browser extensions
-- Consider using Tor browser for sensitive browsing
-- Regularly update browser and OS
-- Use different browsers for different activities
+FINGERPRINTING DATA:
+- Canvas Hash: ${deviceInfo.fingerprint?.['Canvas Hash'] || 'N/A'}
+- Font Hash: ${deviceInfo.fingerprint?.['Font Hash'] || 'N/A'}
 
-Technical Details: ${JSON.stringify(deviceFingerprint, null, 2)}
+Full Technical Data:
+${JSON.stringify(deviceInfo, null, 2)}
             `;
             
             const blob = new Blob([report], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `fingerprint_report_${fingerprintHash}.txt`;
+            a.download = `mobile_scan_report_${fingerprintHash || 'unknown'}.txt`;
             a.click();
         }
 
         // Initialize on page load
         window.addEventListener('load', getAllDeviceInfo);
+
+        // Update on orientation change
+        window.addEventListener('orientationchange', () => {
+            setTimeout(getAllDeviceInfo, 1000);
+        });
+
+        // Update network status
+        window.addEventListener('online', () => {
+            setTimeout(getAllDeviceInfo, 500);
+        });
+
+        window.addEventListener('offline', () => {
+            setTimeout(getAllDeviceInfo, 500);
+        });
     </script>
 </body>
 </html>
