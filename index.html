@@ -2,1799 +2,487 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Ultimate Device & User Data Extractor</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            min-height: 100vh;
-            padding: 10px;
-            line-height: 1.4;
-            font-size: 13px;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 20px;
-            padding: 15px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(20px);
-        }
-
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.6em;
-            font-weight: 700;
-        }
-
-        .warning-banner {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .summary-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .device-type {
-            font-size: 1.4em;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .fingerprint-id {
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            margin: 8px 0;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-top: 15px;
-        }
-
-        .info-section {
-            background: white;
-            border-radius: 10px;
-            padding: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border-left: 3px solid #667eea;
-            transition: all 0.3s ease;
-        }
-
-        .info-section:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .section-title {
-            font-size: 1em;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .icon {
-            font-size: 1.1em;
-        }
-
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 4px 0;
-            border-bottom: 1px solid #f8f9fa;
-            gap: 8px;
-        }
-
-        .info-item:last-child {
-            border-bottom: none;
-        }
-
-        .label {
-            font-weight: 600;
-            color: #495057;
-            flex: 1;
-            font-size: 0.85em;
-        }
-
-        .value {
-            color: #212529;
-            flex: 1.5;
-            text-align: right;
-            font-size: 0.85em;
-            word-break: break-word;
-        }
-
-        .fingerprint-hash {
-            font-family: 'Courier New', monospace;
-            font-size: 0.75em;
-            background: #f8f9fa;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
-
-        .live-data {
-            background: #e8f5e8;
-            padding: 8px;
-            border-radius: 6px;
-            margin: 8px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.75em;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .canvas-container {
-            background: #f8f9fa;
-            padding: 8px;
-            border-radius: 6px;
-            margin: 8px 0;
-            text-align: center;
-        }
-
-        .canvas-fingerprint {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #dee2e6;
-            border-radius: 3px;
-        }
-
-        .permission-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 10px;
-            transition: all 0.3s ease;
-            margin: 2px;
-        }
-
-        .permission-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .refresh-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            margin: 15px 0;
-            transition: all 0.3s ease;
-        }
-
-        .export-section {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .export-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 2px;
-            margin: 12px 0;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #28a745, #20c997);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .warning {
-            background: #fff3cd;
-            color: #856404;
-            padding: 6px;
-            border-radius: 4px;
-            font-size: 0.75em;
-            margin: 4px 0;
-        }
-
-        .critical {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 6px;
-            border-radius: 4px;
-            font-size: 0.75em;
-            margin: 4px 0;
-        }
-
-        .success {
-            background: #d4edda;
-            color: #155724;
-            padding: 6px;
-            border-radius: 4px;
-            font-size: 0.75em;
-            margin: 4px 0;
-        }
-
-        @media (min-width: 768px) {
-            .container {
-                max-width: 1000px;
-                padding: 25px;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .export-section {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .info-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohd Fuzail - Flutter Developer Portfolio</title>
+    <meta name="description" content="Senior Flutter Developer specializing in cross-platform mobile applications. 2.5+ years experience building high-performance apps for iOS and Android.">
+    <meta name="keywords" content="Flutter Developer, Mobile App Developer, iOS, Android, Dart, Cross-platform">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <h1>🔍 Ultimate Device & User Data Extractor</h1>
-        
-        <div class="warning-banner">
-            ⚠️ COMPREHENSIVE DATA COLLECTION IN PROGRESS ⚠️<br>
-            Extracting maximum possible device & user information
-        </div>
-
-        <div class="summary-card">
-            <div class="device-type" id="deviceType">Analyzing Target...</div>
-            <div id="deviceSummary">Deep scanning in progress...</div>
-            <div class="fingerprint-id" id="fingerprintDisplay">Generating Unique Identifier...</div>
-            <div id="confidenceDisplay">Analyzing data patterns...</div>
-        </div>
-
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressBar"></div>
-        </div>
-        
-        <div class="info-grid" id="infoGrid">
-            <!-- All information sections will be populated here -->
-        </div>
-
-        <button class="refresh-btn" onclick="refreshAllInfo()">🔄 Deep Re-scan Everything</button>
-
-        <div class="export-section">
-            <button class="export-btn" onclick="exportToJSON()">📄 Export</button>
-            <button class="export-btn" onclick="copyToClipboard()">📋 Copy</button>
-            <button class="export-btn" onclick="generateFingerprint()">🔍 ID</button>
-            <button class="export-btn" onclick="generateReport()">📊 Report</button>
-            <button class="export-btn" onclick="trackBehavior()">🎯 Track</button>
-            <button class="export-btn" onclick="deepAnalysis()">⚡ Deep</button>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-animation">
+            <div class="loading-cube">
+                <div class="cube-face front"></div>
+                <div class="cube-face back"></div>
+                <div class="cube-face right"></div>
+                <div class="cube-face left"></div>
+                <div class="cube-face top"></div>
+                <div class="cube-face bottom"></div>
+            </div>
+            <p>Loading Portfolio...</p>
         </div>
     </div>
 
-    <script>
-        let deviceData = {};
-        let behaviorData = {};
-        let timingData = {};
-        let totalSections = 0;
-        let completedSections = 0;
-        let masterFingerprint = '';
-        let isTracking = false;
-        let trackers = {};
+    <!-- Navigation -->
+    <nav id="navbar" class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">Mohammad Fuzail</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
-        function updateProgress() {
-            completedSections++;
-            const progress = (completedSections / totalSections) * 100;
-            document.getElementById('progressBar').style.width = progress + '%';
-        }
-
-        function createSection(title, icon, items, liveData = null) {
-            const section = document.createElement('div');
-            section.className = 'info-section';
-            
-            let itemsHTML = '';
-            for (const [key, value] of Object.entries(items)) {
-                const isHash = key.includes('Hash') || key.includes('Fingerprint') || key.includes('ID');
-                const valueClass = isHash ? 'fingerprint-hash' : '';
-                itemsHTML += `
-                    <div class="info-item">
-                        <span class="label">${key}</span>
-                        <span class="value ${valueClass}">${value}</span>
-                    </div>
-                `;
-            }
-
-            if (liveData) {
-                itemsHTML += `<div class="live-data" id="${liveData.id}">${liveData.content}</div>`;
-            }
-
-            section.innerHTML = `
-                <div class="section-title">
-                    <span class="icon">${icon}</span>
-                    ${title}
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-background">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+                <div class="shape shape-5"></div>
+            </div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="title-line">Hi, I'm</span>
+                    <span class="title-name">Mohd Fuzail</span>
+                    <span class="title-role">Flutter Developer</span>
+                </h1>
+                <p class="hero-description">
+                    Creating beautiful, high-performance mobile applications for iOS and Android. 
+                    Passionate about delivering exceptional user experiences through innovative design and clean code.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">View My Work</a>
+                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
                 </div>
-                ${itemsHTML}
-            `;
-
-            return section;
-        }
-
-        function hashString(str) {
-            let hash = 0;
-            if (!str || str.length === 0) return '0';
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash = hash & hash;
-            }
-            return Math.abs(hash).toString(16);
-        }
-
-        // BASIC SYSTEM DETECTION
-        function detectMobileOS() {
-            const ua = navigator.userAgent;
-            if (/android/i.test(ua)) return { os: 'Android', version: getAndroidVersion(ua) };
-            if (/iPad|iPhone|iPod/.test(ua)) return { os: 'iOS', version: getiOSVersion(ua) };
-            if (/Windows Phone/.test(ua)) return { os: 'Windows Phone', version: 'Unknown' };
-            if (/BlackBerry/.test(ua)) return { os: 'BlackBerry', version: 'Unknown' };
-            return { os: 'Unknown', version: 'Unknown' };
-        }
-
-        function getAndroidVersion(ua) {
-            const match = ua.match(/Android\s([0-9\.]*)/);
-            return match ? match[1] : 'Unknown';
-        }
-
-        function getiOSVersion(ua) {
-            const match = ua.match(/OS (\d+)_(\d+)_?(\d+)?/);
-            return match ? `${match[1]}.${match[2]}.${match[3] || '0'}` : 'Unknown';
-        }
-
-        function detectDeviceType() {
-            const ua = navigator.userAgent;
-            const screenWidth = screen.width;
-            const screenHeight = screen.height;
-            const diagonal = Math.sqrt(screenWidth**2 + screenHeight**2);
+            </div>
             
-            if (/iPad/.test(ua) || diagonal > 1500) return 'Tablet';
-            if (/iPhone|Android.*Mobile|Windows Phone|BlackBerry/.test(ua)) return 'Smartphone';
-            if (screenWidth <= 480) return 'Small Phone';
-            if (screenWidth <= 768) return 'Large Phone';
-            if (diagonal > 2000) return 'Desktop';
-            return 'Unknown Device';
-        }
+            <div class="hero-3d">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="app-demo">
+                            <div class="demo-content">
+                                <div class="demo-header"></div>
+                                <div class="demo-body">
+                                    <div class="demo-card"></div>
+                                    <div class="demo-card"></div>
+                                    <div class="demo-card"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <div class="scroll-arrow">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
 
-        // COMPREHENSIVE SYSTEM INFO
-        async function getCompleteSystemInfo() {
-            try {
-                const mobileOS = detectMobileOS();
-                const deviceType = detectDeviceType();
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">About Me</h2>
+                <p class="section-subtitle">Get to know more about my journey and passion</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <div class="about-card">
+                        <h3>Professional Journey</h3>
+                        <p>
+                            With 2.5+ years of dedicated experience in Flutter development, I've crafted high-performance 
+                            mobile applications that serve over 100,000+ users across diverse industries including automotive, 
+                            retail, healthcare, and field services.
+                        </p>
+                        
+                        <h3>What Drives Me</h3>
+                        <p>
+                            I'm passionate about creating scalable solutions that drive business growth while maintaining 
+                            exceptional user experiences. My expertise spans cross-platform development, team mentorship, 
+                            and implementing industry best practices.
+                        </p>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-number" data-target="15">0</div>
+                                <div class="stat-label">Apps Delivered</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" data-target="100000">0</div>
+                                <div class="stat-label">Users Served</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" data-target="2.5">0</div>
+                                <div class="stat-label">Years Experience</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
-                const info = {
-                    'Device Type': deviceType,
-                    'Operating System': mobileOS.os,
-                    'OS Version': mobileOS.version,
-                    'User Agent': navigator.userAgent,
-                    'Platform': navigator.platform,
-                    'App Name': navigator.appName,
-                    'App Code Name': navigator.appCodeName || 'N/A',
-                    'App Version': navigator.appVersion,
-                    'Product': navigator.product || 'N/A',
-                    'Vendor': navigator.vendor || 'N/A',
-                    'Vendor Sub': navigator.vendorSub || 'N/A',
-                    'Build ID': navigator.buildID || 'N/A',
-                    'OS CPU': navigator.oscpu || 'N/A',
-                    'Language': navigator.language,
-                    'Languages': navigator.languages?.join(', ') || 'N/A',
-                    'Timezone': Intl.DateTimeFormat().resolvedOptions().timeZone,
-                    'Timezone Offset': `UTC${new Date().getTimezoneOffset() > 0 ? '-' : '+'}${Math.abs(new Date().getTimezoneOffset() / 60)}`,
-                    'System Hash': hashString(navigator.userAgent + navigator.platform + mobileOS.os)
-                };
+                <div class="about-visual">
+                    <div class="experience-cube">
+                        <div class="cube-container">
+                            <div class="cube">
+                                <div class="cube-face front">
+                                    <i class="fab fa-flutter"></i>
+                                </div>
+                                <div class="cube-face back">
+                                    <i class="fab fa-dart-lang"></i>
+                                </div>
+                                <div class="cube-face right">
+                                    <i class="fab fa-android"></i>
+                                </div>
+                                <div class="cube-face left">
+                                    <i class="fab fa-apple"></i>
+                                </div>
+                                <div class="cube-face top">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                                <div class="cube-face bottom">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                // Update summary
-                document.getElementById('deviceType').textContent = `${deviceType} - ${mobileOS.os}`;
-                document.getElementById('deviceSummary').textContent = `${mobileOS.os} ${mobileOS.version} • ${screen.width}×${screen.height} • ${navigator.hardwareConcurrency || '?'} cores`;
-
-                deviceData.system = info;
-                return createSection('System Detection', '📱', info);
-            } catch (e) {
-                console.error('System info error:', e);
-                return createSection('System Detection', '📱', {'Error': e.message});
-            }
-        }
-
-        // ADVANCED SCREEN ANALYSIS
-        async function getAdvancedScreenInfo() {
-            try {
-                const info = {
-                    'Screen Width': `${screen.width}px`,
-                    'Screen Height': `${screen.height}px`,
-                    'Available Width': `${screen.availWidth}px`,
-                    'Available Height': `${screen.availHeight}px`,
-                    'Device Pixel Ratio': window.devicePixelRatio || 1,
-                    'Physical Width': `${Math.round(screen.width / window.devicePixelRatio)}px`,
-                    'Physical Height': `${Math.round(screen.height / window.devicePixelRatio)}px`,
-                    'Color Depth': `${screen.colorDepth} bits`,
-                    'Pixel Depth': `${screen.pixelDepth} bits`,
-                    'Viewport Width': `${window.innerWidth}px`,
-                    'Viewport Height': `${window.innerHeight}px`,
-                    'Visual Viewport Width': window.visualViewport?.width || 'N/A',
-                    'Visual Viewport Height': window.visualViewport?.height || 'N/A',
-                    'Outer Width': `${window.outerWidth}px`,
-                    'Outer Height': `${window.outerHeight}px`,
-                    'Orientation Type': screen.orientation?.type || 'Unknown',
-                    'Orientation Angle': `${screen.orientation?.angle || 0}°`
-                };
-
-                // Estimate display characteristics
-                const diagonal = Math.sqrt(screen.width**2 + screen.height**2);
-                const estimatedSize = diagonal < 1000 ? 5 : diagonal < 1500 ? 6 : diagonal < 2000 ? 7 : 10;
-                info['Estimated PPI'] = Math.round(diagonal / estimatedSize);
-                info['Estimated Size'] = `${estimatedSize}"`;
-
-                // Advanced display detection
-                if (window.matchMedia) {
-                    info['HDR Support'] = window.matchMedia('(color-gamut: p3)').matches ? 'Yes' : 'No';
-                    info['High Refresh Rate'] = window.matchMedia('(prefers-reduced-motion: no-preference)').matches ? 'Possible' : 'Limited';
-                    info['Dark Mode'] = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'Yes' : 'No';
-                    info['High Contrast'] = window.matchMedia('(prefers-contrast: high)').matches ? 'Yes' : 'No';
-                    info['Reduced Motion'] = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'Yes' : 'No';
-                }
-
-                // Zoom detection
-                const zoomLevel = Math.round((window.outerWidth / window.innerWidth) * 100) / 100;
-                info['Zoom Level'] = `${zoomLevel}x`;
-
-                info['Screen Hash'] = hashString(`${screen.width}x${screen.height}x${screen.colorDepth}x${window.devicePixelRatio}`);
-
-                deviceData.screen = info;
-                return createSection('Screen Analysis', '🖥️', info);
-            } catch (e) {
-                console.error('Screen info error:', e);
-                return createSection('Screen Analysis', '🖥️', {'Error': e.message});
-            }
-        }
-
-        // COMPREHENSIVE TOUCH ANALYSIS
-        async function getAdvancedTouchInfo() {
-            try {
-                const info = {
-                    'Max Touch Points': navigator.maxTouchPoints || 0,
-                    'Touch Support': 'ontouchstart' in window ? 'Yes' : 'No',
-                    'Pointer Events': 'onpointerdown' in window ? 'Yes' : 'No',
-                    'Multi-touch': navigator.maxTouchPoints > 1 ? 'Yes' : 'No',
-                    'Force Touch': 'TouchEvent' in window && TouchEvent.prototype.hasOwnProperty('force') ? 'Yes' : 'No',
-                    'Hover Support': window.matchMedia && window.matchMedia('(hover: hover)').matches ? 'Yes' : 'No',
-                    'Primary Input': window.matchMedia && window.matchMedia('(pointer: coarse)').matches ? 'Touch' : 'Mouse/Trackpad',
-                    'Pointer Fine': window.matchMedia && window.matchMedia('(pointer: fine)').matches ? 'Yes' : 'No',
-                    'Any Hover': window.matchMedia && window.matchMedia('(any-hover: hover)').matches ? 'Yes' : 'No',
-                    'Any Pointer': window.matchMedia && window.matchMedia('(any-pointer: fine)').matches ? 'Fine' : 'Coarse'
-                };
-
-                // Touch behavior tracking
-                let touchData = 'No touch data yet';
-                const liveData = {
-                    id: 'touchTracking',
-                    content: touchData
-                };
-
-                deviceData.touch = info;
-                return createSection('Touch Analysis', '👆', info, liveData);
-            } catch (e) {
-                console.error('Touch info error:', e);
-                return createSection('Touch Analysis', '👆', {'Error': e.message});
-            }
-        }
-
-        // DEEP HARDWARE ANALYSIS
-        async function getDeepHardwareInfo() {
-            try {
-                const info = {
-                    'CPU Cores': navigator.hardwareConcurrency || 'Unknown',
-                    'Device Memory': navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown',
-                    'Max Touch Points': navigator.maxTouchPoints || 0,
-                    'Vibration Support': 'vibrate' in navigator ? 'Yes' : 'No',
-                    'Gamepad Support': 'getGamepads' in navigator ? 'Yes' : 'No',
-                    'Canvas Support': 'getContext' in document.createElement('canvas') ? 'Yes' : 'No',
-                    'WebRTC Support': 'RTCPeerConnection' in window ? 'Yes' : 'No',
-                    'WebAssembly': 'WebAssembly' in window ? 'Yes' : 'No',
-                    'Shared Array Buffer': 'SharedArrayBuffer' in window ? 'Yes' : 'No',
-                    'Atomics': 'Atomics' in window ? 'Yes' : 'No'
-                };
-
-                // CPU Performance Test
-                const start = performance.now();
-                let count = 0;
-                for (let i = 0; i < 100000; i++) {
-                    count += Math.random() * Math.random();
-                }
-                const cpuTime = performance.now() - start;
-                info['CPU Performance'] = `${cpuTime.toFixed(2)}ms`;
-
-                // Memory Test
-                if (performance.memory) {
-                    info['JS Heap Used'] = `${(performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(1)} MB`;
-                    info['JS Heap Total'] = `${(performance.memory.totalJSHeapSize / 1024 / 1024).toFixed(1)} MB`;
-                    info['JS Heap Limit'] = `${(performance.memory.jsHeapSizeLimit / 1024 / 1024).toFixed(1)} MB`;
-                }
-
-                // WebGL detection
-                try {
-                    const canvas = document.createElement('canvas');
-                    const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                    if (gl) {
-                        info['WebGL Version'] = gl.getParameter(gl.VERSION);
-                        info['GLSL Version'] = gl.getParameter(gl.SHADING_LANGUAGE_VERSION);
-                        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                        if (debugInfo) {
-                            info['GPU Vendor'] = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-                            info['GPU Renderer'] = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-                        }
-                        info['Max Texture Size'] = gl.getParameter(gl.MAX_TEXTURE_SIZE);
-                        info['Max Viewport Dims'] = gl.getParameter(gl.MAX_VIEWPORT_DIMS).join('x');
-                        info['WebGL Extensions'] = gl.getSupportedExtensions().length;
-                    }
-                } catch (e) {
-                    info['WebGL Error'] = e.message;
-                }
-
-                info['Hardware Hash'] = hashString(JSON.stringify(info));
-
-                deviceData.hardware = info;
-                return createSection('Hardware Analysis', '⚙️', info);
-            } catch (e) {
-                console.error('Hardware info error:', e);
-                return createSection('Hardware Analysis', '⚙️', {'Error': e.message});
-            }
-        }
-
-        // COMPREHENSIVE NETWORK ANALYSIS
-        async function getNetworkIntelligence() {
-            try {
-                const info = {
-                    'Online Status': navigator.onLine ? 'Online' : 'Offline',
-                    'Connection Type': navigator.connection?.effectiveType || 'Unknown',
-                    'Downlink': navigator.connection?.downlink ? `${navigator.connection.downlink} Mbps` : 'Unknown',
-                    'RTT': navigator.connection?.rtt ? `${navigator.connection.rtt} ms` : 'Unknown',
-                    'Save Data': navigator.connection?.saveData ? 'Yes' : 'No'
-                };
-
-                // DNS timing test
-                const dnsStart = performance.now();
-                try {
-                    await fetch('https://1.1.1.1/dns-query?name=google.com&type=A', {
-                        method: 'HEAD',
-                        mode: 'no-cors'
-                    });
-                    info['DNS Response'] = `${(performance.now() - dnsStart).toFixed(0)}ms`;
-                } catch (e) {
-                    info['DNS Response'] = 'Blocked';
-                }
-
-                // IP and location detection
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Technical Skills</h2>
+                <p class="section-subtitle">Technologies and tools I work with</p>
+            </div>
+            
+            <div class="skills-content">
+                <div class="skills-categories">
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fas fa-mobile-alt"></i>
+                            <h3>Mobile Development</h3>
+                        </div>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Flutter</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="95%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Dart</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Provider/Riverpod</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">BLoC Pattern</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
-                    const ipResponse = await fetch('https://api.ipify.org?format=json', {
-                        signal: controller.signal
-                    });
-                    clearTimeout(timeoutId);
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fas fa-code"></i>
+                            <h3>Architecture & Programming</h3>
+                        </div>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <span class="skill-name">MVC/MVVM</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">OOP</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">C/C++</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
-                    const ipData = await ipResponse.json();
-                    info['Public IPv4'] = ipData.ip;
-
-                    // Get detailed location info
-                    const locationResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
-                    const locationData = await locationResponse.json();
-                    info['ISP'] = locationData.org || 'Unknown';
-                    info['Country'] = locationData.country_name || 'Unknown';
-                    info['Region'] = locationData.region || 'Unknown';
-                    info['City'] = locationData.city || 'Unknown';
-                    info['Postal Code'] = locationData.postal || 'Unknown';
-                    info['ASN'] = locationData.asn || 'Unknown';
-                } catch (e) {
-                    info['IP Info'] = 'Unable to fetch';
-                }
-
-                // WebRTC IP leak detection
-                try {
-                    const ips = await getWebRTCIPs();
-                    info['Local IPs'] = ips.length > 0 ? ips.join(', ') : 'Not detected';
-                } catch (e) {
-                    info['WebRTC IPs'] = 'Blocked';
-                }
-
-                info['Network Hash'] = hashString(JSON.stringify(info));
-
-                deviceData.network = info;
-                return createSection('Network Intelligence', '🌐', info);
-            } catch (e) {
-                console.error('Network info error:', e);
-                return createSection('Network Intelligence', '🌐', {'Error': e.message});
-            }
-        }
-
-        // WebRTC IP Detection
-        function getWebRTCIPs() {
-            return new Promise((resolve) => {
-                const ips = [];
-                const RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
-                
-                if (!RTCPeerConnection) {
-                    resolve([]);
-                    return;
-                }
-
-                const pc = new RTCPeerConnection({
-                    iceServers: [
-                        { urls: 'stun:stun.l.google.com:19302' },
-                        { urls: 'stun:stun1.l.google.com:19302' }
-                    ]
-                });
-
-                pc.createDataChannel('');
-                pc.createOffer().then(offer => pc.setLocalDescription(offer));
-
-                pc.onicecandidate = (event) => {
-                    if (event.candidate) {
-                        const ip = event.candidate.candidate.match(/\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/);
-                        if (ip && !ips.includes(ip[0])) {
-                            ips.push(ip[0]);
-                        }
-                    }
-                };
-
-                setTimeout(() => {
-                    pc.close();
-                    resolve(ips);
-                }, 3000);
-            });
-        }
-
-        // SENSOR & MOTION INTELLIGENCE
-        async function getSensorIntelligence() {
-            try {
-                const info = {
-                    'Device Motion Event': 'DeviceMotionEvent' in window ? 'Supported' : 'Not supported',
-                    'Device Orientation': 'DeviceOrientationEvent' in window ? 'Supported' : 'Not supported',
-                    'Ambient Light': 'AmbientLightSensor' in window ? 'Supported' : 'Not supported',
-                    'Accelerometer': 'Accelerometer' in window ? 'Supported' : 'Not supported',
-                    'LinearAcceleration': 'LinearAccelerationSensor' in window ? 'Supported' : 'Not supported',
-                    'Gyroscope': 'Gyroscope' in window ? 'Supported' : 'Not supported',
-                    'AbsoluteOrientation': 'AbsoluteOrientationSensor' in window ? 'Supported' : 'Not supported',
-                    'RelativeOrientation': 'RelativeOrientationSensor' in window ? 'Supported' : 'Not supported',
-                    'Magnetometer': 'Magnetometer' in window ? 'Supported' : 'Not supported',
-                    'Proximity': 'ProximitySensor' in window ? 'Supported' : 'Not supported'
-                };
-
-                const liveData = {
-                    id: 'sensorReadings',
-                    content: '<button class="permission-btn" onclick="startAdvancedSensors()">Start All Sensors</button>'
-                };
-
-                deviceData.sensors = info;
-                return createSection('Sensor Intelligence', '🧭', info, liveData);
-            } catch (e) {
-                console.error('Sensors info error:', e);
-                return createSection('Sensor Intelligence', '🧭', {'Error': e.message});
-            }
-        }
-
-        function startAdvancedSensors() {
-            const element = document.getElementById('sensorReadings');
-            element.innerHTML = 'Initializing sensors...';
-
-            let sensorData = {};
-
-            // Device orientation
-            if ('DeviceOrientationEvent' in window) {
-                window.addEventListener('deviceorientation', (event) => {
-                    sensorData.orientation = {
-                        alpha: event.alpha?.toFixed(1) || 'N/A',
-                        beta: event.beta?.toFixed(1) || 'N/A',
-                        gamma: event.gamma?.toFixed(1) || 'N/A'
-                    };
-                    updateSensorDisplay();
-                });
-            }
-
-            // Device motion
-            if ('DeviceMotionEvent' in window) {
-                window.addEventListener('devicemotion', (event) => {
-                    if (event.acceleration) {
-                        sensorData.acceleration = {
-                            x: event.acceleration.x?.toFixed(2) || 'N/A',
-                            y: event.acceleration.y?.toFixed(2) || 'N/A',
-                            z: event.acceleration.z?.toFixed(2) || 'N/A'
-                        };
-                    }
-                    if (event.rotationRate) {
-                        sensorData.rotation = {
-                            alpha: event.rotationRate.alpha?.toFixed(2) || 'N/A',
-                            beta: event.rotationRate.beta?.toFixed(2) || 'N/A',
-                            gamma: event.rotationRate.gamma?.toFixed(2) || 'N/A'
-                        };
-                    }
-                    updateSensorDisplay();
-                });
-            }
-
-            function updateSensorDisplay() {
-                let output = '<strong>Live Sensor Data:</strong><br>';
-                if (sensorData.orientation) {
-                    output += `Orientation: α=${sensorData.orientation.alpha}° β=${sensorData.orientation.beta}° γ=${sensorData.orientation.gamma}°<br>`;
-                }
-                if (sensorData.acceleration) {
-                    output += `Acceleration: X=${sensorData.acceleration.x} Y=${sensorData.acceleration.y} Z=${sensorData.acceleration.z}<br>`;
-                }
-                if (sensorData.rotation) {
-                    output += `Rotation: α=${sensorData.rotation.alpha}°/s β=${sensorData.rotation.beta}°/s γ=${sensorData.rotation.gamma}°/s<br>`;
-                }
-                element.innerHTML = output || 'No sensor data received';
-            }
-
-            setTimeout(() => {
-                if (element.innerHTML === 'Initializing sensors...') {
-                    element.innerHTML = 'Sensors may be restricted on this device';
-                }
-            }, 3000);
-        }
-
-        // COMPREHENSIVE MEDIA ANALYSIS
-        async function getMediaIntelligence() {
-            try {
-                const info = {
-                    'Media Devices API': 'mediaDevices' in navigator ? 'Supported' : 'Not supported',
-                    'WebRTC': 'RTCPeerConnection' in window ? 'Supported' : 'Not supported',
-                    'Screen Capture': 'getDisplayMedia' in (navigator.mediaDevices || {}) ? 'Supported' : 'Not supported',
-                    'Audio Context': 'AudioContext' in window ? 'Supported' : 'Not supported',
-                    'Web Audio': 'webkitAudioContext' in window ? 'Webkit' : 'Not supported',
-                    'Media Recorder': 'MediaRecorder' in window ? 'Supported' : 'Not supported',
-                    'Speech Recognition': 'webkitSpeechRecognition' in window ? 'Webkit' : 'SpeechRecognition' in window ? 'Standard' : 'Not supported',
-                    'Speech Synthesis': 'speechSynthesis' in window ? 'Supported' : 'Not supported'
-                };
-
-                if ('mediaDevices' in navigator) {
-                    try {
-                        const devices = await navigator.mediaDevices.enumerateDevices();
-                        const videoInputs = devices.filter(d => d.kind === 'videoinput');
-                        const audioInputs = devices.filter(d => d.kind === 'audioinput');
-                        const audioOutputs = devices.filter(d => d.kind === 'audiooutput');
-                        
-                        info['Video Inputs'] = videoInputs.length.toString();
-                        info['Audio Inputs'] = audioInputs.length.toString();
-                        info['Audio Outputs'] = audioOutputs.length.toString();
-
-                        // Device details
-                        info['Video Devices'] = videoInputs.map(d => d.label || 'Camera').join(', ') || 'None';
-                        info['Audio Input Devices'] = audioInputs.map(d => d.label || 'Microphone').join(', ') || 'None';
-                    } catch (e) {
-                        info['Media Access'] = 'Permission required';
-                    }
-                }
-
-                // Audio context fingerprinting
-                try {
-                    const audioFingerprint = await generateAudioFingerprint();
-                    info['Audio Fingerprint'] = audioFingerprint;
-                } catch (e) {
-                    info['Audio Fingerprint'] = 'Error';
-                }
-
-                deviceData.media = info;
-                return createSection('Media Intelligence', '📷', info);
-            } catch (e) {
-                console.error('Media info error:', e);
-                return createSection('Media Intelligence', '📷', {'Error': e.message});
-            }
-        }
-
-        // Audio Context Fingerprinting
-        async function generateAudioFingerprint() {
-            return new Promise((resolve) => {
-                try {
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioContext.createOscillator();
-                    const analyser = audioContext.createAnalyser();
-                    const gainNode = audioContext.createGain();
-                    const scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1);
-
-                    oscillator.type = 'triangle';
-                    oscillator.frequency.setValueAtTime(10000, audioContext.currentTime);
-                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-
-                    oscillator.connect(analyser);
-                    analyser.connect(scriptProcessor);
-                    scriptProcessor.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-
-                    scriptProcessor.onaudioprocess = function(bins) {
-                        const samples = bins.inputBuffer.getChannelData(0);
-                        let sum = 0;
-                        for (let i = 0; i < samples.length; i++) {
-                            sum += Math.abs(samples[i]);
-                        }
-                        
-                        oscillator.disconnect();
-                        scriptProcessor.disconnect();
-                        audioContext.close();
-                        
-                        resolve(hashString(sum.toString()));
-                    };
-
-                    oscillator.start(0);
-                } catch (e) {
-                    resolve('audio-error');
-                }
-            });
-        }
-
-        // BATTERY & POWER ANALYSIS
-        async function getBatteryIntelligence() {
-            try {
-                const info = {};
-
-                if ('getBattery' in navigator) {
-                    try {
-                        const battery = await navigator.getBattery();
-                        info['Battery Level'] = `${Math.round(battery.level * 100)}%`;
-                        info['Charging'] = battery.charging ? 'Yes' : 'No';
-                        info['Charging Time'] = battery.chargingTime !== Infinity ? `${Math.round(battery.chargingTime / 60)} min` : 'N/A';
-                        info['Discharging Time'] = battery.dischargingTime !== Infinity ? `${Math.round(battery.dischargingTime / 60)} min` : 'N/A';
-                        
-                        // Battery event listeners for live updates
-                        battery.addEventListener('chargingchange', () => updateBatteryDisplay(battery));
-                        battery.addEventListener('levelchange', () => updateBatteryDisplay(battery));
-                    } catch (e) {
-                        info['Battery API'] = 'Access denied';
-                    }
-                } else {
-                    info['Battery API'] = 'Not supported';
-                }
-
-                // Power management detection
-                if ('navigator' in window && 'scheduling' in navigator) {
-                    info['Scheduler API'] = 'Supported';
-                }
-
-                deviceData.battery = info;
-                return createSection('Battery Intelligence', '🔋', info);
-            } catch (e) {
-                console.error('Battery info error:', e);
-                return createSection('Battery Intelligence', '🔋', {'Error': e.message});
-            }
-        }
-
-        function updateBatteryDisplay(battery) {
-            // Update battery info in real-time if needed
-            console.log('Battery updated:', battery.level, battery.charging);
-        }
-
-        // COMPREHENSIVE STORAGE ANALYSIS
-        async function getStorageIntelligence() {
-            try {
-                const info = {
-                    'localStorage': testStorageAPI('localStorage'),
-                    'sessionStorage': testStorageAPI('sessionStorage'),
-                    'IndexedDB': 'indexedDB' in window ? 'Supported' : 'Not supported',
-                    'WebSQL': 'openDatabase' in window ? 'Supported (Deprecated)' : 'Not supported',
-                    'Cache API': 'caches' in window ? 'Supported' : 'Not supported',
-                    'Cookies': navigator.cookieEnabled ? 'Enabled' : 'Disabled',
-                    'Service Worker': 'serviceWorker' in navigator ? 'Supported' : 'Not supported'
-                };
-
-                // Storage quota analysis
-                if ('storage' in navigator && 'estimate' in navigator.storage) {
-                    try {
-                        const estimate = await navigator.storage.estimate();
-                        info['Storage Quota'] = `${(estimate.quota / 1024 / 1024 / 1024).toFixed(2)} GB`;
-                        info['Storage Used'] = `${(estimate.usage / 1024 / 1024).toFixed(2)} MB`;
-                        info['Usage Percentage'] = `${((estimate.usage / estimate.quota) * 100).toFixed(1)}%`;
-                        
-                        // Persistence
-                        if ('persist' in navigator.storage) {
-                            info['Storage Persistent'] = await navigator.storage.persist() ? 'Yes' : 'No';
-                        }
-                    } catch (e) {
-                        info['Storage Quota'] = 'Unable to determine';
-                    }
-                }
-
-                // Test storage capacity
-                info['localStorage Capacity'] = testStorageCapacity('localStorage');
-                info['sessionStorage Capacity'] = testStorageCapacity('sessionStorage');
-
-                // Cookie analysis
-                info['Cookie Count'] = document.cookie.split(';').length;
-                info['Document Domain'] = document.domain;
-                info['Referrer'] = document.referrer || 'None';
-
-                deviceData.storage = info;
-                return createSection('Storage Intelligence', '💾', info);
-            } catch (e) {
-                console.error('Storage info error:', e);
-                return createSection('Storage Intelligence', '💾', {'Error': e.message});
-            }
-        }
-
-        function testStorageAPI(type) {
-            try {
-                const storage = window[type];
-                const testKey = '__test__';
-                storage.setItem(testKey, 'test');
-                storage.removeItem(testKey);
-                return 'Available';
-            } catch (e) {
-                return 'Blocked/Full';
-            }
-        }
-
-        function testStorageCapacity(type) {
-            try {
-                const storage = window[type];
-                let size = 0;
-                const testKey = '__capacity_test__';
-                const testData = 'x'.repeat(1024);
-                
-                while (size < 10240) {
-                    try {
-                        storage.setItem(testKey + size, testData);
-                        size += 1;
-                    } catch (e) {
-                        break;
-                    }
-                }
-                
-                for (let i = 0; i < size; i++) {
-                    storage.removeItem(testKey + i);
-                }
-                
-                return `~${size} KB`;
-            } catch (e) {
-                return 'Unable to test';
-            }
-        }
-
-        // ADVANCED LOCATION INTELLIGENCE
-        async function getLocationIntelligence() {
-            try {
-                const info = {
-                    'Geolocation API': 'geolocation' in navigator ? 'Available' : 'Not available',
-                    'Permissions API': 'permissions' in navigator ? 'Supported' : 'Not supported'
-                };
-
-                // Check permissions
-                if ('permissions' in navigator) {
-                    try {
-                        const geoPermission = await navigator.permissions.query({name: 'geolocation'});
-                        info['Geolocation Permission'] = geoPermission.state;
-                        
-                        const notificationPermission = await navigator.permissions.query({name: 'notifications'});
-                        info['Notification Permission'] = notificationPermission.state;
-                        
-                        const cameraPermission = await navigator.permissions.query({name: 'camera'});
-                        info['Camera Permission'] = cameraPermission.state;
-                        
-                        const microphonePermission = await navigator.permissions.query({name: 'microphone'});
-                        info['Microphone Permission'] = microphonePermission.state;
-                    } catch (e) {
-                        info['Permission Query'] = 'Restricted';
-                    }
-                }
-
-                // Locale detection
-                info['Date Locale'] = new Date().toLocaleDateString();
-                info['Time Locale'] = new Date().toLocaleTimeString();
-                info['Number Format'] = (12345.67).toLocaleString();
-                info['Currency Symbol'] = (123).toLocaleString(navigator.language, {style: 'currency', currency: 'USD'});
-
-                deviceData.location = info;
-                const liveData = {
-                    id: 'locationData',
-                    content: '<button class="permission-btn" onclick="getAdvancedLocation()">Get Precise Location</button>'
-                };
-                
-                return createSection('Location Intelligence', '📍', info, liveData);
-            } catch (e) {
-                console.error('Location info error:', e);
-                return createSection('Location Intelligence', '📍', {'Error': e.message});
-            }
-        }
-
-        function getAdvancedLocation() {
-            if ('geolocation' in navigator) {
-                const element = document.getElementById('locationData');
-                element.innerHTML = 'Acquiring high-precision location...';
-                
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const coords = position.coords;
-                        element.innerHTML = `
-                            <strong>High-Precision Location:</strong><br>
-                            Latitude: ${coords.latitude.toFixed(8)}<br>
-                            Longitude: ${coords.longitude.toFixed(8)}<br>
-                            Accuracy: ${coords.accuracy.toFixed(0)}m<br>
-                            ${coords.altitude ? `Altitude: ${coords.altitude.toFixed(2)}m<br>` : ''}
-                            ${coords.altitudeAccuracy ? `Alt Accuracy: ${coords.altitudeAccuracy.toFixed(0)}m<br>` : ''}
-                            ${coords.heading ? `Heading: ${coords.heading.toFixed(1)}°<br>` : ''}
-                            ${coords.speed ? `Speed: ${coords.speed.toFixed(2)} m/s<br>` : ''}
-                            Timestamp: ${new Date(position.timestamp).toISOString()}<br>
-                            <button class="permission-btn" onclick="trackMovement()">Track Movement</button>
-                        `;
-                    },
-                    (error) => {
-                        element.innerHTML = `<span class="critical">Location Error: ${error.message}</span>`;
-                    },
-                    { 
-                        enableHighAccuracy: true, 
-                        timeout: 15000, 
-                        maximumAge: 0 
-                    }
-                );
-            }
-        }
-
-        function trackMovement() {
-            if ('geolocation' in navigator) {
-                const element = document.getElementById('locationData');
-                let positions = [];
-                
-                const watchId = navigator.geolocation.watchPosition(
-                    (position) => {
-                        positions.push({
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude,
-                            time: new Date(position.timestamp),
-                            accuracy: position.coords.accuracy
-                        });
-                        
-                        element.innerHTML = `
-                            <strong>Movement Tracking Active:</strong><br>
-                            Positions recorded: ${positions.length}<br>
-                            Latest: ${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}<br>
-                            Accuracy: ${position.coords.accuracy.toFixed(0)}m<br>
-                            <button class="permission-btn" onclick="stopTracking(${watchId})">Stop Tracking</button>
-                        `;
-                    },
-                    (error) => {
-                        element.innerHTML += `<br><span class="warning">Tracking error: ${error.message}</span>`;
-                    },
-                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 1000 }
-                );
-            }
-        }
-
-        function stopTracking(watchId) {
-            navigator.geolocation.clearWatch(watchId);
-            document.getElementById('locationData').innerHTML += '<br><span class="success">Tracking stopped</span>';
-        }
-
-        // PERFORMANCE & TIMING ANALYSIS
-        async function getPerformanceIntelligence() {
-            try {
-                const info = {};
-
-                if ('performance' in window) {
-                    const perf = performance;
-                    info['Performance API'] = 'Available';
-                    info['Navigation Type'] = perf.navigation?.type?.toString() || 'Unknown';
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fas fa-tools"></i>
+                            <h3>Tools & Technologies</h3>
+                        </div>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Git/GitHub</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">REST APIs</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="95%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Firebase</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">SQLite</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
-                    // Memory information
-                    if (perf.memory) {
-                        info['JS Heap Used'] = `${(perf.memory.usedJSHeapSize / 1024 / 1024).toFixed(1)} MB`;
-                        info['JS Heap Total'] = `${(perf.memory.totalJSHeapSize / 1024 / 1024).toFixed(1)} MB`;
-                        info['JS Heap Limit'] = `${(perf.memory.jsHeapSizeLimit / 1024 / 1024).toFixed(1)} MB`;
-                        info['Memory Pressure'] = `${((perf.memory.usedJSHeapSize / perf.memory.jsHeapSizeLimit) * 100).toFixed(1)}%`;
-                    }
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fas fa-cogs"></i>
+                            <h3>Development Practices</h3>
+                        </div>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Testing</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Debugging</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Performance Optimization</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                    // Timing information
-                    if (perf.timing) {
-                        const timing = perf.timing;
-                        info['Page Load'] = `${timing.loadEventEnd - timing.navigationStart}ms`;
-                        info['DNS Lookup'] = `${timing.domainLookupEnd - timing.domainLookupStart}ms`;
-                        info['TCP Connect'] = `${timing.connectEnd - timing.connectStart}ms`;
-                        info['SSL Handshake'] = `${timing.connectEnd - timing.secureConnectionStart}ms`;
-                        info['Server Response'] = `${timing.responseEnd - timing.requestStart}ms`;
-                        info['DOM Processing'] = `${timing.domComplete - timing.domLoading}ms`;
-                    }
-
-                    // Resource timing
-                    const resources = perf.getEntriesByType('resource');
-                    info['Resources Loaded'] = resources.length.toString();
-                    
-                    // FPS detection
-                    let fps = 0;
-                    let lastTime = perf.now();
-                    let frameCount = 0;
-                    
-                    function countFPS() {
-                        frameCount++;
-                        const currentTime = perf.now();
-                        if (currentTime >= lastTime + 1000) {
-                            fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
-                            frameCount = 0;
-                            lastTime = currentTime;
-                        }
-                        if (frameCount < 60) requestAnimationFrame(countFPS);
-                    }
-                    requestAnimationFrame(countFPS);
-                    
-                    setTimeout(() => {
-                        info['Estimated FPS'] = fps > 0 ? `${fps} fps` : 'Measuring...';
-                    }, 2000);
-                }
-
-                deviceData.performance = info;
-                return createSection('Performance Intelligence', '⚡', info);
-            } catch (e) {
-                console.error('Performance info error:', e);
-                return createSection('Performance Intelligence', '⚡', {'Error': e.message});
-            }
-        }
-
-        // COMPREHENSIVE SECURITY ANALYSIS
-        async function getSecurityIntelligence() {
-            try {
-                const info = {
-                    'HTTPS': location.protocol === 'https:' ? 'Yes' : 'No',
-                    'Secure Context': window.isSecureContext ? 'Yes' : 'No',
-                    'Cross Origin Isolated': window.crossOriginIsolated ? 'Yes' : 'No',
-                    'Mixed Content': location.protocol === 'https:' && document.referrer.startsWith('http:') ? 'Detected' : 'None',
-                    'Permissions API': 'permissions' in navigator ? 'Supported' : 'Not supported',
-                    'Credential Management': 'credentials' in navigator ? 'Supported' : 'Not supported',
-                    'Web Authentication': 'PublicKeyCredential' in window ? 'Supported' : 'Not supported',
-                    'Payment Request': 'PaymentRequest' in window ? 'Supported' : 'Not supported',
-                    'Trusted Types': 'trustedTypes' in window ? 'Supported' : 'Not supported'
-                };
-
-                // CSP detection
-                try {
-                    info['Content Security Policy'] = document.querySelector('meta[http-equiv="Content-Security-Policy"]') ? 'Present' : 'None detected';
-                } catch (e) {
-                    info['CSP Detection'] = 'Error';
-                }
-
-                // Feature policy detection
-                if ('featurePolicy' in document) {
-                    info['Feature Policy'] = 'Supported';
-                    info['Allowed Features'] = document.featurePolicy.allowedFeatures().length.toString();
-                }
-
-                // TLS/SSL information
-                info['TLS Version'] = 'Unknown';
-                if (location.protocol === 'https:') {
-                    // Try to detect TLS version through various means
-                    info['Certificate Valid'] = 'Likely (HTTPS active)';
-                }
-
-                // Detect developer tools
-                let devtools = false;
-                const threshold = 160;
-                setInterval(() => {
-                    if (window.outerHeight - window.innerHeight > threshold || 
-                        window.outerWidth - window.innerWidth > threshold) {
-                        devtools = true;
-                    }
-                }, 500);
+    <!-- Experience Section -->
+    <section id="experience" class="experience">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Professional Experience</h2>
+                <p class="section-subtitle">My journey through the tech industry</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">July 2024 - Present</div>
+                        <h3>Senior Flutter Developer</h3>
+                        <h4>Tech Almonds Solutions Private Limited</h4>
+                        <ul>
+                            <li>Lead multiple concurrent mobile projects, delivering high-quality releases ahead of schedule</li>
+                            <li>Resolve critical iOS/Android issues and develop innovative features for legacy applications</li>
+                            <li>Mentor junior developers through code reviews and establish coding standards</li>
+                            <li>Optimize workflows improving application stability by 40% and reducing crash rates</li>
+                        </ul>
+                    </div>
+                </div>
                 
-                setTimeout(() => {
-                    info['Developer Tools'] = devtools ? 'Likely Open' : 'Closed';
-                }, 1000);
-
-                // Extension detection
-                const extensionDetected = checkForExtensions();
-                info['Browser Extensions'] = extensionDetected ? 'Detected' : 'None detected';
-
-                deviceData.security = info;
-                return createSection('Security Intelligence', '🔒', info);
-            } catch (e) {
-                console.error('Security info error:', e);
-                return createSection('Security Intelligence', '🔒', {'Error': e.message});
-            }
-        }
-
-        function checkForExtensions() {
-            // Simple extension detection methods
-            const testDiv = document.createElement('div');
-            testDiv.innerHTML = '&nbsp;';
-            testDiv.className = 'adsbox';
-            testDiv.style.position = 'absolute';
-            testDiv.style.left = '-999px';
-            document.body.appendChild(testDiv);
-            
-            const adBlocker = testDiv.offsetHeight === 0;
-            document.body.removeChild(testDiv);
-            
-            return adBlocker;
-        }
-
-        // ADVANCED CANVAS FINGERPRINTING
-        async function getCanvasFingerprints() {
-            try {
-                const info = {};
-
-                // Basic canvas fingerprint
-                const canvas1 = document.createElement('canvas');
-                const ctx1 = canvas1.getContext('2d');
-                canvas1.width = 300;
-                canvas1.height = 150;
-
-                // Complex drawing for fingerprinting
-                ctx1.textBaseline = 'top';
-                ctx1.font = '14px Arial';
-                ctx1.fillStyle = '#f60';
-                ctx1.fillRect(125, 1, 62, 20);
-                ctx1.fillStyle = '#069';
-                ctx1.fillText('Device Fingerprint 🔍📱💻', 2, 15);
-                ctx1.fillStyle = 'rgba(102, 204, 0, 0.7)';
-                ctx1.fillText('Canvas fingerprinting test', 4, 45);
-                ctx1.globalCompositeOperation = 'multiply';
-                ctx1.fillStyle = 'rgb(255,0,255)';
-                ctx1.beginPath();
-                ctx1.arc(50, 50, 50, 0, Math.PI * 2, true);
-                ctx1.closePath();
-                ctx1.fill();
-
-                const canvasData1 = canvas1.toDataURL();
-                info['Canvas Hash 1'] = hashString(canvasData1);
-
-                // WebGL canvas fingerprint
-                const canvas2 = document.createElement('canvas');
-                const gl = canvas2.getContext('webgl') || canvas2.getContext('experimental-webgl');
-                if (gl) {
-                    const vertexShader = gl.createShader(gl.VERTEX_SHADER);
-                    gl.shaderSource(vertexShader, 'attribute vec2 attrVertex;varying vec2 varyinTexCoordinate;uniform vec2 uniformOffset;void main(){varyinTexCoordinate=attrVertex+uniformOffset;gl_Position=vec4(attrVertex,0,1);}');
-                    gl.compileShader(vertexShader);
-
-                    const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-                    gl.shaderSource(fragmentShader, 'precision mediump float;varying vec2 varyinTexCoordinate;void main() {gl_FragColor=vec4(varyinTexCoordinate,0,1);}');
-                    gl.compileShader(fragmentShader);
-
-                    const program = gl.createProgram();
-                    gl.attachShader(program, vertexShader);
-                    gl.attachShader(program, fragmentShader);
-                    gl.linkProgram(program);
-                    gl.useProgram(program);
-
-                    const buffer = gl.createBuffer();
-                    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-0.2, -0.9, 0, 0.4, -0.26, 0, 0, 0.7321, 0]), gl.STATIC_DRAW);
-
-                    gl.enableVertexAttribArray(0);
-                    gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
-                    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 3);
-
-                    const pixels = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
-                    gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-                    
-                    info['WebGL Hash'] = hashString(Array.from(pixels).join(''));
-                    info['WebGL Vendor'] = gl.getParameter(gl.VENDOR);
-                    info['WebGL Renderer'] = gl.getParameter(gl.RENDERER);
-                }
-
-                // Canvas container for display
-                const canvasContainer = document.createElement('div');
-                canvasContainer.className = 'canvas-container';
-                canvasContainer.innerHTML = '<div style="font-size: 0.8em; margin-bottom: 5px;">Canvas Fingerprint:</div>';
-                canvas1.className = 'canvas-fingerprint';
-                canvasContainer.appendChild(canvas1);
-
-                deviceData.canvas = info;
-                const section = createSection('Canvas Fingerprints', '🎨', info);
-                section.appendChild(canvasContainer);
-                return section;
-            } catch (e) {
-                console.error('Canvas fingerprint error:', e);
-                return createSection('Canvas Fingerprints', '🎨', {'Error': e.message});
-            }
-        }
-
-        // FONT & PLUGIN DETECTION
-        async function getFontPluginDetection() {
-            try {
-                const info = {};
-
-                // Advanced font detection
-                const testFonts = [
-                    'Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Verdana', 'Georgia',
-                    'Palatino', 'Garamond', 'Bookman', 'Tahoma', 'Comic Sans MS', 'Impact',
-                    'Arial Black', 'Helvetica Neue', 'Lucida Grande', 'Lucida Sans Unicode',
-                    'Trebuchet MS', 'Microsoft Sans Serif', 'Segoe UI', 'Roboto', 'Droid Sans',
-                    'Ubuntu', 'Cantarell', 'DejaVu Sans', 'Liberation Sans', 'Noto Sans',
-                    'Source Sans Pro', 'Open Sans', 'Lato', 'Montserrat', 'Raleway',
-                    'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'
-                ];
-
-                const availableFonts = [];
-                const baseFonts = ['serif', 'sans-serif', 'monospace'];
-                const testString = 'mmmmmmmmmmlli';
-                const testSize = '72px';
-
-                const span = document.createElement('span');
-                span.style.fontSize = testSize;
-                span.innerHTML = testString;
-                span.style.visibility = 'hidden';
-                span.style.position = 'absolute';
-
-                const defaultWidths = {};
-                for (const baseFont of baseFonts) {
-                    span.style.fontFamily = baseFont;
-                    document.body.appendChild(span);
-                    defaultWidths[baseFont] = span.offsetWidth;
-                    document.body.removeChild(span);
-                }
-
-                for (const font of testFonts) {
-                    let detected = false;
-                    for (const baseFont of baseFonts) {
-                        span.style.fontFamily = `"${font}", ${baseFont}`;
-                        document.body.appendChild(span);
-                        if (span.offsetWidth !== defaultWidths[baseFont]) {
-                            detected = true;
-                        }
-                        document.body.removeChild(span);
-                    }
-                    if (detected) {
-                        availableFonts.push(font);
-                    }
-                }
-
-                info['Available Fonts'] = availableFonts.length.toString();
-                info['Font List'] = availableFonts.slice(0, 10).join(', ') + (availableFonts.length > 10 ? '...' : '');
-                info['Font Hash'] = hashString(availableFonts.join(','));
-
-                // Plugin detection
-                const plugins = [];
-                for (let i = 0; i < navigator.plugins.length; i++) {
-                    plugins.push(navigator.plugins[i].name);
-                }
-                info['Plugin Count'] = plugins.length.toString();
-                info['Plugin Hash'] = hashString(plugins.join(','));
-                info['Plugins'] = plugins.slice(0, 3).join(', ') + (plugins.length > 3 ? '...' : '');
-
-                deviceData.fonts = info;
-                return createSection('Font & Plugin Detection', '📝', info);
-            } catch (e) {
-                console.error('Font/plugin detection error:', e);
-                return createSection('Font & Plugin Detection', '📝', {'Error': e.message});
-            }
-        }
-
-        // BEHAVIOR TRACKING
-        async function getBehaviorTracking() {
-            try {
-                const info = {
-                    'Mouse Tracking': 'Ready',
-                    'Touch Tracking': 'Ready',
-                    'Keyboard Tracking': 'Ready',
-                    'Scroll Tracking': 'Ready',
-                    'Focus Tracking': 'Ready'
-                };
-
-                // Initialize behavior tracking
-                let mouseData = [];
-                let touchData = [];
-                let keyData = [];
-                let scrollData = [];
-
-                // Mouse tracking
-                document.addEventListener('mousemove', (e) => {
-                    mouseData.push({
-                        x: e.clientX,
-                        y: e.clientY,
-                        time: Date.now(),
-                        movementX: e.movementX,
-                        movementY: e.movementY
-                    });
-                    if (mouseData.length > 100) mouseData.shift();
-                });
-
-                // Touch tracking
-                document.addEventListener('touchmove', (e) => {
-                    for (let touch of e.touches) {
-                        touchData.push({
-                            x: touch.clientX,
-                            y: touch.clientY,
-                            force: touch.force || 0,
-                            radiusX: touch.radiusX || 0,
-                            radiusY: touch.radiusY || 0,
-                            time: Date.now()
-                        });
-                    }
-                    if (touchData.length > 100) touchData.shift();
-                });
-
-                // Keyboard tracking
-                let lastKeyTime = 0;
-                document.addEventListener('keydown', (e) => {
-                    const now = Date.now();
-                    keyData.push({
-                        key: e.key,
-                        code: e.code,
-                        time: now,
-                        interval: lastKeyTime ? now - lastKeyTime : 0
-                    });
-                    lastKeyTime = now;
-                    if (keyData.length > 50) keyData.shift();
-                });
-
-                // Scroll tracking
-                document.addEventListener('scroll', (e) => {
-                    scrollData.push({
-                        x: window.scrollX,
-                        y: window.scrollY,
-                        time: Date.now()
-                    });
-                    if (scrollData.length > 50) scrollData.shift();
-                });
-
-                behaviorData = {
-                    mouse: mouseData,
-                    touch: touchData,
-                    keyboard: keyData,
-                    scroll: scrollData
-                };
-
-                const liveData = {
-                    id: 'behaviorTracking',
-                    content: 'Behavior tracking active. Move mouse, touch screen, type, or scroll to generate data.'
-                };
-
-                deviceData.behavior = info;
-                return createSection('Behavior Tracking', '🎯', info, liveData);
-            } catch (e) {
-                console.error('Behavior tracking error:', e);
-                return createSection('Behavior Tracking', '🎯', {'Error': e.message});
-            }
-        }
-
-        // ENVIRONMENTAL DETECTION
-        async function getEnvironmentalData() {
-            try {
-                const info = {};
-
-                // Timing-based detection
-                const now = new Date();
-                info['Local Time'] = now.toLocaleString();
-                info['UTC Time'] = now.toISOString();
-                info['Week Day'] = now.toLocaleDateString(undefined, { weekday: 'long' });
-                info['Time Zone Name'] = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-                // System preferences
-                if (window.matchMedia) {
-                    info['Prefers Dark Mode'] = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'Yes' : 'No';
-                    info['Prefers Reduced Motion'] = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'Yes' : 'No';
-                    info['Prefers High Contrast'] = window.matchMedia('(prefers-contrast: high)').matches ? 'Yes' : 'No';
-                    info['Forced Colors'] = window.matchMedia('(forced-colors: active)').matches ? 'Active' : 'None';
-                }
-
-                // Connection characteristics
-                if (navigator.connection) {
-                    info['Network Type'] = navigator.connection.type || 'Unknown';
-                    info['Data Saver'] = navigator.connection.saveData ? 'Enabled' : 'Disabled';
-                }
-
-                // CPU architecture hints
-                info['Platform Architecture'] = navigator.platform;
-                info['Hardware Concurrency'] = navigator.hardwareConcurrency || 'Unknown';
-
-                // Browser characteristics
-                info['Cookie Enabled'] = navigator.cookieEnabled ? 'Yes' : 'No';
-                info['Do Not Track'] = navigator.doNotTrack || 'Not set';
-                info['Java Enabled'] = navigator.javaEnabled ? navigator.javaEnabled() : 'Unknown';
-
-                deviceData.environment = info;
-                return createSection('Environmental Data', '🌍', info);
-            } catch (e) {
-                console.error('Environmental data error:', e);
-                return createSection('Environmental Data', '🌍', {'Error': e.message});
-            }
-        }
-
-        // MASTER FINGERPRINT GENERATION
-        function generateMasterFingerprint() {
-            try {
-                const components = [
-                    deviceData.system?.['System Hash'] || '',
-                    deviceData.screen?.['Screen Hash'] || '',
-                    deviceData.hardware?.['Hardware Hash'] || '',
-                    deviceData.network?.['Network Hash'] || '',
-                    deviceData.canvas?.['Canvas Hash 1'] || '',
-                    deviceData.canvas?.['WebGL Hash'] || '',
-                    deviceData.fonts?.['Font Hash'] || '',
-                    navigator.userAgent,
-                    navigator.platform,
-                    screen.width + 'x' + screen.height,
-                    navigator.hardwareConcurrency || '0',
-                    navigator.deviceMemory || '0',
-                    new Date().getTimezoneOffset().toString(),
-                    navigator.language
-                ].filter(c => c);
-
-                masterFingerprint = hashString(components.join('|'));
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">May 2022 - March 2024</div>
+                        <h3>Flutter Developer</h3>
+                        <h4>Teciza Technologies Private Limited</h4>
+                        <ul>
+                            <li>Developed and maintained 12+ Flutter applications with RESTful API integration</li>
+                            <li>Implemented Razorpay payment gateway processing over ₹10 million in transactions</li>
+                            <li>Established unified design system improving development efficiency by 30%</li>
+                            <li>Collaborated with cross-functional teams to deliver consistent user experiences</li>
+                        </ul>
+                    </div>
+                </div>
                 
-                // Calculate confidence based on available data
-                const availableCategories = Object.keys(deviceData).length;
-                const confidence = Math.min(Math.round((availableCategories / 15) * 100), 100);
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2017 - 2021</div>
+                        <h3>Bachelor of Technology</h3>
+                        <h4>Jamia Hamdard University - Electronics & Communication</h4>
+                        <p>CGPA: 7.50/10 - Built strong foundation in programming and system design</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Projects</h2>
+                <p class="section-subtitle">Showcase of my best work and achievements</p>
+            </div>
+            
+            <div class="projects-grid">
+                <!-- Project cards will be dynamically generated -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Let's Work Together</h2>
+                <p class="section-subtitle">Ready to bring your mobile app ideas to life</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <h3>Get In Touch</h3>
+                        <p>I'm always interested in hearing about new opportunities and exciting projects. Let's discuss how we can work together!</p>
+                        
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <h4>Email</h4>
+                                    <p>hello@mohdfuzail.dev</p>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h4>Location</h4>
+                                    <p>New Delhi, India</p>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <h4>Response Time</h4>
+                                    <p>Within 24 hours</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="social-links">
+                            <a href="https://github.com/fuzailmohammad" target="_blank" class="social-link">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://linkedin.com/in/mohammadfuzail" target="_blank" class="social-link">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="social-link">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 
-                return {
-                    id: masterFingerprint,
-                    confidence: confidence,
-                    components: components.length
-                };
-            } catch (e) {
-                return {
-                    id: 'error',
-                    confidence: 0,
-                    components: 0
-                };
-            }
-        }
+                <div class="contact-form-container">
+                    <form id="contact-form" class="contact-form">
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" required>
+                            <label for="name">Your Name</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" required>
+                            <label for="email">Your Email</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="subject" name="subject" required>
+                            <label for="subject">Subject</label>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                            <label for="message">Your Message</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <span>Send Message</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // MAIN SCANNING FUNCTION
-        async function getAllDeviceInfo() {
-            const grid = document.getElementById('infoGrid');
-            grid.innerHTML = '';
-            deviceData = {};
-            completedSections = 0;
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Mohd Fuzail. All rights reserved.</p>
+                <p>Built with passion using modern web technologies</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Download Resume Button -->
+    <a href="public/Mohd Fuzail - Flutter Developer.pdf" download class="download-resume">
+        <i class="fas fa-download"></i>
+        Download Resume
+    </a>
 
-            const sections = [
-                getCompleteSystemInfo,
-                getAdvancedScreenInfo,
-                getAdvancedTouchInfo,
-                getDeepHardwareInfo,
-                getNetworkIntelligence,
-                getSensorIntelligence,
-                getMediaIntelligence,
-                getBatteryIntelligence,
-                getStorageIntelligence,
-                getLocationIntelligence,
-                getPerformanceIntelligence,
-                getSecurityIntelligence,
-                getCanvasFingerprints,
-                getFontPluginDetection,
-                getBehaviorTracking,
-                getEnvironmentalData
-            ];
-
-            totalSections = sections.length;
-
-            for (const getSection of sections) {
-                try {
-                    const section = await getSection();
-                    grid.appendChild(section);
-                } catch (e) {
-                    console.error('Error getting section info:', e);
-                }
-                updateProgress();
-                await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for UI responsiveness
-            }
-
-            // Generate master fingerprint
-            setTimeout(() => {
-                try {
-                    const fingerprint = generateMasterFingerprint();
-                    document.getElementById('fingerprintDisplay').textContent = `Device ID: ${fingerprint.id.toUpperCase()}`;
-                    document.getElementById('confidenceDisplay').textContent = `Confidence: ${fingerprint.confidence}% • ${fingerprint.components} data points • ${Object.keys(deviceData).length} categories`;
-                } catch (e) {
-                    document.getElementById('fingerprintDisplay').textContent = 'Fingerprint generation complete';
-                    document.getElementById('confidenceDisplay').textContent = 'Analysis complete';
-                }
-            }, 500);
-        }
-
-        // UI FUNCTIONS
-        function refreshAllInfo() {
-            getAllDeviceInfo();
-        }
-
-        function exportToJSON() {
-            const timestamp = new Date().toISOString();
-            const exportData = {
-                timestamp,
-                masterFingerprint,
-                deviceData,
-                behaviorData,
-                sessionInfo: {
-                    userAgent: navigator.userAgent,
-                    url: window.location.href,
-                    referrer: document.referrer,
-                    timestamp: timestamp
-                }
-            };
-            
-            const dataStr = JSON.stringify(exportData, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', `device_intelligence_${masterFingerprint}_${timestamp.split('T')[0]}.json`);
-            linkElement.click();
-        }
-
-        function copyToClipboard() {
-            const exportData = {
-                timestamp: new Date().toISOString(),
-                masterFingerprint,
-                deviceData
-            };
-            
-            const dataStr = JSON.stringify(exportData, null, 2);
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(dataStr).then(() => {
-                    alert('Complete device data copied to clipboard!');
-                }).catch(() => {
-                    alert('Unable to copy to clipboard');
-                });
-            } else {
-                alert('Clipboard not supported');
-            }
-        }
-
-        function generateFingerprint() {
-            if (masterFingerprint) {
-                alert(`Device Fingerprint: ${masterFingerprint.toUpperCase()}\n\nThis unique identifier can track you across:\n• Different websites\n• Private browsing sessions\n• After clearing cookies\n• Even with VPN usage\n\nBased on: ${Object.keys(deviceData).length} data categories`);
-            } else {
-                alert('Fingerprint not ready. Please wait for scan completion.');
-            }
-        }
-
-        function generateReport() {
-            const report = `
-COMPREHENSIVE DEVICE INTELLIGENCE REPORT
-========================================
-
-Device Fingerprint: ${masterFingerprint.toUpperCase()}
-Generated: ${new Date().toISOString()}
-Scan Categories: ${Object.keys(deviceData).length}
-
-DEVICE PROFILE:
-- Type: ${deviceData.system?.['Device Type'] || 'Unknown'}
-- OS: ${deviceData.system?.['Operating System'] || 'Unknown'} ${deviceData.system?.['OS Version'] || ''}
-- Screen: ${deviceData.screen?.['Screen Width'] || '?'} × ${deviceData.screen?.['Screen Height'] || '?'}
-- CPU Cores: ${deviceData.hardware?.['CPU Cores'] || 'Unknown'}
-- Memory: ${deviceData.hardware?.['Device Memory'] || 'Unknown'}
-
-NETWORK PROFILE:
-- Connection: ${deviceData.network?.['Connection Type'] || 'Unknown'}
-- Public IP: ${deviceData.network?.['Public IPv4'] || 'Unknown'}
-- ISP: ${deviceData.network?.['ISP'] || 'Unknown'}
-- Location: ${deviceData.network?.['City'] || 'Unknown'}, ${deviceData.network?.['Country'] || 'Unknown'}
-
-FINGERPRINTING DATA:
-- Canvas Hash: ${deviceData.canvas?.['Canvas Hash 1'] || 'N/A'}
-- WebGL Hash: ${deviceData.canvas?.['WebGL Hash'] || 'N/A'}
-- Font Hash: ${deviceData.fonts?.['Font Hash'] || 'N/A'}
-- Audio Fingerprint: ${deviceData.media?.['Audio Fingerprint'] || 'N/A'}
-
-TRACKING CAPABILITIES:
-- Persistent across sessions: YES
-- Survives cookie deletion: YES
-- Works in private browsing: YES
-- Bypasses VPN (partially): YES
-- Unique identification: ${masterFingerprint ? 'YES' : 'PARTIAL'}
-
-PRIVACY IMPLICATIONS:
-This comprehensive fingerprint can be used to:
-1. Track user behavior across websites
-2. Identify returning users without cookies
-3. Detect fraud and bot activity
-4. Personalize content and advertising
-5. Bypass privacy protection measures
-
-PROTECTION RECOMMENDATIONS:
-- Use browsers with built-in fingerprinting protection
-- Enable privacy extensions (uBlock Origin, Privacy Badger)
-- Use Tor browser for sensitive browsing
-- Regularly clear browser data
-- Use different browsers for different activities
-- Consider using virtual machines for isolation
-
-TECHNICAL DATA:
-${JSON.stringify(deviceData, null, 2)}
-
-BEHAVIOR DATA:
-${JSON.stringify(behaviorData, null, 2)}
-            `;
-            
-            const blob = new Blob([report], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `device_intelligence_report_${masterFingerprint || 'unknown'}.txt`;
-            a.click();
-        }
-
-        function trackBehavior() {
-            isTracking = !isTracking;
-            if (isTracking) {
-                alert('Enhanced behavior tracking activated. All interactions are being monitored and analyzed.');
-                // Enhanced tracking could be implemented here
-            } else {
-                alert('Behavior tracking paused.');
-            }
-        }
-
-        function deepAnalysis() {
-            alert(`DEEP ANALYSIS RESULTS:\n\nDevice Uniqueness: ${masterFingerprint ? 'UNIQUE' : 'PARTIAL'}\nTrackability Score: HIGH\nPrivacy Risk: CRITICAL\n\nThis device can be tracked across:\n• ${Object.keys(deviceData).length} different data categories\n• Multiple tracking techniques\n• Various browser fingerprinting methods\n\nRecommendation: Use privacy-focused browser for sensitive activities.`);
-        }
-
-        // Event listeners
-        window.addEventListener('load', getAllDeviceInfo);
-        window.addEventListener('orientationchange', () => setTimeout(getAllDeviceInfo, 1000));
-        window.addEventListener('online', () => setTimeout(getAllDeviceInfo, 500));
-        window.addEventListener('offline', () => setTimeout(getAllDeviceInfo, 500));
-
-        // Touch tracking
-        document.addEventListener('touchstart', (e) => {
-            const element = document.getElementById('touchTracking');
-            if (element) {
-                element.innerHTML = `Touch detected: ${e.touches.length} point(s) at ${e.touches[0].clientX}, ${e.touches[0].clientY}`;
-            }
-        });
-
-        // Behavior tracking updates
-        setInterval(() => {
-            const element = document.getElementById('behaviorTracking');
-            if (element && behaviorData.mouse) {
-                element.innerHTML = `
-                    Mouse movements: ${behaviorData.mouse.length}<br>
-                    Touch events: ${behaviorData.touch.length}<br>
-                    Key presses: ${behaviorData.keyboard.length}<br>
-                    Scroll events: ${behaviorData.scroll.length}
-                `;
-            }
-        }, 2000);
-    </script>
+    <!-- Scripts -->
+    <script src="scripts/main.js"></script>
+    <script src="scripts/animations.js"></script>
+    <script src="scripts/projects.js"></script>
+    <script src="scripts/contact.js"></script>
 </body>
 </html>

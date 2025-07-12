@@ -1,0 +1,386 @@
+/* Loading Screen */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--background-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+}
+
+.loading-animation {
+    text-align: center;
+}
+
+.loading-cube {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    perspective: 200px;
+}
+
+.cube-face {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-primary);
+    border: 1px solid var(--primary-color);
+}
+
+.cube-face.front { transform: rotateY(0deg) translateZ(30px); }
+.cube-face.back { transform: rotateY(180deg) translateZ(30px); }
+.cube-face.right { transform: rotateY(90deg) translateZ(30px); }
+.cube-face.left { transform: rotateY(-90deg) translateZ(30px); }
+.cube-face.top { transform: rotateX(90deg) translateZ(30px); }
+.cube-face.bottom { transform: rotateX(-90deg) translateZ(30px); }
+
+/* Floating Shapes */
+.floating-shapes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.shape {
+    position: absolute;
+    background: var(--gradient-primary);
+    opacity: 0.1;
+    animation: float 6s ease-in-out infinite;
+}
+
+.shape-1 {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.shape-2 {
+    width: 120px;
+    height: 60px;
+    border-radius: 30px;
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+}
+
+.shape-3 {
+    width: 60px;
+    height: 60px;
+    transform: rotate(45deg);
+    top: 30%;
+    right: 25%;
+    animation-delay: 4s;
+}
+
+.shape-4 {
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+    bottom: 20%;
+    left: 20%;
+    animation-delay: 1s;
+}
+
+.shape-5 {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    top: 10%;
+    right: 40%;
+    animation-delay: 3s;
+}
+
+/* Phone Mockup */
+.phone-mockup {
+    width: 300px;
+    height: 600px;
+    background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+    border-radius: 40px;
+    padding: 20px;
+    box-shadow: 
+        0 0 0 8px rgba(255, 255, 255, 0.1),
+        0 20px 60px rgba(0, 212, 255, 0.3);
+    position: relative;
+    transform: perspective(1000px) rotateY(-15deg) rotateX(5deg);
+    transition: transform 0.3s ease;
+}
+
+.phone-mockup:hover {
+    transform: perspective(1000px) rotateY(-10deg) rotateX(2deg);
+}
+
+.phone-screen {
+    width: 100%;
+    height: 100%;
+    background: var(--background-primary);
+    border-radius: 30px;
+    overflow: hidden;
+    position: relative;
+}
+
+.app-demo {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--background-secondary), var(--background-primary));
+    position: relative;
+}
+
+.demo-content {
+    padding: 40px 20px;
+    height: 100%;
+}
+
+.demo-header {
+    height: 60px;
+    background: var(--gradient-primary);
+    border-radius: 15px;
+    margin-bottom: 30px;
+    animation: pulse 2s ease-in-out infinite alternate;
+}
+
+.demo-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.demo-card {
+    height: 80px;
+    background: var(--background-card);
+    border-radius: 15px;
+    border: 1px solid var(--border-color);
+    animation: slideInLeft 1s ease-out;
+}
+
+.demo-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.demo-card:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Experience Cube */
+.experience-cube {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+}
+
+.cube-container {
+    perspective: 1000px;
+    width: 200px;
+    height: 200px;
+}
+
+.cube {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    transform-style: preserve-3d;
+    animation: rotateCube 20s infinite linear;
+}
+
+.cube .cube-face {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: var(--background-card);
+    border: 2px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--primary-color);
+}
+
+.cube .cube-face.front { transform: rotateY(0deg) translateZ(100px); }
+.cube .cube-face.back { transform: rotateY(180deg) translateZ(100px); }
+.cube .cube-face.right { transform: rotateY(90deg) translateZ(100px); }
+.cube .cube-face.left { transform: rotateY(-90deg) translateZ(100px); }
+.cube .cube-face.top { transform: rotateX(90deg) translateZ(100px); }
+.cube .cube-face.bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+/* Contact Form */
+.contact-form {
+    background: var(--background-card);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(20px);
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom-color: var(--primary-color);
+}
+
+.form-group label {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    color: var(--text-secondary);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus + label,
+.form-group textarea:focus + label,
+.form-group input:not(:placeholder-shown) + label,
+.form-group textarea:not(:placeholder-shown) + label {
+    top: -10px;
+    left: 15px;
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    background: var(--background-primary);
+    padding: 0 5px;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Project Cards */
+.project-card {
+    background: var(--background-card);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+}
+
+.project-image {
+    width: 100%;
+    height: 200px;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--text-primary);
+}
+
+.project-content {
+    padding: 30px;
+}
+
+.project-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+.project-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.project-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tech-tag {
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--primary-color);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.project-links {
+    display: flex;
+    gap: 15px;
+}
+
+.project-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.project-link:hover {
+    color: var(--text-primary);
+}
+
+/* Responsive Design Hints */
+@media (max-width: 768px) {
+    .hero-content,
+    .about-content,
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .skills-categories {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .phone-mockup {
+        width: 250px;
+        height: 500px;
+        transform: none;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
