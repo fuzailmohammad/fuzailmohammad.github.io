@@ -47,8 +47,8 @@ export const Contact: React.FC = () => {
     {
       icon: Linkedin,
       label: 'LinkedIn',
-      value: 'linkedin.com/in/mohdfuzail',
-      href: 'https://linkedin.com/in/mohdfuzail',
+      value: 'linkedin.com/in/mohammad-fuzail',
+      href: 'https://www.linkedin.com/in/mohammad-fuzail/',
       color: 'text-blue-600',
     },
   ];
