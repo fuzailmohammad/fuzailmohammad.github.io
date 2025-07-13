@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 
 export const CustomCursor: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -6,24 +6,45 @@ export const CustomCursor: React.FC = () => {
   const [isClicking, setIsClicking] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
-    // Check if device is mobile
-    const checkMobile = () => {
-      setIsMobile(window.matchMedia('(hover: none) and (pointer: coarse)').matches);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
+  // Increase number of particles and optimize their rendering
+  const particles = useMemo(() => Array.from({ length: 15 }, (_, i) => ({
+    id: i,
+    delay: i * 0.5,
+    scale: 1 - (i * 0.05),
+    opacity: 1 - (i * 0.1)
+  })), []);
 
-    let animationFrameId: number;
-    
+  const checkMobile = useCallback(() => {
+    setIsMobile(window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+  }, []);
+
+  useEffect(() => {
+    checkMobile();
+    const debouncedResize = debounce(checkMobile, 250);
+    window.addEventListener('resize', debouncedResize);
+
+    let rafId: number;
+    let lastX = 0;
+    let lastY = 0;
+    const smoothing = 0.15; // Lower value for smoother movement
+
     const updateMousePosition = (e: MouseEvent) => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
+      if (rafId) {
+        cancelAnimationFrame(rafId);
       }
       
-      animationFrameId = requestAnimationFrame(() => {
-        setMousePosition({ x: e.clientX, y: e.clientY });
+      rafId = requestAnimationFrame(() => {
+        // Smooth interpolation for cursor movement
+        const targetX = e.clientX;
+        const targetY = e.clientY;
+
+        const newX = lastX + (targetX - lastX) * smoothing;
+        const newY = lastY + (targetY - lastY) * smoothing;
+
+        lastX = newX;
+        lastY = newY;
+
+        setMousePosition({ x: newX, y: newY });
       });
     };
 
@@ -32,70 +53,75 @@ export const CustomCursor: React.FC = () => {
     const handleMouseDown = () => setIsClicking(true);
     const handleMouseUp = () => setIsClicking(false);
 
-    document.addEventListener('mousemove', updateMousePosition);
-    document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mouseup', handleMouseUp);
-    
-    // Use a more efficient way to handle interactive elements
-    const updateInteractiveElements = () => {
-      const interactiveElements = document.querySelectorAll('a, button, [data-cursor="pointer"], input, textarea');
-      interactiveElements.forEach(el => {
-        el.addEventListener('mouseenter', handleMouseEnter);
-        el.addEventListener('mouseleave', handleMouseLeave);
-      });
+    // Optimized event delegation for interactive elements
+    const handleInteraction = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const isInteractive = target.matches('a, button, [data-cursor="pointer"], input, textarea');
+
+      if (isInteractive) {
+        setIsHovering(true);
+      } else if (isHovering) {
+        setIsHovering(false);
+      }
     };
 
-    // Initial setup
-    updateInteractiveElements();
-
-    // Update when DOM changes
-    const observer = new MutationObserver(updateInteractiveElements);
-    observer.observe(document.body, { childList: true, subtree: true });
+    document.addEventListener('mousemove', updateMousePosition, { passive: true });
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mouseover', handleInteraction, { passive: true });
 
     return () => {
+      window.removeEventListener('resize', debouncedResize);
       document.removeEventListener('mousemove', updateMousePosition);
       document.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mouseup', handleMouseUp);
-      window.removeEventListener('resize', checkMobile);
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      observer.disconnect();
+      document.removeEventListener('mouseover', handleInteraction);
+      cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [checkMobile, isHovering]);
 
-  // Don't render cursor on mobile devices
-  if (isMobile) {
-    return null;
-  }
+  if (isMobile) return null;
+
   return (
-    <>
-      {/* Main cursor dot */}
-      <div
-        className="fixed top-0 left-0 w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full pointer-events-none z-50 transition-all duration-150 ease-out"
-        style={{
-          transform: `translate(${mousePosition.x - 4}px, ${mousePosition.y - 4}px) scale(${isClicking ? 0.8 : isHovering ? 1.5 : 1})`,
-          mixBlendMode: 'difference',
-        }}
-      />
-      
-      {/* Outer ring */}
-      <div
-        className="fixed top-0 left-0 w-8 h-8 border-2 border-blue-500/50 rounded-full pointer-events-none z-50 transition-all duration-300 ease-out"
-        style={{
-          transform: `translate(${mousePosition.x - 16}px, ${mousePosition.y - 16}px) scale(${isClicking ? 0.8 : isHovering ? 1.5 : 1})`,
-          opacity: isHovering ? 0.8 : 0.5,
-        }}
-      />
-      
-      {/* Trailing effect */}
-      <div
-        className="fixed top-0 left-0 w-12 h-12 border border-purple-500/20 rounded-full pointer-events-none z-40 transition-all duration-500 ease-out"
-        style={{
-          transform: `translate(${mousePosition.x - 24}px, ${mousePosition.y - 24}px) scale(${isHovering ? 2 : 1})`,
-          opacity: isHovering ? 0.3 : 0.1,
-        }}
-      />
-    </>
+    <div
+      className="fixed inset-0 pointer-events-none z-50"
+      style={{ perspective: '1000px' }}
+    >
+      {particles.map(({ id, delay, scale, opacity }) => (
+        <div
+          key={id}
+          className="fixed rounded-full mix-blend-difference"
+          style={{
+            transform: `translate3d(${mousePosition.x - 4}px, ${mousePosition.y - 4}px, 0) scale(${
+              isHovering ? 2.5 : isClicking ? 0.8 : 1
+            })`,
+            width: '8px',
+            height: '8px',
+            backgroundColor: 'white',
+            transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
+            transitionDelay: `${delay}ms`,
+            opacity: opacity * (isHovering ? 0.7 : 1),
+            transform: `
+              translate3d(
+                ${mousePosition.x - 4}px,
+                ${mousePosition.y - 4}px,
+                ${id * -5}px
+              )
+              scale(${scale * (isHovering ? 2 : isClicking ? 0.8 : 1)})
+            `,
+            willChange: 'transform, opacity'
+          }}
+        />
+      ))}
+    </div>
   );
 };
+
+// Utility function for debouncing
+function debounce(fn: Function, ms: number) {
+  let timer: NodeJS.Timeout;
+  return (...args: any[]) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), ms);
+  };
+}

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ExternalLink, Smartphone, Star, Filter } from 'lucide-react';
 
@@ -104,10 +104,11 @@ export const Projects: React.FC = () => {
     },
   ];
 
-  const categories = ['All', ...Array.from(new Set(projects.map(p => p.category)))];
-  const filteredProjects = selectedCategory === 'All' 
-    ? projects 
-    : projects.filter(p => p.category === selectedCategory);
+  const filteredProjects = useMemo(() => {
+    return projects.filter(project =>
+      selectedCategory === 'All' || project.category === selectedCategory
+    );
+  }, [selectedCategory]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -120,17 +121,23 @@ export const Projects: React.FC = () => {
     },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
+  const projectVariants = {
+    hidden: { y: 20, opacity: 0 },
     visible: {
-      opacity: 1,
       y: 0,
+      opacity: 1,
       transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
+        type: "spring",
+        stiffness: 50,
+        damping: 20
+      }
     },
   };
+
+  const categories = useMemo(() =>
+    ['All', ...new Set(projects.map(project => project.category))],
+    []
+  );
 
   return (
     <section id="projects" className="py-20 bg-white dark:bg-gray-900">
@@ -144,17 +151,17 @@ export const Projects: React.FC = () => {
         >
           <motion.h2
             className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-6"
-            variants={itemVariants}
+            variants={projectVariants}
           >
             Featured Projects
           </motion.h2>
           <motion.div
             className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-8"
-            variants={itemVariants}
+            variants={projectVariants}
           />
           <motion.p
             className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
-            variants={itemVariants}
+            variants={projectVariants}
           >
             A showcase of mobile applications that have made a real impact
           </motion.p>
@@ -177,7 +184,7 @@ export const Projects: React.FC = () => {
               }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              variants={itemVariants}
+              variants={projectVariants}
               data-cursor="pointer"
             >
               <Filter className="inline mr-2" size={16} />
@@ -186,18 +193,19 @@ export const Projects: React.FC = () => {
           ))}
         </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {filteredProjects.map((project, index) => (
             <motion.div
-              key={index}
-              variants={itemVariants}
-              className="group bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
-              whileHover={{ scale: 1.03, y: -10 }}
+              key={project.title}
+              variants={projectVariants}
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
+              transition={{ delay: index * 0.1 }}
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:scale-[1.02] transition-transform duration-300"
+              style={{
+                willChange: 'transform',
+                containIntrinsicSize: '0 500px' // Performance optimization
+              }}
             >
               <div className={`h-2 bg-gradient-to-r ${project.gradient}`} />
               
@@ -261,7 +269,7 @@ export const Projects: React.FC = () => {
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
