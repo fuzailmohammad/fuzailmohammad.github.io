@@ -20,11 +20,6 @@
     <meta name="twitter:description" content="Senior Flutter Developer with 2.5+ years of experience building production-grade mobile applications." />
     
     <style>
-      /* Hide scrollbar for custom cursor */
-      * {
-        cursor: none !important;
-      }
-      
       /* Smooth scrolling */
       html {
         scroll-behavior: smooth;
@@ -52,9 +47,24 @@
       .dark ::-webkit-scrollbar-track {
         background: #374151;
       }
+      
+      /* Hide default cursor */
+      * {
+        cursor: none !important;
+      }
+      
+      /* Prevent cursor issues on mobile */
+      @media (hover: none) and (pointer: coarse) {
+        * {
+          cursor: auto !important;
+        }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/index-siW8lhJ9.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CIfz_nRi.css">
+    <script type="module" crossorigin src="/assets/index-BxQDpbXH.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/vendor-YsBxPMQB.js">
+    <link rel="modulepreload" crossorigin href="/assets/motion-wu5s1ejC.js">
+    <link rel="modulepreload" crossorigin href="/assets/three-BfOuntVU.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-Bi_yZWyI.css">
   </head>
   <body>
     <div id="root"></div>
