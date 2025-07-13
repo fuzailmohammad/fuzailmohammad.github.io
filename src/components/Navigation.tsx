@@ -35,23 +35,31 @@ export const Navigation: React.FC = () => {
   };
 
   return (
-    <motion.nav
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg'
-          : 'bg-transparent'
+    <motion.header
+      className={`fixed top-0 left-0 right-0 z-50 ${
+        isScrolled ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg' : ''
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.5 }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <motion.div
-            className="text-2xl font-bold text-gray-900 dark:text-white font-serif italic"
+            className="flex-shrink-0"
             whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            Mohammad Fuzail
+            <a href="#home" className="flex items-center" data-cursor="pointer">
+              <img
+                src="/logo.svg"
+                alt="MF Logo"
+                className="h-10 w-10"
+              />
+              <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">
+                Mohammad Fuzail
+              </span>
+            </a>
           </motion.div>
 
           {/* Desktop Navigation */}
@@ -123,7 +131,7 @@ export const Navigation: React.FC = () => {
             ))}
           </div>
         </motion.div>
-      </div>
-    </motion.nav>
+      </nav>
+    </motion.header>
   );
 };
