@@ -160,7 +160,7 @@ export const Hero: React.FC = () => {
           variants={itemVariants}
         >
           <motion.a
-            href="/Mohammad Fuzail - Flutter Developer.pdf"
+            href="./Mohammad Fuzail - Flutter Developer.pdf"
             download="Mohammad_Fuzail_Resume.pdf"
             className="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
             whileHover={{ scale: 1.05, y: -2 }}
