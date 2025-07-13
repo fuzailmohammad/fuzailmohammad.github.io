@@ -10,7 +10,7 @@ export const Experience: React.FC = () => {
     {
       title: 'Senior Flutter Developer',
       company: 'Tech Almonds Solutions',
-      location: 'Remote',
+      location: 'Gurugram, Haryana, India',
       period: '2024 - Present',
       description: [
         'Leading mobile development initiatives and mentoring junior developers',
@@ -24,7 +24,7 @@ export const Experience: React.FC = () => {
     {
       title: 'Flutter Developer',
       company: 'Teciza Technologies',
-      location: 'Indore, India',
+      location: 'Nehru Place, New Delhi, India',
       period: '2022 - 2024',
       description: [
         'Developed 10+ production-grade Flutter applications serving 80,000+ users',
