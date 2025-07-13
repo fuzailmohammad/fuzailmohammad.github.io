@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from './components/ThemeProvider';
-import { CustomCursor } from './components/CustomCursor';
 import { ScrollProgress } from './components/ScrollProgress';
 import { Preloader } from './components/Preloader';
 import { Navigation } from './components/Navigation';
@@ -26,7 +25,6 @@ function App() {
         
         {!isLoading && (
           <>
-            <CustomCursor />
             <ScrollProgress />
             <Navigation />
             <main>
