@@ -1,41 +1,72 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Background Circle with gradient -->
-    <circle cx="256" cy="256" r="248" fill="url(#gradient)" stroke="url(#strokeGradient)" stroke-width="4"/>
-
-    <!-- Stylized "MF" text -->
-    <path d="M160 160 L160 352 L200 352 L200 230 L250 300 L300 230 L300 352 L340 352 L340 160 L300 160 L250 250 L200 160 Z" fill="white">
-        <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
-    </path>
-
-    <!-- Decorative elements -->
-    <path d="M340 160 L380 160 L380 280 Q380 320 340 320" fill="white" opacity="0.9">
-        <animate attributeName="opacity" values="0.7;0.9;0.7" dur="2s" repeatCount="indefinite"/>
-    </path>
-
-    <!-- Particle effects -->
-    <g class="particles">
-        <circle cx="160" cy="160" r="4" fill="white" opacity="0.6">
-            <animate attributeName="opacity" values="0.3;0.6;0.3" dur="1.5s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="380" cy="160" r="4" fill="white" opacity="0.6">
-            <animate attributeName="opacity" values="0.6;0.3;0.6" dur="1.5s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="250" cy="250" r="4" fill="white" opacity="0.6">
-            <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite"/>
-        </circle>
-    </g>
-
-    <!-- Gradient definitions -->
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
     <defs>
-        <linearGradient id="gradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#3B82F6"/>
-            <stop offset="50%" stop-color="#6366F1"/>
-            <stop offset="100%" stop-color="#8B5CF6"/>
+        <!-- Galactic Gradient -->
+        <radialGradient id="galaxyGradient" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fdf4ff" />
+            <stop offset="40%" stop-color="#f472b6" />
+            <stop offset="70%" stop-color="#7dd3fc" />
+            <stop offset="100%" stop-color="#8b5cf6" />
+        </radialGradient>
+
+        <!-- Animated Gradient Glow -->
+        <linearGradient id="animatedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f9a8d4">
+                <animate attributeName="stop-color" values="#f9a8d4;#c084fc;#5eead4;#f9a8d4" dur="6s" repeatCount="indefinite" />
+            </stop>
+            <stop offset="100%" stop-color="#8b5cf6">
+                <animate attributeName="stop-color" values="#8b5cf6;#22d3ee;#f472b6;#8b5cf6" dur="6s" repeatCount="indefinite" />
+            </stop>
         </linearGradient>
-        <linearGradient id="strokeGradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#60A5FA"/>
-            <stop offset="100%" stop-color="#A78BFA"/>
-        </linearGradient>
+
+        <!-- Glow Filter -->
+        <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+            <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
     </defs>
+
+    <!-- Dark Space Background -->
+    <rect width="512" height="512" fill="#0e0b1d" />
+
+    <!-- Radiant Animated Halo -->
+    <circle cx="256" cy="256" r="180" fill="url(#animatedGradient)" opacity="0.1">
+        <animateTransform attributeName="transform" type="rotate" from="0 256 256" to="360 256 256" dur="60s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- Energy Ring -->
+    <circle cx="256" cy="256" r="210" stroke="url(#animatedGradient)" stroke-width="2" fill="none" opacity="0.3">
+        <animate attributeName="r" values="210;215;210" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke-opacity" values="0.3;0.6;0.3" dur="4s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Pulsing Center Core -->
+    <circle cx="256" cy="256" r="5" fill="#ffffff">
+        <animate attributeName="r" values="5;10;5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.4;1" dur="3s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- M Monogram Text -->
+    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central"
+        font-size="160" font-family="'Georgia', 'Inter', serif" font-weight="bold"
+        fill="url(#galaxyGradient)" filter="url(#neonGlow)">
+        M
+        <animate attributeName="fill-opacity" values="0.8;1;0.8" dur="5s" repeatCount="indefinite"/>
+    </text>
+
+    <!-- Floating Orbs (Energy Nodes) -->
+    <circle cx="256" cy="70" r="4" fill="#f9a8d4" opacity="0.8">
+        <animateTransform attributeName="transform" type="rotate" from="0 256 256" to="360 256 256" dur="20s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="256" cy="442" r="4" fill="#7dd3fc" opacity="0.8">
+        <animateTransform attributeName="transform" type="rotate" from="0 256 256" to="-360 256 256" dur="22s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="442" cy="256" r="4" fill="#c084fc" opacity="0.8">
+        <animateTransform attributeName="transform" type="rotate" from="0 256 256" to="360 256 256" dur="26s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="70" cy="256" r="4" fill="#f472b6" opacity="0.8">
+        <animateTransform attributeName="transform" type="rotate" from="0 256 256" to="-360 256 256" dur="24s" repeatCount="indefinite"/>
+    </circle>
 </svg>
