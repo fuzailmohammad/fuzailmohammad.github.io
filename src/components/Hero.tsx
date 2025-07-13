@@ -9,17 +9,22 @@ export const Hero: React.FC = () => {
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    let animationId: number;
+    let animationId: number | null = null;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ 
+      canvas: canvasRef.current, 
+      alpha: true,
+      antialias: false,
+      powerPreference: "high-performance"
+    });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
 
     // Create floating particles
     const geometry = new THREE.BufferGeometry();
-    const particlesCount = 500; // Reduced for better performance
+    const particlesCount = 300; // Further reduced for better performance
     const posArray = new Float32Array(particlesCount * 3);
 
     for (let i = 0; i < particlesCount * 3; i++) {
@@ -40,8 +45,10 @@ export const Hero: React.FC = () => {
 
     const animate = () => {
       animationId = requestAnimationFrame(animate);
-      particlesMesh.rotation.y += 0.001;
-      particlesMesh.rotation.x += 0.0005;
+      if (particlesMesh) {
+        particlesMesh.rotation.y += 0.001;
+        particlesMesh.rotation.x += 0.0005;
+      }
       renderer.render(scene, camera);
     };
 
@@ -57,12 +64,21 @@ export const Hero: React.FC = () => {
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      if (animationId) {
+      if (animationId !== null) {
         cancelAnimationFrame(animationId);
       }
-      renderer.dispose();
-      geometry.dispose();
-      material.dispose();
+      if (renderer) {
+        renderer.dispose();
+      }
+      if (geometry) {
+        geometry.dispose();
+      }
+      if (material) {
+        material.dispose();
+      }
+      if (scene) {
+        scene.clear();
+      }
     };
   }, []);
 
@@ -90,7 +106,7 @@ export const Hero: React.FC = () => {
   };
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
@@ -106,7 +122,7 @@ export const Hero: React.FC = () => {
         animate="visible"
       >
         <motion.div
-          className="mb-12"
+          className="mb-16"
           variants={itemVariants}
         >
           <span className="inline-block px-4 py-2 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">

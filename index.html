@@ -20,11 +20,6 @@
     <meta name="twitter:description" content="Senior Flutter Developer with 2.5+ years of experience building production-grade mobile applications." />
     
     <style>
-      /* Hide scrollbar for custom cursor */
-      * {
-        cursor: none !important;
-      }
-      
       /* Smooth scrolling */
       html {
         scroll-behavior: smooth;
@@ -51,6 +46,18 @@
       /* Dark mode scrollbar */
       .dark ::-webkit-scrollbar-track {
         background: #374151;
+      }
+      
+      /* Hide default cursor */
+      * {
+        cursor: none !important;
+      }
+      
+      /* Prevent cursor issues on mobile */
+      @media (hover: none) and (pointer: coarse) {
+        * {
+          cursor: auto !important;
+        }
       }
     </style>
   </head>
