@@ -1,488 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mohd Fuzail - Flutter Developer Portfolio</title>
-    <meta name="description" content="Senior Flutter Developer specializing in cross-platform mobile applications. 2.5+ years experience building high-performance apps for iOS and Android.">
-    <meta name="keywords" content="Flutter Developer, Mobile App Developer, iOS, Android, Dart, Cross-platform">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mohammad Fuzail - Senior Flutter Developer | Mobile App Specialist</title>
+    <meta name="description" content="Senior Flutter Developer with 2.5+ years of experience building production-grade mobile applications. Specialized in Flutter, Dart, and mobile app development." />
+    <meta name="keywords" content="Flutter Developer, Mobile App Developer, Dart, React Native, iOS, Android, Mohammad Fuzail" />
+    <meta name="author" content="Mohammad Fuzail" />
     
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Mohammad Fuzail - Senior Flutter Developer" />
+    <meta property="og:description" content="Senior Flutter Developer with 2.5+ years of experience building production-grade mobile applications." />
+    <meta property="og:type" content="website" />
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/components.css">
-    <link rel="stylesheet" href="styles/animations.css">
-    <link rel="stylesheet" href="styles/responsive.css">
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mohammad Fuzail - Senior Flutter Developer" />
+    <meta name="twitter:description" content="Senior Flutter Developer with 2.5+ years of experience building production-grade mobile applications." />
     
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="loading-animation">
-            <div class="loading-cube">
-                <div class="cube-face front"></div>
-                <div class="cube-face back"></div>
-                <div class="cube-face right"></div>
-                <div class="cube-face left"></div>
-                <div class="cube-face top"></div>
-                <div class="cube-face bottom"></div>
-            </div>
-            <p>Loading Portfolio...</p>
-        </div>
-    </div>
-
-    <!-- Navigation -->
-    <nav id="navbar" class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <span class="logo-text">Mohammad Fuzail</span>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="#home" class="nav-link">Home</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#skills" class="nav-link">Skills</a></li>
-                <li><a href="#experience" class="nav-link">Experience</a></li>
-                <li><a href="#projects" class="nav-link">Projects</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-background">
-            <div class="floating-shapes">
-                <div class="shape shape-1"></div>
-                <div class="shape shape-2"></div>
-                <div class="shape shape-3"></div>
-                <div class="shape shape-4"></div>
-                <div class="shape shape-5"></div>
-            </div>
-        </div>
-        
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1 class="hero-title">
-                    <span class="title-line">Hi, I'm</span>
-                    <span class="title-name">Mohd Fuzail</span>
-                    <span class="title-role">Flutter Developer</span>
-                </h1>
-                <p class="hero-description">
-                    Creating beautiful, high-performance mobile applications for iOS and Android. 
-                    Passionate about delivering exceptional user experiences through innovative design and clean code.
-                </p>
-                <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">View My Work</a>
-                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
-                </div>
-            </div>
-            
-            <div class="hero-3d">
-                <div class="phone-mockup">
-                    <div class="phone-screen">
-                        <div class="app-demo">
-                            <div class="demo-content">
-                                <div class="demo-header"></div>
-                                <div class="demo-body">
-                                    <div class="demo-card"></div>
-                                    <div class="demo-card"></div>
-                                    <div class="demo-card"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="scroll-indicator">
-            <div class="scroll-arrow">
-                <i class="fas fa-chevron-down"></i>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">About Me</h2>
-                <p class="section-subtitle">Get to know more about my journey and passion</p>
-            </div>
-            
-            <div class="about-content">
-                <div class="about-text">
-                    <div class="about-card">
-                        <h3>Professional Journey</h3>
-                        <p>
-                            With 2.5+ years of dedicated experience in Flutter development, I've crafted high-performance 
-                            mobile applications that serve over 100,000+ users across diverse industries including automotive, 
-                            retail, healthcare, and field services.
-                        </p>
-                        
-                        <h3>What Drives Me</h3>
-                        <p>
-                            I'm passionate about creating scalable solutions that drive business growth while maintaining 
-                            exceptional user experiences. My expertise spans cross-platform development, team mentorship, 
-                            and implementing industry best practices.
-                        </p>
-                        
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-number" data-target="15">0</div>
-                                <div class="stat-label">Apps Delivered</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number" data-target="100000">0</div>
-                                <div class="stat-label">Users Served</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number" data-target="2.5">0</div>
-                                <div class="stat-label">Years Experience</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="about-visual">
-                    <div class="experience-cube">
-                        <div class="cube-container">
-                            <div class="cube">
-                                <div class="cube-face front">
-                                    <i class="fab fa-flutter"></i>
-                                </div>
-                                <div class="cube-face back">
-                                    <i class="fab fa-dart-lang"></i>
-                                </div>
-                                <div class="cube-face right">
-                                    <i class="fab fa-android"></i>
-                                </div>
-                                <div class="cube-face left">
-                                    <i class="fab fa-apple"></i>
-                                </div>
-                                <div class="cube-face top">
-                                    <i class="fas fa-code"></i>
-                                </div>
-                                <div class="cube-face bottom">
-                                    <i class="fas fa-mobile-alt"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="skills">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Technical Skills</h2>
-                <p class="section-subtitle">Technologies and tools I work with</p>
-            </div>
-            
-            <div class="skills-content">
-                <div class="skills-categories">
-                    <div class="skill-category">
-                        <div class="category-header">
-                            <i class="fas fa-mobile-alt"></i>
-                            <h3>Mobile Development</h3>
-                        </div>
-                        <div class="skills-list">
-                            <div class="skill-item">
-                                <span class="skill-name">Flutter</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="95%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <span class="skill-name">Dart</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <span class="skill-name">Provider/Riverpod</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="85%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <span class="skill-name">BLoC Pattern</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="80%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="skill-category">
-                        <div class="category-header">
-                            <i class="fas fa-code"></i>
-                            <h3>Architecture & Programming</h3>
-                        </div>
-                        <div class="skills-list">
-                            <div class="skill-item">
-                                <span class="skill-name">MVC/MVVM</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <span class="skill-name">OOP</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="85%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <span class="skill-name">C/C++</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="75%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="skill-category">
-                        <div class="category-header">
-                            <i class="fas fa-tools"></i>
-                            <h3>Tools & Technologies</h3>
-                        </div>
-                        <div class="skills-list">
-                            <div class="skill-item">
-                                <span class="skill-name">Git/GitHub</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <span class="skill-name">REST APIs</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="95%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <span class="skill-name">Firebase</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="85%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <span class="skill-name">SQLite</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="80%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="skill-category">
-                        <div class="category-header">
-                            <i class="fas fa-cogs"></i>
-                            <h3>Development Practices</h3>
-                        </div>
-                        <div class="skills-list">
-                            <div class="skill-item">
-                                <span class="skill-name">Testing</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="85%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <span class="skill-name">Debugging</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <span class="skill-name">Performance Optimization</span>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="80%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="experience">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Professional Experience</h2>
-                <p class="section-subtitle">My journey through the tech industry</p>
-            </div>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">July 2024 - Present</div>
-                        <h3>Senior Flutter Developer</h3>
-                        <h4>Tech Almonds Solutions Private Limited</h4>
-                        <ul>
-                            <li>Lead multiple concurrent mobile projects, delivering high-quality releases ahead of schedule</li>
-                            <li>Resolve critical iOS/Android issues and develop innovative features for legacy applications</li>
-                            <li>Mentor junior developers through code reviews and establish coding standards</li>
-                            <li>Optimize workflows improving application stability by 40% and reducing crash rates</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">May 2022 - March 2024</div>
-                        <h3>Flutter Developer</h3>
-                        <h4>Teciza Technologies Private Limited</h4>
-                        <ul>
-                            <li>Developed and maintained 12+ Flutter applications with RESTful API integration</li>
-                            <li>Implemented Razorpay payment gateway processing over ₹10 million in transactions</li>
-                            <li>Established unified design system improving development efficiency by 30%</li>
-                            <li>Collaborated with cross-functional teams to deliver consistent user experiences</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">2017 - 2021</div>
-                        <h3>Bachelor of Technology</h3>
-                        <h4>Jamia Hamdard University - Electronics & Communication</h4>
-                        <p>CGPA: 7.50/10 - Built strong foundation in programming and system design</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Featured Projects</h2>
-                <p class="section-subtitle">Showcase of my best work and achievements</p>
-            </div>
-            
-            <div class="projects-grid">
-                <!-- Project cards will be dynamically generated -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Let's Work Together</h2>
-                <p class="section-subtitle">Ready to bring your mobile app ideas to life</p>
-            </div>
-            
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-card">
-                        <h3>Get In Touch</h3>
-                        <p>I'm always interested in hearing about new opportunities and exciting projects. Let's discuss how we can work together!</p>
-                        
-                        <div class="contact-methods">
-                            <div class="contact-method">
-                                <i class="fas fa-envelope"></i>
-                                <div>
-                                    <h4>Email</h4>
-                                    <p>hello@mohdfuzail.dev</p>
-                                </div>
-                            </div>
-                            <div class="contact-method">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <div>
-                                    <h4>Location</h4>
-                                    <p>New Delhi, India</p>
-                                </div>
-                            </div>
-                            <div class="contact-method">
-                                <i class="fas fa-clock"></i>
-                                <div>
-                                    <h4>Response Time</h4>
-                                    <p>Within 24 hours</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="social-links">
-                            <a href="https://github.com/fuzailmohammad" target="_blank" class="social-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="https://linkedin.com/in/mohammadfuzail" target="_blank" class="social-link">
-                                <i class="fab fa-linkedin"></i>
-                            </a>
-                            <a href="#" class="social-link">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="contact-form-container">
-                    <form id="contact-form" class="contact-form">
-                        <div class="form-group">
-                            <input type="text" id="name" name="name" required>
-                            <label for="name">Your Name</label>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="email" name="email" required>
-                            <label for="email">Your Email</label>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" id="subject" name="subject" required>
-                            <label for="subject">Subject</label>
-                        </div>
-                        <div class="form-group">
-                            <textarea id="message" name="message" rows="5" required></textarea>
-                            <label for="message">Your Message</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <span>Send Message</span>
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <p>&copy; 2024 Mohd Fuzail. All rights reserved.</p>
-                <p>Built with passion using modern web technologies</p>
-            </div>
-        </div>
-    </footer>
-    
-    <!-- Download Resume Button -->
-    <a href="public/Mohd Fuzail - Flutter Developer.pdf" download class="download-resume">
-        <i class="fas fa-download"></i>
-        Download Resume
-    </a>
-
-    <!-- Scripts -->
-    <script src="scripts/main.js"></script>
-    <script src="scripts/animations.js"></script>
-    <script src="scripts/projects.js"></script>
-    <script src="scripts/contact.js"></script>
-</body>
+    <style>
+      /* Hide scrollbar for custom cursor */
+      * {
+        cursor: none !important;
+      }
+      
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+        border-radius: 4px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(45deg, #2563eb, #7c3aed);
+      }
+      
+      /* Dark mode scrollbar */
+      .dark ::-webkit-scrollbar-track {
+        background: #374151;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
