@@ -40,8 +40,8 @@ export const Contact: React.FC = () => {
     {
       icon: Github,
       label: 'GitHub',
-      value: 'github.com/mohdfuzail',
-      href: 'https://github.com/mohdfuzail',
+      value: 'github.com/fuzailmohammad',
+      href: 'https://github.com/fuzailmohammad',
       color: 'text-gray-700 dark:text-gray-300',
     },
     {
