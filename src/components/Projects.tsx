@@ -64,7 +64,7 @@ export const Projects: React.FC = () => {
       description: 'Gamified retail loyalty application with points system and reward redemption.',
       category: 'Retail',
       links: {
-        playStore: 'https://play.google.com/store/apps/details?id=com.classmate.starclub',
+        playStore: 'https://play.google.com/store/apps/details?id=com.almond.itc_starClub',
         appStore: 'https://apps.apple.com/app/classmate-star-club/id1234567893',
       },
       technologies: ['Flutter', 'Gamification', 'Loyalty System', 'Firebase'],
