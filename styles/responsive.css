@@ -319,7 +319,7 @@
     .navbar,
     .floating-shapes,
     .scroll-indicator {
-        display: none;
+        display: fixed;
     }
 
     body {
