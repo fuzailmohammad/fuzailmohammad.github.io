@@ -10,21 +10,26 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(timer);
-          setTimeout(() => {
-            setIsComplete(true);
-            setTimeout(onComplete, 500);
-          }, 500);
-          return 100;
-        }
-        return prev + Math.random() * 15;
-      });
-    }, 100);
+    const startTime = Date.now();
+    const duration = 1500;
 
-    return () => clearInterval(timer);
+    const updateProgress = () => {
+      const elapsed = Date.now() - startTime;
+      const newProgress = Math.min((elapsed / duration) * 100, 100);
+
+      setProgress(newProgress);
+
+      if (newProgress < 100) {
+        requestAnimationFrame(updateProgress);
+      } else {
+        setTimeout(() => {
+          setIsComplete(true);
+          setTimeout(onComplete, 300);
+        }, 200);
+      }
+    };
+
+    requestAnimationFrame(updateProgress);
   }, [onComplete]);
 
   return (

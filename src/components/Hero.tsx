@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Download, Mail } from 'lucide-react';
 import * as THREE from 'three';
@@ -12,43 +12,80 @@ export const Hero: React.FC = () => {
     let animationId: number | null = null;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ 
-      canvas: canvasRef.current, 
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvasRef.current,
       alpha: true,
       antialias: false,
       powerPreference: "high-performance"
     });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Create floating particles
+    const particlesCount = 1500;
     const geometry = new THREE.BufferGeometry();
-    const particlesCount = 300; // Further reduced for better performance
     const posArray = new Float32Array(particlesCount * 3);
+    const colors = new Float32Array(particlesCount * 3);
+    const sizes = new Float32Array(particlesCount);
 
-    for (let i = 0; i < particlesCount * 3; i++) {
-      posArray[i] = (Math.random() - 0.5) * 10;
+    for (let i = 0; i < particlesCount; i++) {
+      posArray[i * 3] = (Math.random() - 0.5) * 15;
+      posArray[i * 3 + 1] = (Math.random() - 0.5) * 15;
+      posArray[i * 3 + 2] = (Math.random() - 0.5) * 15;
+
+      const colorChoice = Math.random();
+      if (colorChoice < 0.33) {
+        colors[i * 3] = 0.23;
+        colors[i * 3 + 1] = 0.51;
+        colors[i * 3 + 2] = 0.96;
+      } else if (colorChoice < 0.66) {
+        colors[i * 3] = 0.58;
+        colors[i * 3 + 1] = 0.29;
+        colors[i * 3 + 2] = 0.91;
+      } else {
+        colors[i * 3] = 0.92;
+        colors[i * 3 + 1] = 0.38;
+        colors[i * 3 + 2] = 0.65;
+      }
+
+      sizes[i] = Math.random() * 3 + 1;
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
     const material = new THREE.PointsMaterial({
-      size: 0.005,
-      color: 0x3b82f6,
+      size: 0.008,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.8,
+      sizeAttenuation: true,
+      blending: THREE.AdditiveBlending,
     });
 
     const particlesMesh = new THREE.Points(geometry, material);
     scene.add(particlesMesh);
 
-    camera.position.z = 3;
+    camera.position.z = 4;
 
+    let time = 0;
     const animate = () => {
       animationId = requestAnimationFrame(animate);
+      time += 0.001;
+
       if (particlesMesh) {
-        particlesMesh.rotation.y += 0.001;
-        particlesMesh.rotation.x += 0.0005;
+        particlesMesh.rotation.y = time * 0.5;
+        particlesMesh.rotation.x = Math.sin(time * 0.3) * 0.2;
+
+        const positions = geometry.attributes.position.array as Float32Array;
+        for (let i = 0; i < particlesCount; i++) {
+          const i3 = i * 3;
+          positions[i3 + 1] = Math.sin(time + positions[i3]) * 0.5;
+        }
+        geometry.attributes.position.needsUpdate = true;
       }
+
       renderer.render(scene, camera);
     };
 
@@ -67,18 +104,10 @@ export const Hero: React.FC = () => {
       if (animationId !== null) {
         cancelAnimationFrame(animationId);
       }
-      if (renderer) {
-        renderer.dispose();
-      }
-      if (geometry) {
-        geometry.dispose();
-      }
-      if (material) {
-        material.dispose();
-      }
-      if (scene) {
-        scene.clear();
-      }
+      renderer.dispose();
+      geometry.dispose();
+      material.dispose();
+      scene.clear();
     };
   }, []);
 
