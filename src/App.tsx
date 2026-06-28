@@ -17,7 +17,6 @@ import { TermsConditions } from './components/TermsConditions';
 
 const HomePage: React.FC = () => (
   <>
-    <CustomCursor />
     <ScrollProgress />
     <Navigation />
     <main>
@@ -46,11 +45,14 @@ function App() {
           {isLoading && <Preloader onComplete={handlePreloaderComplete} />}
 
           {!isLoading && (
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-conditions" element={<TermsConditions />} />
-            </Routes>
+            <>
+              <CustomCursor />
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-conditions" element={<TermsConditions />} />
+              </Routes>
+            </>
           )}
         </div>
       </Router>

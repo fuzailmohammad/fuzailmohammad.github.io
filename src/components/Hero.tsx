@@ -146,16 +146,21 @@ export const Hero: React.FC = () => {
   }, []);
 
   const handleResumeDownload = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const pdfUrl = './documents/resume.pdf';
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
 
-    if (isMobile) {
+    if (isIOS) {
       e.preventDefault();
-      const pdfUrl = './Mohammad Fuzail - Flutter Developer.pdf';
-      const newWindow = window.open(pdfUrl, '_blank');
-
-      if (!newWindow) {
-        window.location.href = pdfUrl;
-      }
+      window.open(pdfUrl, '_blank');
+    } else if (isAndroid) {
+      e.preventDefault();
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.download = 'Mohammad_Fuzail_Resume.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   }, []);
 
@@ -237,7 +242,7 @@ export const Hero: React.FC = () => {
           variants={itemVariants}
         >
           <motion.a
-            href="./Mohammad Fuzail - Flutter Developer.pdf"
+            href="./documents/resume.pdf"
             download="Mohammad_Fuzail_Resume.pdf"
             onClick={handleResumeDownload}
             className="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"

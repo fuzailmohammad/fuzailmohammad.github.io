@@ -41,12 +41,19 @@ export const PrivacyPolicy: React.FC = () => {
   }, []);
 
   const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = './documents/privacy-policy.pdf';
-    link.download = 'privacy-policy.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const pdfUrl = './documents/privacy-policy.pdf';
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    if (isIOS) {
+      window.open(pdfUrl, '_blank');
+    } else {
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.download = 'privacy-policy.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
 
   const sections = [

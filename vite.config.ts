@@ -18,11 +18,14 @@ export default defineConfig({
           icons: ['lucide-react'],
         },
         assetFileNames: (assetInfo) => {
-          let extType = assetInfo.name.split('.')[1];
+          const extType = assetInfo.name.split('.')[1];
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-            extType = 'img';
+            return `assets/img/[name]-[hash][extname]`;
           }
-          return `assets/${extType}/[name]-[hash][extname]`;
+          if (/css/i.test(extType)) {
+            return `assets/css/[name]-[hash][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
         },
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
@@ -30,14 +33,8 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 1000,
     cssCodeSplit: true,
-    reportCompressedSize: false,
   },
   optimizeDeps: {
     include: ['framer-motion', 'lucide-react', 'react-router-dom'],
-  },
-  server: {
-    hmr: {
-      overlay: false,
-    },
   },
 });
