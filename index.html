@@ -8,17 +8,37 @@
     <meta name="description" content="Senior Flutter Developer with 2.5+ years of experience building production-grade mobile applications. Specialized in Flutter, Dart, and mobile app development." />
     <meta name="keywords" content="Flutter Developer, Mobile App Developer, Dart, React Native, iOS, Android, Mohammad Fuzail" />
     <meta name="author" content="Mohammad Fuzail" />
-    
+
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Mohammad Fuzail - Senior Flutter Developer" />
     <meta property="og:description" content="Senior Flutter Developer with 2.5+ years of experience building production-grade mobile applications." />
     <meta property="og:type" content="website" />
-    
+    <meta property="og:url" content="https://fuzailmohammad.github.io" />
+
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Mohammad Fuzail - Senior Flutter Developer" />
     <meta name="twitter:description" content="Senior Flutter Developer with 2.5+ years of experience building production-grade mobile applications." />
-    
+
+    <!-- GitHub Pages SPA redirect script -->
+    <script>
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      // This script checks to see if a redirect is present in the query string,
+      // converts it back into the correct URL and adds it to the browser's history
+      // using window.history.replaceState(...), so that routing works correctly.
+      var l = window.location;
+      if (l.search[1] === '/' ) {
+        var decoded = l.search.slice(1).split('&').map(function(s) {
+          return s.replace(/~and~/g, '&')
+        }).join('?');
+        window.history.replaceState(null, null,
+          l.pathname.slice(0, -1) + decoded + l.hash
+        );
+      }
+    </script>
+
     <style>
       /* Smooth scrolling */
       html {

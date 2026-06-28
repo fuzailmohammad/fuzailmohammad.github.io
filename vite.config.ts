@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   base: '/',
   plugins: [react()],
-  publicDir: false,
+  publicDir: 'public',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -13,9 +13,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
+          vendor: ['react', 'react-dom', 'react-router-dom'],
           motion: ['framer-motion'],
-          three: ['three'],
           icons: ['lucide-react'],
         },
         assetFileNames: (assetInfo) => {
@@ -34,7 +33,7 @@ export default defineConfig({
     reportCompressedSize: false,
   },
   optimizeDeps: {
-    include: ['framer-motion', 'three', 'lucide-react'],
+    include: ['framer-motion', 'lucide-react', 'react-router-dom'],
   },
   server: {
     hmr: {

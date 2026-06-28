@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Download, Mail } from 'lucide-react';
-import * as THREE from 'three';
 
 export const Hero: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -9,106 +8,155 @@ export const Hero: React.FC = () => {
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    let animationId: number | null = null;
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef.current,
-      alpha: true,
-      antialias: false,
-      powerPreference: "high-performance"
-    });
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d', { alpha: true });
+    if (!ctx) return;
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    let animationId: number;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    const dpr = Math.min(window.devicePixelRatio, 2);
 
-    const particlesCount = 1500;
-    const geometry = new THREE.BufferGeometry();
-    const posArray = new Float32Array(particlesCount * 3);
-    const colors = new Float32Array(particlesCount * 3);
-    const sizes = new Float32Array(particlesCount);
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    ctx.scale(dpr, dpr);
 
-    for (let i = 0; i < particlesCount; i++) {
-      posArray[i * 3] = (Math.random() - 0.5) * 15;
-      posArray[i * 3 + 1] = (Math.random() - 0.5) * 15;
-      posArray[i * 3 + 2] = (Math.random() - 0.5) * 15;
-
-      const colorChoice = Math.random();
-      if (colorChoice < 0.33) {
-        colors[i * 3] = 0.23;
-        colors[i * 3 + 1] = 0.51;
-        colors[i * 3 + 2] = 0.96;
-      } else if (colorChoice < 0.66) {
-        colors[i * 3] = 0.58;
-        colors[i * 3 + 1] = 0.29;
-        colors[i * 3 + 2] = 0.91;
-      } else {
-        colors[i * 3] = 0.92;
-        colors[i * 3 + 1] = 0.38;
-        colors[i * 3 + 2] = 0.65;
-      }
-
-      sizes[i] = Math.random() * 3 + 1;
+    interface Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      radius: number;
+      opacity: number;
+      hue: number;
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    const particleCount = 50;
+    const particles: Particle[] = [];
 
-    const material = new THREE.PointsMaterial({
-      size: 0.008,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.8,
-      sizeAttenuation: true,
-      blending: THREE.AdditiveBlending,
-    });
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        radius: Math.random() * 2 + 1,
+        opacity: Math.random() * 0.5 + 0.1,
+        hue: Math.random() * 60 + 200,
+      });
+    }
 
-    const particlesMesh = new THREE.Points(geometry, material);
-    scene.add(particlesMesh);
+    let mouseX = width / 2;
+    let mouseY = height / 2;
+    let mouseActive = false;
 
-    camera.position.z = 4;
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      mouseActive = true;
+    };
+
+    const handleMouseLeave = () => {
+      mouseActive = false;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleMouseLeave);
 
     let time = 0;
     const animate = () => {
-      animationId = requestAnimationFrame(animate);
-      time += 0.001;
+      time += 0.005;
+      ctx.clearRect(0, 0, width, height);
 
-      if (particlesMesh) {
-        particlesMesh.rotation.y = time * 0.5;
-        particlesMesh.rotation.x = Math.sin(time * 0.3) * 0.2;
+      particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
 
-        const positions = geometry.attributes.position.array as Float32Array;
-        for (let i = 0; i < particlesCount; i++) {
-          const i3 = i * 3;
-          positions[i3 + 1] = Math.sin(time + positions[i3]) * 0.5;
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 3);
+        gradient.addColorStop(0, `hsla(${p.hue}, 70%, 60%, ${p.opacity})`);
+        gradient.addColorStop(1, `hsla(${p.hue}, 70%, 60%, 0)`);
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        particles.slice(i + 1).forEach((p2) => {
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 150) {
+            const opacity = (1 - dist / 150) * 0.15;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `hsla(220, 70%, 60%, ${opacity})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        });
+
+        if (mouseActive) {
+          const dx = mouseX - p.x;
+          const dy = mouseY - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 200) {
+            const opacity = (1 - dist / 200) * 0.3;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(mouseX, mouseY);
+            ctx.strokeStyle = `hsla(260, 70%, 60%, ${opacity})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
         }
-        geometry.attributes.position.needsUpdate = true;
-      }
+      });
 
-      renderer.render(scene, camera);
+      animationId = requestAnimationFrame(animate);
     };
 
     animate();
 
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.scale(dpr, dpr);
     };
 
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      if (animationId !== null) {
-        cancelAnimationFrame(animationId);
-      }
-      renderer.dispose();
-      geometry.dispose();
-      material.dispose();
-      scene.clear();
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+      cancelAnimationFrame(animationId);
     };
+  }, []);
+
+  const handleResumeDownload = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      e.preventDefault();
+      const pdfUrl = './Mohammad Fuzail - Flutter Developer.pdf';
+      const newWindow = window.open(pdfUrl, '_blank');
+
+      if (!newWindow) {
+        window.location.href = pdfUrl;
+      }
+    }
   }, []);
 
   const containerVariants = {
@@ -191,6 +239,7 @@ export const Hero: React.FC = () => {
           <motion.a
             href="./Mohammad Fuzail - Flutter Developer.pdf"
             download="Mohammad_Fuzail_Resume.pdf"
+            onClick={handleResumeDownload}
             className="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}

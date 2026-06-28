@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Code } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export const Footer: React.FC = () => {
   return (
@@ -15,10 +16,26 @@ export const Footer: React.FC = () => {
             viewport={{ once: true }}
           >
             <h3 className="text-2xl font-bold mb-4">Mohammad Fuzail</h3>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Senior Flutter Developer passionate about creating exceptional mobile experiences 
+            <p className="text-gray-400 max-w-2xl mx-auto mb-6">
+              Senior Flutter Developer passionate about creating exceptional mobile experiences
               that make a difference in people's lives.
             </p>
+
+            <div className="flex justify-center gap-6 text-sm">
+              <Link
+                to="/privacy-policy"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <span className="text-gray-600">|</span>
+              <Link
+                to="/terms-conditions"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Terms & Conditions
+              </Link>
+            </div>
           </motion.div>
 
           <motion.div
