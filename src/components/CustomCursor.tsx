@@ -1,213 +1,126 @@
-import React, { useEffect, useRef, memo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 
-interface CursorState {
-  mouseX: number;
-  mouseY: number;
-  cursorX: number;
-  cursorY: number;
-  isHovering: boolean;
-  isClicking: boolean;
-  isVisible: boolean;
-}
+const CUSTOM_CURSOR_ENABLED = true;
 
-export const CustomCursor: React.FC = memo(() => {
+export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
-  const stateRef = useRef<CursorState>({
-    mouseX: 0,
-    mouseY: 0,
-    cursorX: 0,
-    cursorY: 0,
-    isHovering: false,
-    isClicking: false,
-    isVisible: false,
-  });
-  const animationRef = useRef<number | null>(null);
-  const listenersRef = useRef<{
-    mousemove: ((e: MouseEvent) => void) | null;
-    mousedown: (() => void) | null;
-    mouseup: (() => void) | null;
-    mouseenter: (() => void) | null;
-    mouseleave: (() => void) | null;
-  }>({
-    mousemove: null,
-    mousedown: null,
-    mouseup: null,
-    mouseenter: null,
-    mouseleave: null,
-  });
-
-  const location = useLocation();
+  const rafRef = useRef<number>(0);
+  const stateRef = useRef({ x: 0, y: 0, cx: 0, cy: 0, hover: false });
 
   useEffect(() => {
-    const isTouchDevice = () => {
-      return 'ontouchstart' in window ||
-        navigator.maxTouchPoints > 0 ||
-        ((navigator as unknown as { msMaxTouchPoints?: number }).msMaxTouchPoints ?? 0) > 0;
-    };
+    if (!CUSTOM_CURSOR_ENABLED) return;
 
-    const isCoarsePointer = () => {
-      return window.matchMedia('(pointer: coarse)').matches;
-    };
+    const isTouch = 'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      window.matchMedia('(pointer: coarse)').matches;
 
-    if (isTouchDevice() || isCoarsePointer()) {
-      if (cursorRef.current) cursorRef.current.style.display = 'none';
-      if (ringRef.current) ringRef.current.style.display = 'none';
-      return;
-    }
+    if (isTouch) return;
 
-    const state = stateRef.current;
     const cursor = cursorRef.current;
     const ring = ringRef.current;
-
     if (!cursor || !ring) return;
 
-    const updateCursor = () => {
-      const dx = state.mouseX - state.cursorX;
-      const dy = state.mouseY - state.cursorY;
+    const state = stateRef.current;
+    state.x = window.innerWidth / 2;
+    state.y = window.innerHeight / 2;
+    state.cx = state.x;
+    state.cy = state.y;
 
-      state.cursorX += dx * 0.18;
-      state.cursorY += dy * 0.18;
+    cursor.style.opacity = '1';
+    ring.style.opacity = '0.5';
 
-      const scale = state.isClicking ? 0.8 : state.isHovering ? 1.4 : 1;
-      const opacity = state.isVisible ? (state.isHovering ? 1 : 0.8) : 0;
-
-      cursor.style.transform = `translate(${state.cursorX - 4}px, ${state.cursorY - 4}px) scale(${scale})`;
-      cursor.style.opacity = String(opacity);
-
-      ring.style.transform = `translate(${state.cursorX - 14}px, ${state.cursorY - 14}px) scale(${scale})`;
-      ring.style.opacity = String(state.isVisible ? (state.isHovering ? 0.6 : 0.4) : 0);
-
-      animationRef.current = requestAnimationFrame(updateCursor);
+    const onMove = (e: MouseEvent) => {
+      state.x = e.clientX;
+      state.y = e.clientY;
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      state.mouseX = e.clientX;
-      state.mouseY = e.clientY;
-      if (!state.isVisible) {
-        state.isVisible = true;
-        state.cursorX = e.clientX;
-        state.cursorY = e.clientY;
-      }
+    const onEnter = () => {
+      cursor.style.opacity = '1';
+      ring.style.opacity = state.hover ? '0.8' : '0.5';
     };
 
-    const handleMouseDown = () => {
-      state.isClicking = true;
+    const onLeave = () => {
+      cursor.style.opacity = '0';
+      ring.style.opacity = '0';
     };
 
-    const handleMouseUp = () => {
-      state.isClicking = false;
+    const onHoverEnter = () => {
+      state.hover = true;
+      ring.style.opacity = '0.8';
     };
 
-    const handleMouseEnterWindow = () => {
-      state.isVisible = true;
+    const onHoverLeave = () => {
+      state.hover = false;
+      ring.style.opacity = '0.5';
     };
 
-    const handleMouseLeaveWindow = () => {
-      state.isVisible = false;
+    const animate = () => {
+      const dx = state.x - state.cx;
+      const dy = state.y - state.cy;
+      state.cx += dx * 0.18;
+      state.cy += dy * 0.18;
+      const scale = state.hover ? 1.4 : 1;
+      cursor.style.transform = `translate3d(${state.cx - 4}px, ${state.cy - 4}px, 0) scale(${scale})`;
+      ring.style.transform = `translate3d(${state.cx - 14}px, ${state.cy - 14}px, 0) scale(${scale})`;
+      rafRef.current = requestAnimationFrame(animate);
     };
 
-    const handleElementMouseEnter = () => {
-      state.isHovering = true;
-    };
+    rafRef.current = requestAnimationFrame(animate);
 
-    const handleElementMouseLeave = () => {
-      state.isHovering = false;
-    };
+    document.addEventListener('mousemove', onMove, { passive: true });
+    document.addEventListener('mouseenter', onEnter);
+    document.addEventListener('mouseleave', onLeave);
 
-    listenersRef.current = {
-      mousemove: handleMouseMove,
-      mousedown: handleMouseDown,
-      mouseup: handleMouseUp,
-      mouseenter: handleMouseEnterWindow,
-      mouseleave: handleMouseLeaveWindow,
-    };
-
-    document.addEventListener('mousemove', handleMouseMove, { passive: true });
-    document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mouseup', handleMouseUp);
-    document.addEventListener('mouseenter', handleMouseEnterWindow);
-    document.addEventListener('mouseleave', handleMouseLeaveWindow);
-
-    const addInteractiveListeners = () => {
-      const interactiveElements = document.querySelectorAll(
-        'a, button, [data-cursor="pointer"], input, textarea, [role="button"], [tabindex]'
-      );
-      interactiveElements.forEach((el) => {
-        el.addEventListener('mouseenter', handleElementMouseEnter);
-        el.addEventListener('mouseleave', handleElementMouseLeave);
+    const selectors = 'a, button, [data-cursor="pointer"], input, textarea, [role="button"]';
+    const addListeners = () => {
+      document.querySelectorAll(selectors).forEach(el => {
+        el.addEventListener('mouseenter', onHoverEnter);
+        el.addEventListener('mouseleave', onHoverLeave);
       });
     };
+    addListeners();
 
-    addInteractiveListeners();
-
-    let rafId: number | null = null;
-    const debouncedAddListeners = () => {
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(addInteractiveListeners);
-    };
-
-    const observer = new MutationObserver(debouncedAddListeners);
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
-    animationRef.current = requestAnimationFrame(updateCursor);
+    const observer = new MutationObserver(addListeners);
+    observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-      }
-
-      const listeners = listenersRef.current;
-      if (listeners.mousemove) document.removeEventListener('mousemove', listeners.mousemove);
-      if (listeners.mousedown) document.removeEventListener('mousedown', listeners.mousedown);
-      if (listeners.mouseup) document.removeEventListener('mouseup', listeners.mouseup);
-      if (listeners.mouseenter) document.removeEventListener('mouseenter', listeners.mouseenter);
-      if (listeners.mouseleave) document.removeEventListener('mouseleave', listeners.mouseleave);
-
+      cancelAnimationFrame(rafRef.current);
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseenter', onEnter);
+      document.removeEventListener('mouseleave', onLeave);
       observer.disconnect();
-
-      const interactiveElements = document.querySelectorAll(
-        'a, button, [data-cursor="pointer"], input, textarea, [role="button"], [tabindex]'
-      );
-      interactiveElements.forEach((el) => {
-        el.removeEventListener('mouseenter', handleElementMouseEnter);
-        el.removeEventListener('mouseleave', handleElementMouseLeave);
+      document.querySelectorAll(selectors).forEach(el => {
+        el.removeEventListener('mouseenter', onHoverEnter);
+        el.removeEventListener('mouseleave', onHoverLeave);
       });
     };
-  }, [location]);
+  }, []);
+
+  if (!CUSTOM_CURSOR_ENABLED) return null;
+  if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) return null;
 
   return (
     <>
       <div
         ref={cursorRef}
-        className="fixed top-0 left-0 w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full pointer-events-none will-change-transform"
+        className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none will-change-transform"
         style={{
+          background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
           zIndex: 99999,
           opacity: 0,
           mixBlendMode: 'difference',
-          transform: 'translate(-100px, -100px)',
         }}
-        aria-hidden="true"
       />
       <div
         ref={ringRef}
-        className="fixed top-0 left-0 w-6 h-6 border-2 border-blue-500/60 rounded-full pointer-events-none will-change-transform"
+        className="fixed top-0 left-0 w-7 h-7 rounded-full pointer-events-none will-change-transform"
         style={{
+          border: '2px solid rgba(59, 130, 246, 0.5)',
           zIndex: 99998,
           opacity: 0,
-          transform: 'translate(-100px, -100px)',
         }}
-        aria-hidden="true"
       />
     </>
   );
-});
-
-CustomCursor.displayName = 'CustomCursor';
+}
