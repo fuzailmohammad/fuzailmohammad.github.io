@@ -4,37 +4,96 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mohammad Fuzail - Senior Flutter Developer</title>
-    <meta name="description" content="Senior Flutter Developer with 2.5+ years of experience building production-grade mobile applications." />
-    <meta property="og:title" content="Mohammad Fuzail - Senior Flutter Developer" />
-    <meta property="og:description" content="Senior Flutter Developer specializing in Flutter and mobile app development." />
+    <title>Mohd Fuzail - Senior Flutter Developer | Mobile Application Specialist</title>
+    <meta name="description" content="Senior Flutter Developer with 3+ years of experience delivering production-grade cross-platform mobile applications for Android and iOS. 15+ production apps delivered across automotive, retail, healthcare, and enterprise sectors." />
+    <meta name="keywords" content="Mohd Fuzail, Mohammad Fuzail, Senior Flutter Developer, Mobile Application Specialist, Dart, iOS, Android, BLoC, Riverpod, Firebase, Fastlane" />
+    <meta name="author" content="Mohd Fuzail" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Mohd Fuzail - Senior Flutter Developer | Mobile Specialist" />
+    <meta property="og:description" content="Senior Flutter Developer with 3+ years of experience delivering production-grade cross-platform mobile applications for Android and iOS. 15+ production apps." />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://fuzailmohammad.github.io" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mohd Fuzail - Senior Flutter Developer | Mobile Specialist" />
+    <meta name="twitter:description" content="Senior Flutter Developer with 3+ years of experience delivering production-grade cross-platform mobile applications for Android and iOS." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700;1,900&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+    <!-- GitHub Pages SPA redirect script -->
     <script>
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
       var l = window.location;
-      if (l.search[1] === '/') {
+      if (l.search[1] === '/' ) {
         var decoded = l.search.slice(1).split('&').map(function(s) {
           return s.replace(/~and~/g, '&')
         }).join('?');
-        window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
+        window.history.replaceState(null, null,
+          l.pathname.slice(0, -1) + decoded + l.hash
+        );
       }
     </script>
+
+    <!-- Early theme init script to prevent light/dark flash -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('portfolio-theme');
+          var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
+    </script>
+
     <style>
-      html { scroll-behavior: smooth; }
-      ::-webkit-scrollbar { width: 8px; }
-      ::-webkit-scrollbar-track { background: #f1f1f1; }
-      ::-webkit-scrollbar-thumb { background: linear-gradient(45deg, #3b82f6, #8b5cf6); border-radius: 4px; }
-      .dark ::-webkit-scrollbar-track { background: #374151; }
-      @media (hover: hover) and (pointer: fine) {
-        * { cursor: none !important; }
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
       }
-      @media (hover: none) and (pointer: coarse) {
-        * { cursor: auto !important; }
+
+      html[data-theme="light"] {
+        background-color: #FFFFFF;
+        color: #0F172A;
+      }
+
+      html[data-theme="dark"] {
+        background-color: #0B0F19;
+        color: #F8FAFC;
+      }
+
+      html[data-theme="darkest"] {
+        background-color: #080808;
+        color: #F5F3EE;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #88888844;
+        border-radius: 3px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #F4C400;
       }
     </style>
-    <script type="module" crossorigin src="/assets/index-CkW8hCw6.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/vendor-DaMZjeFU.js">
-    <link rel="modulepreload" crossorigin href="/assets/motion-C-_UmLQs.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-C4jYoCL_.css">
+    <script type="module" crossorigin src="/assets/index-B8VhuZ6N.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/vendor-uC8UBufS.js">
+    <link rel="modulepreload" crossorigin href="/assets/motion-BnBOtpA7.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-4C6-cktV.css">
   </head>
   <body>
     <div id="root"></div>

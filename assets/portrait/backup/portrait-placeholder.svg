@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" fill="none">
+  <defs>
+    <linearGradient id="portraitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#181818" />
+      <stop offset="100%" stop-color="#0a0a0a" />
+    </linearGradient>
+    <radialGradient id="bioGlow" cx="50%" cy="40%" r="40%">
+      <stop offset="0%" stop-color="#F4C400" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#F4C400" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="bioGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#222222" stroke-width="0.75" />
+    </pattern>
+  </defs>
+
+  <!-- Frame Background -->
+  <rect width="800" height="1000" fill="url(#portraitGrad)" />
+  <rect width="800" height="1000" fill="url(#bioGrid)" />
+  <circle cx="400" cy="380" r="280" fill="url(#bioGlow)" />
+
+  <!-- Classified Header Banner -->
+  <rect x="60" y="50" width="680" height="35" fill="#141414" stroke="#2a2a2a" stroke-width="1" />
+  <rect x="60" y="50" width="8" height="35" fill="#F4C400" />
+  <text x="80" y="73" fill="#F4C400" font-family="monospace" font-size="12" letter-spacing="3" font-weight="bold">
+    CLASSIFIED DOSSIER // SUBJECT IDENTITY
+  </text>
+  <text x="560" y="73" fill="#8A8A8A" font-family="monospace" font-size="11" letter-spacing="2">
+    SECURITY: CL-4
+  </text>
+
+  <!-- Human Portrait Silhouette (Mohammad Fuzail Profile) -->
+  <g id="human-silhouette" opacity="0.9">
+    <!-- Shoulders & Coat / Jacket -->
+    <path d="M 180 850 C 220 700 300 620 370 600 L 430 600 C 500 620 580 700 620 850 L 650 1000 L 150 1000 Z" 
+          fill="#111111" stroke="#262626" stroke-width="1.5" />
+    
+    <!-- Collar & Shirt V-neck -->
+    <polygon points="360,600 440,600 400,680" fill="#181818" stroke="#333" stroke-width="1" />
+    <line x1="400" y1="680" x2="400" y2="850" stroke="#F4C400" stroke-width="1" opacity="0.4" />
+
+    <!-- Neck -->
+    <polygon points="365,490 435,490 440,610 360,610" fill="#191919" />
+
+    <!-- Head & Hair Silhouette -->
+    <!-- Hair volume & modern styled crop -->
+    <path d="M 330 350 C 320 250 360 170 440 170 C 490 170 515 210 510 270 C 520 320 500 350 495 380 C 495 440 450 490 400 495 C 350 490 320 430 330 350 Z" 
+          fill="#0c0c0c" stroke="#2a2a2a" stroke-width="2" />
+    <!-- Facial contour highlight (Editorial rim light) -->
+    <path d="M 335 340 C 330 400 355 460 400 485 C 445 460 470 400 465 340" 
+          stroke="#F4C400" stroke-width="1.5" stroke-dasharray="4 3" fill="none" opacity="0.6" />
+    
+    <!-- Face Silhouette Shade -->
+    <ellipse cx="400" cy="350" rx="65" ry="90" fill="#161616" stroke="#2b2b2b" stroke-width="1" />
+  </g>
+
+  <!-- Biometric HUD Targeting Rings -->
+  <g stroke="#F4C400" stroke-width="1.2" opacity="0.75">
+    <!-- Outer reticle -->
+    <circle cx="400" cy="350" r="160" stroke-dasharray="12 8" fill="none" />
+    <!-- Mid reticle with degree ticks -->
+    <circle cx="400" cy="350" r="120" stroke-dasharray="4 6" fill="none" opacity="0.5" />
+    <!-- Inner lock -->
+    <circle cx="400" cy="350" r="40" stroke-dasharray="2 4" fill="none" opacity="0.7" />
+
+    <!-- Crosshair axes -->
+    <line x1="210" y1="350" x2="270" y2="350" />
+    <line x1="530" y1="350" x2="590" y2="350" />
+    <line x1="400" y1="160" x2="400" y2="220" />
+    <line x1="400" y1="480" x2="400" y2="540" />
+
+    <!-- Central target marker -->
+    <line x1="390" y1="350" x2="410" y2="350" stroke="#F4C400" stroke-width="2" />
+    <line x1="400" y1="340" x2="400" y2="360" stroke="#F4C400" stroke-width="2" />
+  </g>
+
+  <!-- Dossier Telemetry & Metadata Overlays -->
+  <g fill="#F4C400" font-family="monospace" font-size="10" letter-spacing="2">
+    <!-- Top Left -->
+    <text x="80" y="120">CODEX: MF-00786</text>
+    <text x="80" y="140" fill="#8A8A8A">STATUS: VERIFIED</text>
+    <text x="80" y="160" fill="#8A8A8A">ROLE: SENIOR FLUTTER DEV</text>
+    
+    <!-- Top Right -->
+    <text x="560" y="120">BIOMETRIC: MATCH 99.4%</text>
+    <text x="560" y="140" fill="#8A8A8A">GOTHAM SECTOR: 04</text>
+    <text x="560" y="160" fill="#8A8A8A">SYS.STATE: DEPLOYED</text>
+  </g>
+
+  <!-- Bottom Stamp / Seal -->
+  <g transform="translate(240, 880)">
+    <rect x="0" y="0" width="320" height="50" rx="4" fill="#121212" stroke="#F4C400" stroke-width="1.5" />
+    <text x="25" y="30" fill="#F4C400" font-family="monospace" font-size="11" font-weight="bold" letter-spacing="3">
+      [ BEHIND THE MASK // VERIFIED ]
+    </text>
+  </g>
+
+  <!-- Corner Brackets -->
+  <path d="M 40 40 L 70 40 M 40 40 L 40 70" stroke="#F4C400" stroke-width="2" />
+  <path d="M 760 40 L 730 40 M 760 40 L 760 70" stroke="#F4C400" stroke-width="2" />
+  <path d="M 40 960 L 70 960 M 40 960 L 40 930" stroke="#F4C400" stroke-width="2" />
+  <path d="M 760 960 L 730 960 M 760 960 L 760 930" stroke="#F4C400" stroke-width="2" />
+</svg>
