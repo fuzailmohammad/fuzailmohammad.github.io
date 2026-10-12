@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Download, FileText } from 'lucide-react';
+import { Download, FileText, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Navigation } from './Navigation';
 import { Footer } from './Footer';
+import { useTheme } from './ThemeProvider';
 
 export const PrivacyPolicy: React.FC = () => {
+  const { isBatmanMode } = useTheme();
   useEffect(() => {
     window.scrollTo(0, 0);
 
     // Update SEO meta tags
-    document.title = 'Privacy Policy | Mohammad Fuzail - Flutter Developer';
+    document.title = 'Privacy Policy | Mohammad Fuzail - Mobile Systems Architect';
 
     const updateMeta = (name: string, content: string) => {
       let meta = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement;
@@ -21,19 +23,7 @@ export const PrivacyPolicy: React.FC = () => {
       meta.content = content;
     };
 
-    const updateOgMeta = (property: string, content: string) => {
-      let meta = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement;
-      if (!meta) {
-        meta = document.createElement('meta');
-        meta.setAttribute('property', property);
-        document.head.appendChild(meta);
-      }
-      meta.content = content;
-    };
-
-    updateMeta('description', 'Privacy Policy for Mohammad Fuzail\'s portfolio website. Learn how we collect, use, and protect your personal information.');
-    updateOgMeta('og:title', 'Privacy Policy | Mohammad Fuzail');
-    updateOgMeta('og:description', 'Privacy Policy for Mohammad Fuzail\'s portfolio website.');
+    updateMeta('description', "Privacy Policy for Mohammad Fuzail's portfolio website. Learn how we handle information.");
 
     return () => {
       document.title = 'Mohammad Fuzail - Senior Flutter Developer | Mobile App Specialist';
@@ -41,7 +31,7 @@ export const PrivacyPolicy: React.FC = () => {
   }, []);
 
   const handleDownload = () => {
-    const pdfUrl = './documents/privacy-policy.pdf';
+    const pdfUrl = '/documents/privacy-policy.pdf';
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
     if (isIOS) {
@@ -69,199 +59,135 @@ export const PrivacyPolicy: React.FC = () => {
   ];
 
   return (
-    <div className="bg-white dark:bg-gray-900 min-h-screen">
+    <div className="bg-gotham-black text-bat-offwhite min-h-screen">
       <Navigation />
 
-      <main className="pt-24 pb-16">
+      <main className="pt-[calc(var(--nav-height)+2rem)] pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="text-center mb-12">
-              <div className="flex justify-center mb-6">
-                <div className="p-4 bg-blue-100 dark:bg-blue-900/50 rounded-full">
-                  <FileText className="w-12 h-12 text-blue-600 dark:text-blue-400" />
+          
+          {/* Header */}
+          <div className="mb-10">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 text-xs font-mono text-bat-yellow hover:underline mb-6"
+            >
+              <ArrowLeft size={14} />
+              {isBatmanMode ? 'RETURN TO BASE' : 'BACK TO HOME'}
+            </Link>
+
+            <div className="p-8 bg-gotham-charcoal border border-gotham-border rounded-lg relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-bat-yellow" />
+              <div className="flex items-center gap-4 mb-4">
+                <div className="p-3 bg-gotham-surface border border-gotham-border rounded text-bat-yellow">
+                  <FileText className="w-8 h-8" />
+                </div>
+                <div>
+                  <span className="font-mono text-xs text-bat-yellow uppercase tracking-widest">
+                    {isBatmanMode ? 'LEGAL SPECIFICATION // DOSSIER-PP' : 'LEGAL NOTICE // PRIVACY POLICY'}
+                  </span>
+                  <h1 className="font-display font-black text-3xl sm:text-4xl text-bat-offwhite">
+                    PRIVACY POLICY
+                  </h1>
                 </div>
               </div>
-              <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-                Privacy Policy
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                Last Updated: June 28, 2026
+              <p className="font-mono text-xs text-bat-muted">
+                {isBatmanMode ? 'LAST UPDATED: SEPTEMBER 2026 // COMPLIANCE MATRIX ACTIVE' : 'LAST UPDATED: SEPTEMBER 2026 // PRIVACY COMPLIANT'}
               </p>
             </div>
+          </div>
 
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 mb-8">
-              <div className="flex items-center justify-between flex-wrap gap-4">
-                <div>
-                  <h3 className="text-white text-lg font-semibold mb-1">Download Privacy Policy</h3>
-                  <p className="text-blue-100 text-sm">Get a PDF copy for your records</p>
-                </div>
-                <button
-                  onClick={handleDownload}
-                  className="flex items-center px-6 py-3 bg-white text-blue-600 rounded-full font-semibold hover:bg-gray-100 transition-colors"
-                >
-                  <Download className="mr-2" size={20} />
-                  Download PDF
-                </button>
-              </div>
-            </div>
-
-            <nav className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 mb-8">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Table of Contents
+          {/* Download Action Banner */}
+          <div className="bg-gotham-surface border border-gotham-border rounded-lg p-6 mb-8 flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <h3 className="font-display font-bold text-lg text-bat-offwhite mb-1">
+                {isBatmanMode ? 'OFFLINE DOSSIER DOWNLOAD' : 'OFFLINE DOCUMENT DOWNLOAD'}
               </h3>
-              <ul className="space-y-2">
-                {sections.map((section) => (
-                  <li key={section.id}>
-                    <a
-                      href={`#${section.id}`}
-                      className="text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      {section.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            <div className="prose dark:prose-invert max-w-none">
-              <section id="information-collection" className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                  1. Information We Collect
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  [PLACEHOLDER: Replace this section with your actual privacy policy content regarding information collection.]
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  We may collect personal information that you voluntarily provide when using our services, including but not limited to:
-                </p>
-                <ul className="list-disc pl-6 text-gray-600 dark:text-gray-400 mt-4 space-y-2">
-                  <li>Name and contact information</li>
-                  <li>Email address</li>
-                  <li>Professional information</li>
-                  <li>Usage data and analytics</li>
-                </ul>
-              </section>
-
-              <section id="information-usage" className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                  2. How We Use Your Information
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  [PLACEHOLDER: Replace this section with your actual privacy policy content regarding information usage.]
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  The information we collect is used to:
-                </p>
-                <ul className="list-disc pl-6 text-gray-600 dark:text-gray-400 mt-4 space-y-2">
-                  <li>Provide and maintain our services</li>
-                  <li>Communicate with you about updates and inquiries</li>
-                  <li>Improve user experience</li>
-                  <li>Comply with legal obligations</li>
-                </ul>
-              </section>
-
-              <section id="information-sharing" className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                  3. Information Sharing
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  [PLACEHOLDER: Replace this section with your actual privacy policy content regarding information sharing.]
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  We do not sell, trade, or rent your personal information to third parties. We may share your information with trusted service providers who assist us in operating our website and conducting our business.
-                </p>
-              </section>
-
-              <section id="data-security" className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                  4. Data Security
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  [PLACEHOLDER: Replace this section with your actual privacy policy content regarding data security.]
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
-                </p>
-              </section>
-
-              <section id="cookies" className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                  5. Cookies and Tracking
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  [PLACEHOLDER: Replace this section with your actual privacy policy content regarding cookies and tracking technologies.]
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  We use cookies and similar tracking technologies to improve user experience and analyze website traffic.
-                </p>
-              </section>
-
-              <section id="user-rights" className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                  6. Your Rights
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  [PLACEHOLDER: Replace this section with your actual privacy policy content regarding user rights.]
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  You have the right to:
-                </p>
-                <ul className="list-disc pl-6 text-gray-600 dark:text-gray-400 mt-4 space-y-2">
-                  <li>Access your personal information</li>
-                  <li>Request correction of your data</li>
-                  <li>Request deletion of your data</li>
-                  <li>Object to processing of your data</li>
-                  <li>Data portability</li>
-                </ul>
-              </section>
-
-              <section id="children-privacy" className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                  7. Children's Privacy
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  [PLACEHOLDER: Replace this section with your actual privacy policy content regarding children's privacy.]
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Our services are not intended for individuals under the age of 13. We do not knowingly collect personal information from children.
-                </p>
-              </section>
-
-              <section id="policy-changes" className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                  8. Changes to This Policy
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  [PLACEHOLDER: Replace this section with your actual privacy policy content regarding policy changes.]
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.
-                </p>
-              </section>
-
-              <section id="contact" className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                  9. Contact Information
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  [PLACEHOLDER: Replace this section with your actual privacy policy content regarding contact information.]
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  If you have any questions about this Privacy Policy, please contact us at:
-                </p>
-                <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mt-4">
-                  <p className="text-gray-900 dark:text-white font-semibold">Mohammad Fuzail</p>
-                  <a href="mailto:mohdfuzail00786@gmail.com" className="text-blue-600 dark:text-blue-400 hover:underline">
-                    mohdfuzail00786@gmail.com
-                  </a>
-                </div>
-              </section>
+              <p className="font-sans text-xs text-bat-muted">
+                Download a verified PDF copy for your records
+              </p>
             </div>
-          </motion.div>
+            <button
+              onClick={handleDownload}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-bat-yellow text-gotham-black font-display font-bold text-sm tracking-wider hover:bg-white transition-colors"
+            >
+              <Download size={16} />
+              DOWNLOAD PDF
+            </button>
+          </div>
+
+          {/* Table of Contents */}
+          <nav className="bg-gotham-charcoal/80 border border-gotham-border rounded-lg p-6 mb-10">
+            <h3 className="font-mono text-xs uppercase tracking-widest text-bat-yellow mb-4">
+              TABLE OF CONTENTS
+            </h3>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
+              {sections.map((section, idx) => (
+                <li key={section.id}>
+                  <a
+                    href={`#${section.id}`}
+                    className="text-bat-muted hover:text-bat-yellow transition-colors flex items-center gap-2"
+                  >
+                    <span className="text-bat-yellow/60">0{idx + 1}.</span>
+                    <span>{section.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Content Body */}
+          <div className="space-y-8 text-bat-offwhite/85 text-sm sm:text-base leading-relaxed">
+            <section id="information-collection" className="p-6 bg-gotham-charcoal/40 border border-gotham-border/60 rounded">
+              <h2 className="font-display font-bold text-xl text-bat-yellow mb-3">
+                1. Information We Collect
+              </h2>
+              <p className="text-bat-offwhite/80 mb-3">
+                {isBatmanMode
+                  ? 'We may collect personal information voluntarily submitted through the portfolio dispatch terminal, including:'
+                  : 'We may collect personal information voluntarily submitted through the portfolio contact form, including:'}
+              </p>
+              <ul className="list-disc pl-6 space-y-1 text-bat-muted font-mono text-xs">
+                <li>{isBatmanMode ? 'Name and operative identifier' : 'Name and contact identity'}</li>
+                <li>{isBatmanMode ? 'Return transmission frequency (Email address)' : 'Email address and phone number'}</li>
+                <li>{isBatmanMode ? 'Project scopes and mission parameters' : 'Project inquiries and message details'}</li>
+                <li>{isBatmanMode ? 'Anonymous telemetry and performance analytics' : 'Anonymous performance and usage analytics'}</li>
+              </ul>
+            </section>
+
+            <section id="information-usage" className="p-6 bg-gotham-charcoal/40 border border-gotham-border/60 rounded">
+              <h2 className="font-display font-bold text-xl text-bat-yellow mb-3">
+                2. How We Use Your Information
+              </h2>
+              <p className="text-bat-offwhite/80">
+                Data collected is strictly deployed to respond to client and engineering inquiries, maintain high availability of portfolio services, and coordinate technical architecture consultations.
+              </p>
+            </section>
+
+            <section id="data-security" className="p-6 bg-gotham-charcoal/40 border border-gotham-border/60 rounded">
+              <h2 className="font-display font-bold text-xl text-bat-yellow mb-3">
+                3. Data Security Protocols
+              </h2>
+              <p className="text-bat-offwhite/80">
+                Rigorous transmission encryption standards (TLS/HTTPS) and minimal data retention protocols are maintained. No personal telemetry is sold, traded, or shared with unauthorized commercial entities.
+              </p>
+            </section>
+
+            <section id="contact" className="p-6 bg-gotham-surface border border-gotham-border rounded">
+              <h2 className="font-display font-bold text-xl text-bat-yellow mb-2">
+                4. Legal Contact
+              </h2>
+              <p className="text-bat-muted text-xs font-mono mb-2">
+                DIRECT INQUIRIES REGARDING DATA GOVERNANCE:
+              </p>
+              <a
+                href="mailto:mohdfuzail00786@gmail.com"
+                className="font-mono text-sm text-bat-offwhite hover:text-bat-yellow transition-colors underline"
+              >
+                mohdfuzail00786@gmail.com
+              </a>
+            </section>
+          </div>
+
         </div>
       </main>
 

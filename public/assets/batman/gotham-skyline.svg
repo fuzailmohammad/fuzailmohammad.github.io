@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" fill="none">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#050505" stop-opacity="0.95" />
+      <stop offset="60%" stop-color="#0d0d0d" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#141414" stop-opacity="0.9" />
+    </linearGradient>
+    <linearGradient id="signalBeam" x1="15%" y1="90%" x2="85%" y2="10%">
+      <stop offset="0%" stop-color="#F4C400" stop-opacity="0.25" />
+      <stop offset="60%" stop-color="#F4C400" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#F4C400" stop-opacity="0.0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Deep Gotham Sky -->
+  <rect width="1200" height="600" fill="url(#skyGrad)" />
+
+  <!-- Dramatic Batsignal Beam -->
+  <polygon points="220,540 680,40 820,30 250,560" fill="url(#signalBeam)" />
+
+  <!-- Distant Towers Layer -->
+  <g fill="#0b0b0b">
+    <rect x="50" y="240" width="70" height="360" />
+    <polygon points="85,190 50,240 120,240" />
+    <rect x="150" y="290" width="80" height="310" />
+    <rect x="260" y="180" width="110" height="420" />
+    <polygon points="315,120 260,180 370,180" />
+    <line x1="315" y1="90" x2="315" y2="120" stroke="#0b0b0b" stroke-width="3" />
+    
+    <rect x="420" y="260" width="90" height="340" />
+    <rect x="540" y="210" width="130" height="390" />
+    <polygon points="605,150 540,210 670,210" />
+    
+    <rect x="710" y="280" width="80" height="320" />
+    <rect x="820" y="170" width="120" height="430" />
+    <polygon points="880,100 820,170 940,170" />
+    <line x1="880" y1="70" x2="880" y2="100" stroke="#0b0b0b" stroke-width="3" />
+    
+    <rect x="970" y="250" width="90" height="350" />
+    <rect x="1080" y="310" width="90" height="290" />
+  </g>
+
+  <!-- Midground Gothic Architecture -->
+  <g fill="#111111">
+    <rect x="0" y="340" width="90" height="260" />
+    <rect x="110" y="320" width="100" height="280" />
+    <polygon points="160,270 110,320 210,320" />
+    
+    <rect x="230" y="260" width="120" height="340" />
+    <polygon points="290,200 230,260 350,260" />
+    <rect x="285" y="160" width="10" height="40" />
+    
+    <rect x="380" y="350" width="110" height="250" />
+    <rect x="510" y="300" width="140" height="300" />
+    <polygon points="580,240 510,300 650,300" />
+    
+    <rect x="680" y="330" width="95" height="270" />
+    <rect x="800" y="270" width="140" height="330" />
+    <polygon points="870,210 800,270 940,270" />
+    <rect x="865" y="170" width="10" height="40" />
+
+    <rect x="960" y="320" width="110" height="280" />
+    <rect x="1090" y="360" width="110" height="240" />
+  </g>
+
+  <!-- Foreground Dramatic Silhouettes & Art Deco Steps -->
+  <g fill="#070707">
+    <rect x="80" y="420" width="140" height="180" />
+    <rect x="250" y="380" width="160" height="220" />
+    <polygon points="330,340 250,380 410,380" />
+    
+    <rect x="450" y="440" width="130" height="160" />
+    <rect x="610" y="400" width="160" height="200" />
+    <polygon points="690,360 610,400 770,400" />
+
+    <rect x="800" y="430" width="150" height="170" />
+    <rect x="980" y="390" width="180" height="210" />
+  </g>
+
+  <!-- Window Grid Accents (Subtle Gold/Charcoal dots) -->
+  <g fill="#F4C400" opacity="0.35">
+    <rect x="270" y="280" width="3" height="6" />
+    <rect x="280" y="280" width="3" height="6" />
+    <rect x="270" y="295" width="3" height="6" />
+    <rect x="280" y="295" width="3" height="6" />
+    <rect x="310" y="310" width="3" height="6" />
+    <rect x="320" y="310" width="3" height="6" />
+    
+    <rect x="550" y="320" width="3" height="6" />
+    <rect x="560" y="320" width="3" height="6" />
+    <rect x="550" y="335" width="3" height="6" />
+    <rect x="560" y="335" width="3" height="6" />
+    
+    <rect x="840" y="300" width="3" height="6" />
+    <rect x="850" y="300" width="3" height="6" />
+    <rect x="840" y="315" width="3" height="6" />
+    <rect x="850" y="315" width="3" height="6" />
+    <rect x="890" y="280" width="3" height="6" />
+    <rect x="900" y="280" width="3" height="6" />
+  </g>
+
+  <!-- Bats in Flight (Subtle Silhouettes) -->
+  <g fill="#F4C400" opacity="0.6">
+    <!-- Small bats -->
+    <path d="M720 120 Q725 116 730 120 Q735 116 740 120 Q733 124 730 121 Q727 124 720 120 Z" transform="scale(1.2)" />
+    <path d="M760 140 Q764 137 768 140 Q772 137 776 140 Q770 143 768 141 Q766 143 760 140 Z" transform="scale(0.9)" />
+    <path d="M690 95 Q694 92 698 95 Q702 92 706 95 Q700 98 698 96 Q696 98 690 95 Z" transform="scale(1.5)" />
+    <path d="M640 160 Q644 157 648 160 Q652 157 656 160 Q650 163 648 161 Q646 163 640 160 Z" />
+  </g>
+</svg>

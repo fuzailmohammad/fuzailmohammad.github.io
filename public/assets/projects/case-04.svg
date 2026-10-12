@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <defs>
+    <linearGradient id="bgCase4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141414" />
+      <stop offset="100%" stop-color="#0a0a0a" />
+    </linearGradient>
+    <pattern id="gridCase4" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#1f1f1f" stroke-width="1" />
+    </pattern>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgCase4)" />
+  <rect width="800" height="500" fill="url(#gridCase4)" />
+  
+  <!-- Classified Banner -->
+  <rect x="40" y="30" width="720" height="36" fill="#181818" stroke="#2d2d2d" stroke-width="1" />
+  <rect x="40" y="30" width="6" height="36" fill="#F4C400" />
+  <text x="60" y="53" fill="#F4C400" font-family="monospace" font-size="12" letter-spacing="2" font-weight="bold">
+    CASE FILE #004 // SECTOR: MULTI-TIER B2B LOYALTY
+  </text>
+  <text x="640" y="53" fill="#8A8A8A" font-family="monospace" font-size="11" letter-spacing="2">
+    STATUS: ACTIVE
+  </text>
+
+  <!-- Left Phone Mockup Graphic -->
+  <g transform="translate(140, 110)">
+    <rect x="0" y="0" width="180" height="320" rx="24" fill="#101010" stroke="#F4C400" stroke-width="2" />
+    <rect x="65" y="10" width="50" height="8" rx="4" fill="#222" />
+    
+    <!-- Multi-role Dashboard -->
+    <rect x="15" y="35" width="150" height="55" rx="8" fill="#181818" stroke="#2c2c2c" stroke-width="1" />
+    <text x="25" y="53" fill="#F4C400" font-family="monospace" font-size="9" font-weight="bold">TIER 4: ENTERPRISE</text>
+    <rect x="25" y="65" width="60" height="12" rx="3" fill="#F4C400" opacity="0.3" />
+    <rect x="90" y="65" width="60" height="12" rx="3" fill="#222" />
+
+    <!-- Role Badges Grid -->
+    <rect x="15" y="105" width="150" height="85" rx="8" fill="#161616" stroke="#252525" stroke-width="1" />
+    <circle cx="35" cy="130" r="12" fill="#222" stroke="#F4C400" stroke-width="1" />
+    <circle cx="70" cy="130" r="12" fill="#222" stroke="#444" stroke-width="1" />
+    <circle cx="105" cy="130" r="12" fill="#222" stroke="#444" stroke-width="1" />
+    <circle cx="140" cy="130" r="12" fill="#222" stroke="#444" stroke-width="1" />
+    <text x="25" y="165" fill="#8A8A8A" font-family="monospace" font-size="8">4-ROLE ACCESS CONTROL</text>
+    <rect x="25" y="175" width="120" height="4" rx="2" fill="#333" />
+
+    <!-- QR Voucher Redemption Engine -->
+    <rect x="15" y="205" width="150" height="75" rx="8" fill="#191919" stroke="#2c2c2c" stroke-width="1" />
+    <rect x="25" y="218" width="45" height="45" fill="#111" stroke="#F4C400" stroke-width="1" />
+    <rect x="32" y="225" width="12" height="12" fill="#F4C400" />
+    <rect x="50" y="225" width="12" height="12" fill="#F4C400" />
+    <rect x="32" y="243" width="12" height="12" fill="#F4C400" />
+    <text x="80" y="235" fill="#F5F3EE" font-family="sans-serif" font-size="10" font-weight="bold">INSTANT REDEEM</text>
+    <text x="80" y="250" fill="#F4C400" font-family="monospace" font-size="8">TOKEN VERIFIED</text>
+  </g>
+
+  <!-- Right Architecture Flow & Telemetry -->
+  <g transform="translate(380, 120)">
+    <text x="0" y="30" fill="#F5F3EE" font-family="sans-serif" font-size="22" font-weight="bold" letter-spacing="1">
+      PARKER LOYALTY PLATFORM
+    </text>
+    <text x="0" y="60" fill="#8A8A8A" font-family="sans-serif" font-size="13">
+      Multi-Role B2B Incentive Engine & Voucher Redemption
+    </text>
+
+    <!-- Architecture Nodes -->
+    <g transform="translate(0, 90)">
+      <rect x="0" y="0" width="110" height="40" rx="4" fill="#161616" stroke="#F4C400" stroke-width="1" />
+      <text x="14" y="25" fill="#F4C400" font-family="monospace" font-size="11">MULTI-AUTH</text>
+
+      <line x1="110" y1="20" x2="160" y2="20" stroke="#F4C400" stroke-width="1.5" stroke-dasharray="3 3" />
+
+      <rect x="160" y="0" width="110" height="40" rx="4" fill="#161616" stroke="#333" stroke-width="1" />
+      <text x="180" y="25" fill="#8A8A8A" font-family="monospace" font-size="11">PROVIDER</text>
+
+      <line x1="270" y1="20" x2="320" y2="20" stroke="#F4C400" stroke-width="1.5" stroke-dasharray="3 3" />
+
+      <rect x="320" y="0" width="60" height="40" rx="4" fill="#161616" stroke="#333" stroke-width="1" />
+      <text x="328" y="25" fill="#8A8A8A" font-family="monospace" font-size="11">VOUCHER</text>
+    </g>
+
+    <!-- Key Metrics Badges -->
+    <g transform="translate(0, 160)">
+      <rect x="0" y="0" width="160" height="50" rx="4" fill="#121212" stroke="#262626" stroke-width="1" />
+      <text x="15" y="24" fill="#F4C400" font-family="monospace" font-size="18" font-weight="bold">4 USER ROLES</text>
+      <text x="15" y="40" fill="#666" font-family="monospace" font-size="9">RBAC SECURITY MATRIX</text>
+
+      <rect x="180" y="0" width="160" height="50" rx="4" fill="#121212" stroke="#262626" stroke-width="1" />
+      <text x="195" y="24" fill="#F4C400" font-family="monospace" font-size="18" font-weight="bold">HIGH SECURITY</text>
+      <text x="195" y="40" fill="#666" font-family="monospace" font-size="9">QR TOKEN VERIFICATION</text>
+    </g>
+  </g>
+
+  <!-- Corner Brackets -->
+  <path d="M 20 20 L 40 20 M 20 20 L 20 40" stroke="#F4C400" stroke-width="2" />
+  <path d="M 780 20 L 760 20 M 780 20 L 780 40" stroke="#F4C400" stroke-width="2" />
+  <path d="M 20 480 L 40 480 M 20 480 L 20 460" stroke="#F4C400" stroke-width="2" />
+  <path d="M 780 480 L 760 480 M 780 480 L 780 460" stroke="#F4C400" stroke-width="2" />
+</svg>
