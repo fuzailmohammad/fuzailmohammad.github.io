@@ -31,9 +31,9 @@
         "We engineered QR Scanner & Generator around on-device data processing and privacy-first architectural standards:"
       ],
       "listItems": [
-        "On-Device Processing: Scanned barcode symbols and generated QR codes are decoded and generated locally on your device without transmitting raw payload contents to our servers.",
+        "On-Device Scanning and Decoding: Scanning, optical frame evaluation, and barcode decoding happen locally on your device. Raw scan contents are not transmitted to FuzailVerse servers.",
+        "Local Storage of Scan History: If you enable scan history (or keep it enabled as configured by default), decoded barcode strings and metadata are stored locally in an on-device SQLite database. You can delete individual entries or clear all history at any time using in-app controls.",
         "No Account Required: The application functions completely without user registration, login credentials, or user profile creation.",
-        "No Content Harvesting: We do not intercept, collect, store, or monitor the text, URLs, credentials, or personal information contained within the codes you scan or generate.",
         "No Data Sale: We do not sell, rent, or trade any user information or device identifiers to third parties or data brokers."
       ]
     },
@@ -80,6 +80,7 @@
         "Scanned Barcode Data: When a barcode or QR code is successfully decoded, its textual payload and categorical format are displayed on your screen. Parsing logic (such as identifying Wi-Fi parameters, contact vCards, phone numbers, or email links) is performed strictly on-device using local regular expressions and format parsers.",
         "Network Actions: Scanned content is never transmitted to FuzailVerse servers. If a scanned code contains an internet URL and you tap to open it (or if \"Auto-open URLs\" is explicitly enabled in Settings), the link is opened in your default web browser via an Android system Intent (Intent.ACTION_VIEW). Any subsequent browsing activity is governed by the privacy policy of the destination website.",
         "QR Code Generation: The application includes a local generator for creating QR codes representing text, URLs, email templates, phone numbers, SMS messages, and Wi-Fi configurations. Generation is executed 100% on-device using the embedded ZXing Core library (com.google.zxing:core:3.5.4). The inputs you type (including sensitive items such as Wi-Fi passwords) are converted directly into bitmap matrices in local memory without network transmission.",
+        "Contact Information for QR Generation: When creating a Phone or SMS QR code, you may optionally tap the contact icon to pick a phone number. The app does not request the READ_CONTACTS permission; instead, it delegates selection to Android’s system contact picker (Intent.ACTION_PICK). Only the specific contact number you select is returned to the application and processed locally in volatile memory to populate the input field. This information is processed strictly on-device and is never transmitted off-device or collected by FuzailVerse.",
         "Saving and Sharing: Generated QR codes can be saved to your device photo gallery (under Pictures/QRScanner) via Android’s scoped MediaStore API without broad storage access, or shared through the Android system sharesheet using a private, temporary FileProvider cache directory."
       ]
     },
@@ -97,7 +98,7 @@
         "Complete History Clearance: You can wipe all stored scan records permanently by selecting \"Clear History\" in the History screen.",
         "Search and Filter: You can search your local scan records and filter favorites directly within the application.",
         "History Disablement: You can disable scan history saving entirely at any time in Settings.",
-        "Android Auto Backup Consideration: If Android Auto Backup is enabled on your device (as configured via android:allowBackup=\"true\"), your local database and preferences may be backed up to your private Google Drive backup storage linked to your Google Account. While clearing app data in Android Settings deletes local files immediately, cloud-backed data is managed through your Google Drive backup settings.",
+        "Android Auto Backup Consideration: Because the application declares android:allowBackup=\"true\" without custom exclusion filters in its backup configuration, Android’s system-level backup may automatically store a copy of your local database and preferences in your private Google Drive backup storage associated with your Google Account. While clearing app storage or uninstalling removes files from your physical device, cloud-backed data is managed under your Google Drive / Android Backup settings and may be restored if you reinstall the application on a device associated with the same Google Account.",
         "Zero Developer Cloud Sync: FuzailVerse does not operate a synchronization server, cloud database, or remote backup facility."
       ]
     },
@@ -124,7 +125,8 @@
         "Categorical Scan Metadata: When a code is scanned or generated, the app logs non-sensitive categorical descriptors: format type (e.g., \"QR_CODE\", \"EAN_13\", \"CODE_128\"), value category (e.g., \"URL\", \"WIFI\", \"TEXT\"), scan source (\"camera\" or \"gallery\"), and generated resolution.",
         "Device & Software Characteristics: Device manufacturer, hardware model, Android operating system version, system language, time zone, and app version name.",
         "Pseudonymous Identifiers: Google Firebase Installation IDs (FID) and app-instance identifiers generated randomly by the Firebase SDK to calculate unique active user counts.",
-        "Advertising ID (AAID): Because the advertising framework is included in compiled dependencies and ad ID collection is not explicitly suppressed in manifest metadata, Google Firebase Analytics may automatically collect the Google Advertising ID (AAID) for analytics attribution, subject to user controls in Android OS settings."
+        "Advertising ID (AAID) Collection: In the release configuration, the Advertising ID permission (com.google.android.gms.permission.AD_ID) is present via dependency merger, and the client manifest does not explicitly disable ad ID collection (google_analytics_adid_collection_enabled is not set to false). As a result, the Firebase Analytics SDK may automatically access the Google Advertising ID (AAID) for analytics attribution and campaign measurement, unless the user resets or deletes their Advertising ID in Android OS settings.",
+        "Data Retention: Google Analytics for Firebase provides two project-level retention configurations for user-level and event-level data: 2 months or 14 months, which is administered in the Google Firebase Console. Once this retention window elapses, user-level data is automatically deleted from Google's analytics servers. Standard aggregated summary reports (such as total daily scan counts by format category) contain no user identifiers and are retained in aggregate by Google Analytics."
       ],
       "table": {
         "headers": ["Data Type", "Logged to Firebase Analytics?", "Notes / Protections"],
@@ -154,7 +156,8 @@
         "Device hardware specifications (device model, CPU architecture, total RAM, available disk space).",
         "Operating system details (Android version, build ID, orientation, whether the device is rooted).",
         "Application runtime state at the instant of the crash (active screen, version code, version name).",
-        "No Custom User Breadcrumbs: The application does not configure custom user IDs, custom logging keys with user input, or breadcrumbs containing personal or scanned data."
+        "No Custom User Breadcrumbs: The application does not configure custom user IDs, custom logging keys with user input, or breadcrumbs containing personal or scanned data.",
+        "Data Retention: Google Firebase Crashlytics retains crash events, stack traces, and associated diagnostic metrics for 90 days, after which they are permanently deleted from Google's servers in accordance with Firebase Crashlytics data retention terms."
       ]
     },
     {
@@ -162,10 +165,10 @@
       "number": "11",
       "title": "Advertising ID & Ad Framework Status",
       "paragraphs": [
-        "Ad Display Status: The application currently functions as an AD-FREE tool and does not display in-app banner, interstitial, or rewarded video advertisements.",
-        "Compiled Dependencies: The release build currently compiles the Google Mobile Ads SDK (com.google.android.gms:play-services-ads:25.5.0) and User Messaging Platform (com.google.android.ump:user-messaging-platform:4.0.0). However, ad initialization, consent requests, and ad rendering routines are commented out in application source code.",
-        "Manifest Permission: The play-services-ads dependency automatically injects the permission com.google.android.gms.permission.AD_ID into the merged release manifest during Gradle build merger.",
-        "Advertising ID Collection: While no commercial ads are currently shown to users, the presence of the Advertising ID permission and Google Play Services means that Google Play Services and Firebase Analytics may access the Google Advertising ID (AAID) for SDK diagnostics and analytics, unless deleted or opted out by the user in Android Settings > Google > Ads."
+        "Compiled Dependencies: The release build compiles the Google Mobile Ads SDK (com.google.android.gms:play-services-ads:25.5.0) and User Messaging Platform SDK (com.google.android.ump:user-messaging-platform:4.0.0).",
+        "Manifest Permission: The play-services-ads dependency automatically injects the permission com.google.android.gms.permission.AD_ID into the merged application manifest during the Gradle build process.",
+        "Current Inactive State: In the application source code, all ad initialization routines, consent forms, interstitial display calls, rewarded ad activations, and banner composables are currently commented out / dormant. The application does not serve or display visual advertisements to users during app use.",
+        "Advertising ID Access: Although commercial ads are not actively shown, the presence of the compiled advertising SDK and the merged AD_ID permission means that Google Play Services and Firebase Analytics may access the Google Advertising ID (AAID) for diagnostics, campaign measurement, and attribution, subject to user controls in Android System Settings > Google > Ads."
       ]
     },
     {
@@ -195,7 +198,7 @@
       ],
       "listItems": [
         "Precise or Approximate Geolocation: The app does not request ACCESS_FINE_LOCATION or ACCESS_COARSE_LOCATION.",
-        "Contact Books or Address Books: The app does not request READ_CONTACTS. Selecting a phone number for QR creation uses the system contact picker delegate (Intent.ACTION_PICK), which shares only the single chosen number with local form state.",
+        "Contact Books or Address Books: The app does not request READ_CONTACTS and does not harvest or upload your address book. When using the optional contact picker during QR code creation, the application delegates selection to the system contact picker (Intent.ACTION_PICK), which shares only the single chosen phone number with local in-memory form state.",
         "Microphone or Audio: The app does not request RECORD_AUDIO. Scan beep sounds are synthesized locally via the Android ToneGenerator API.",
         "Storage Files or Media Libraries: The app does not request READ_EXTERNAL_STORAGE or READ_MEDIA_IMAGES. Image scanning uses the system Photo Picker.",
         "Biometric or Health Data: No health, fitness, or biometric sensors are accessed.",
@@ -209,9 +212,9 @@
       "title": "Data Retention and Deletion Practices",
       "paragraphs": [
         "Local Storage Retention: Scan history and application preferences remain stored locally on your device until you choose to delete them. You can delete individual scan items or clear the entire history at any time using the in-app controls. In addition, clearing application storage in Android Settings deletes all local databases immediately.",
-        "Android Cloud Backup: If your device has Android Auto Backup enabled, app data may be backed up to your Google Drive backup storage in accordance with Android system settings.",
-        "Firebase Analytics Retention: Aggregated, pseudonymous analytics events sent to Google Firebase Analytics are retained in accordance with standard Firebase retention configurations (typically 2 to 14 months for user-level and event-level data) and are subsequently purged automatically by Google.",
-        "Firebase Crashlytics Retention: Crash logs, diagnostic traces, and associated device state records are retained by Google Firebase Crashlytics for 90 days, after which they are permanently deleted.",
+        "Android Cloud Backup: If your device has Android Auto Backup enabled, app data may be backed up to your Google Drive backup storage in accordance with Android system settings and your Google Account configuration.",
+        "Firebase Analytics Retention: User-level and event-level data sent to Google Firebase Analytics is retained for either 2 months or 14 months (as configured in the Google Firebase Console) and is subsequently purged automatically by Google. Aggregated summary reports containing no user identifiers are retained per Google Analytics standard reporting models.",
+        "Firebase Crashlytics Retention: Crash logs, diagnostic traces, and associated device state records are retained by Google Firebase Crashlytics for 90 days, after which they are permanently deleted from Google's servers.",
         "Deletion Requests: Because we do not operate user accounts, maintain cloud profiles, or store personal identifiers, we cannot link stored diagnostic data to an individual person. However, if you have questions or specific requests regarding data processed by our service providers, you may contact mohdfuzail.dev@gmail.com."
       ]
     },
@@ -221,7 +224,7 @@
       "title": "Security and Data Protection Practices",
       "paragraphs": [
         "We employ sensible administrative, technical, and architectural safeguards to protect information handled by the application:",
-        "Encryption in Transit: All diagnostic and analytics telemetry transmitted to third-party endpoints (such as Google Firebase) is encrypted in transit using industry-standard HTTPS / Transport Layer Security (TLS).",
+        "Encryption in Transit: All diagnostic and analytics telemetry transmitted off-device to third-party endpoints (such as Google Firebase) is encrypted in transit using industry-standard HTTPS / Transport Layer Security (TLS) protocols.",
         "Operating System Sandboxing: Local scan history and settings are housed within Android’s secure per-application data sandbox, preventing unauthorized access by other standard applications on your device.",
         "Realistic Limitations: While we follow rigorous industry standards for mobile application development, no electronic system, local storage mechanism, or wireless transmission can guarantee absolute security. We do not make exaggerated claims of invulnerability."
       ]
@@ -231,8 +234,8 @@
       "number": "16",
       "title": "Children’s Privacy",
       "paragraphs": [
-        "QR Scanner & Generator is a general-utility utility application designed for a general audience and is not directed to children under the age of 13 (or under 16 in the European Economic Area).",
-        "The application does not knowingly solicit or collect personal information from children. If you are a parent or legal guardian and believe that your child has provided personal information through the application or its service providers, please contact us at mohdfuzail.dev@gmail.com so that we can take appropriate steps to investigate and address the matter."
+        "QR Scanner & Generator is a general-utility application designed for a general audience and is not directed at children. We do not knowingly collect personal information from children under the age of 13, or under the equivalent minimum age required by applicable law in their jurisdiction (such as under 16 in certain member states of the European Economic Area).",
+        "If a parent or guardian becomes aware that a child has provided personal information to third-party services integrated with this application, they may contact us at mohdfuzail.dev@gmail.com so that we can take appropriate steps to investigate and address the inquiry."
       ]
     },
     {
