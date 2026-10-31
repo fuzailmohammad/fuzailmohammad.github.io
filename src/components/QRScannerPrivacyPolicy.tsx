@@ -242,7 +242,7 @@ export const QRScannerPrivacyPolicy: React.FC = () => {
                                     ? 'font-medium text-bat-offwhite font-mono text-xs'
                                     : cIdx === 1 && cell.startsWith('NO')
                                     ? 'text-emerald-400 font-semibold'
-                                    : cIdx === 1 && cell.startsWith('YES')
+                                    : cIdx === 1 && (cell.startsWith('YES') || cell.startsWith('AUTOMATIC'))
                                     ? 'text-bat-yellow font-semibold'
                                     : 'text-bat-muted'
                                 }`}

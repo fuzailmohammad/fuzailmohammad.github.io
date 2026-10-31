@@ -59,7 +59,7 @@ function generateQRScannerFallbackHtml() {
           const color =
             i === 1 && row[i].startsWith('NO')
               ? '#34d399'
-              : i === 1 && row[i].startsWith('YES')
+              : i === 1 && (row[i].startsWith('YES') || row[i].startsWith('AUTOMATIC'))
               ? '#facc15'
               : '#cbd5e1';
           html += `<td style="padding: 8px 12px; color: ${color};">${row[i]}</td>`;
