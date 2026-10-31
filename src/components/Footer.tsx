@@ -97,15 +97,15 @@ export const Footer: React.FC = () => {
 
           <div className="flex items-center gap-6">
             <Link
-              to="/privacy-policy"
-              className="hover:text-bat-yellow transition-colors"
+              to="/privacy-policy/"
+              className="hover:text-emerald-400 transition-colors"
             >
               PRIVACY POLICY
             </Link>
             <span className="text-gotham-border">/</span>
             <Link
-              to="/terms-conditions"
-              className="hover:text-bat-yellow transition-colors"
+              to="/terms-and-conditions/"
+              className="hover:text-emerald-400 transition-colors"
             >
               TERMS & CONDITIONS
             </Link>

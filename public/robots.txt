@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fuzailverse.pages.dev/sitemap.xml
+

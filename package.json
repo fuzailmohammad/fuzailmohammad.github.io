@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build:data": "node --experimental-strip-types -e 'import fs from \"fs\"; import { legalMetadata, privacyPolicyData, termsConditionsData } from \"./src/data/legalData.ts\"; fs.writeFileSync(\"./src/data/legalData.json\", JSON.stringify({ legalMetadata, privacyPolicyData, termsConditionsData }, null, 2));'",
+    "generate:pdfs": "python3 scripts/generate_pdfs.py",
+    "build": "npm run build:data && npm run generate:pdfs && vite build",
+    "postbuild": "node scripts/post-build.js",
     "preview": "vite preview"
   },
   "dependencies": {

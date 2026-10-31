@@ -53,7 +53,12 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/projects/:slug" element={<ProjectDetail />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/privacy-policy/*" element={<PrivacyPolicy />} />
+          <Route path="/terms-and-conditions" element={<TermsConditions />} />
+          <Route path="/terms-and-conditions/*" element={<TermsConditions />} />
           <Route path="/terms-conditions" element={<TermsConditions />} />
+          <Route path="/terms-conditions/*" element={<TermsConditions />} />
+          <Route path="*" element={<HomePage />} />
         </Routes>
       </div>
     </Router>

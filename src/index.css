@@ -220,3 +220,42 @@ section[id] {
     animation: none !important;
   }
 }
+
+/* Print Styles for Legal Documentation */
+@media print {
+  header,
+  footer,
+  .no-print,
+  #scroll-progress,
+  .custom-cursor {
+    display: none !important;
+  }
+
+  body, html {
+    background-color: #FFFFFF !important;
+    color: #111827 !important;
+    font-size: 10pt !important;
+  }
+
+  main {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  section, article {
+    background: transparent !important;
+    border-color: #D1D5DB !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  a {
+    color: #111827 !important;
+    text-decoration: underline !important;
+  }
+
+  h1, h2, h3, h4 {
+    color: #000000 !important;
+  }
+}

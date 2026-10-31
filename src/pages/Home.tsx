@@ -1,10 +1,9 @@
 import React, { memo, useCallback, useEffect, useRef, lazy, Suspense } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Download, Mail, Code, Users, Award, Zap } from 'lucide-react';
 
-const Navigation = lazy(() => import('../components/Navigation'));
-const Footer = lazy(() => import('../components/Footer'));
+const Navigation = lazy(() => import('../components/Navigation').then(m => ({ default: m.Navigation })));
+const Footer = lazy(() => import('../components/Footer').then(m => ({ default: m.Footer })));
 
 const Hero = memo(function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
