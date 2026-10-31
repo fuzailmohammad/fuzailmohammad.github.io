@@ -309,3 +309,4 @@ export const QRScannerPrivacyPolicy: React.FC = () => {
 };
 
 export default QRScannerPrivacyPolicy;
+
