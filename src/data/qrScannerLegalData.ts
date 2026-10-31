@@ -134,15 +134,24 @@ export const qrScannerSections: QRScannerLegalSection[] = [
       'Favorites: You can flag scan results as favorites and toggle between viewing all items or favorites only.',
       'Individual Record Deletion: You can delete any specific scan from history by tapping the delete icon on that record or via the item options menu.',
       'Multi-Selection Deletion: You can enter selection mode to select multiple scans and delete them simultaneously.',
-      'Clear History: You can wipe all stored scan records from the active local database by confirming "Clear scan history" in the History screen.',
+      'Clear History: You can wipe stored scan records from the active local database by confirming "Clear scan history" in the History screen.',
       'History Disablement: You can disable scan history saving entirely at any time in Settings by toggling off "Save Scan History".',
-      'Local Active Database vs. Android Auto Backups: Clearing history or deleting records removes them immediately from the active local database on your physical device. However, because the application declares android:allowBackup="true", earlier copies of your local database and preferences may exist within your personal Google Drive backup if Android Auto Backup is enabled on your device. If an Android backup is restored during reinstallation, previously backed-up records may be reintroduced to your device. Cloud backup data is governed by your Google Account backup settings; FuzailVerse does not operate a separate cloud synchronization server.',
-      'Application Preferences in DataStore: User configurations are stored locally using Android Jetpack DataStore Preferences (theme selection, accent color, haptic feedback, scan sound, vibration, flash memory, continuous scan mode, and local scan counters).',
+      'Active Local Database vs. Android Auto Backups: Tapping "Clear scan history" or deleting records deletes them from the active local Room database on your physical device. However, deleting local data does not automatically delete Android-managed backup copies. Because the application declares android:allowBackup="true", earlier copies of your local database and preferences may be retained in your personal Google Drive storage if Android Auto Backup is enabled on your device. If a backup is subsequently restored (such as after reinstalling the app or setting up a new device associated with the same Google Account), previously deleted records may reappear. FuzailVerse does not operate its own cloud sync or backup server, and users can manage or delete their Android Auto Backups through Android OS Settings (Settings > Google > Backup) and Google Account storage controls.',
+    ],
+  },
+  {
+    id: 'preferences-datastore',
+    number: '8',
+    title: 'Application Settings & Local Preferences',
+    paragraphs: [
+      'The application stores user configurations and UI preferences locally using Android Jetpack DataStore Preferences (stored in the private app sandbox as settings_preferences).',
+      'Stored preferences include theme selection (Dark, Light, or System default), accent color choice, vibration on scan toggle, scan sound beep toggle, haptic feedback toggle, remember flash state toggle, continuous scan mode toggle, and local usage counters (total scans completed and QR codes generated).',
+      'These preferences reside strictly on your physical device to maintain your chosen configuration across app launches and are not transmitted to FuzailVerse servers.',
     ],
   },
   {
     id: 'firebase-analytics',
-    number: '8',
+    number: '9',
     title: 'Google Firebase Analytics Disclosures',
     paragraphs: [
       'The application incorporates Google Firebase Analytics (com.google.firebase:firebase-analytics:24.0.0), a mobile analytics service provided by Google LLC.',
@@ -151,19 +160,20 @@ export const qrScannerSections: QRScannerLegalSection[] = [
     ],
     listItems: [
       'Application Lifecycle Events: Standard lifecycle events (app_open, app_opened with version and build type) and screen transitions (screen_view with screen name).',
-      'Categorical Event Parameters: When a code is scanned or generated, the application logs categorical metadata parameters: format type (e.g., "QR_CODE", "EAN_13", "CODE_128"), value category (e.g., "URL", "WIFI", "TEXT"), scan source ("camera" or "gallery"), QR generation category, and generated resolution. Firebase may associate these individual event records with pseudonymous installation identifiers to calculate metrics and generate aggregate statistical reports. The existence of aggregate reporting does not imply that every underlying event record is anonymous or immediately aggregated at ingestion.',
-      'No Sensitive Payload Leakage: Detailed inspection of every analytics call in AnalyticsTracker confirms that no raw scanned payloads, destination URLs, passwords, Wi-Fi credentials, or personal contact details are passed into analytics event parameters.',
+      'Categorical Event Parameters: When a code is scanned or generated, the application logs categorical metadata parameters: format type (e.g., "QR_CODE", "EAN_13", "CODE_128"), value category (e.g., "URL", "WIFI", "TEXT"), scan source ("camera" or "gallery"), QR generation category, and generated resolution. Firebase may associate these individual event records with pseudonymous installation identifiers to calculate metrics and generate aggregate statistical reports. The existence of aggregate reports does not mean every underlying event record is anonymous or aggregated at collection time.',
+      'No Sensitive Payload Logging: Detailed source-code inspection of every analytics call in AnalyticsTracker confirms that the app does not intentionally log raw scanned QR payloads, destination URLs, Wi-Fi passwords, contact details, or other raw user-entered content to Firebase Analytics.',
+      'Wi-Fi Credentials Clarification: While raw decoded Wi-Fi payloads (including network SSID and passwords) may be stored in the local Room database when the user has enabled scan history, Wi-Fi credentials are not intentionally sent to Firebase Analytics.',
       'Device & Software Characteristics: Device manufacturer, hardware model, Android operating system version, system language, time zone, and app version name.',
       'Pseudonymous Identifiers: Google Firebase Installation IDs (FID) and app-instance identifiers generated randomly by the Firebase SDK to calculate unique active user counts.',
       'Advertising ID (AAID) Collection Disabled: In accordance with our privacy-first design, the Advertising ID permission (com.google.android.gms.permission.AD_ID) has been explicitly removed from the application manifest using tools:node="remove", and advertising identifier collection is explicitly deactivated in Firebase Analytics configuration (google_analytics_adid_collection_enabled = false). The Firebase Analytics SDK does not collect or process the Google Advertising ID from QR Scanner & Generator.',
-      'Property Data Retention: Google Analytics for Firebase offers project-level data retention settings in the Firebase Console (typically 2 months or 14 months for user- and event-level data). After the project-configured retention window elapses, user-level data is automatically deleted from Google\'s analytics servers. Standard aggregated summary reports contain no user identifiers and are retained in aggregate by Google Analytics.',
+      'Property Data Retention: Retention of user-level and event-level data is controlled by the Google Firebase project configuration in the Firebase Console (which offers standard options such as 2 months or 14 months). Because direct access to the private Firebase Console dashboard is administered separately, retention is governed by whichever period is configured in the project settings. Standard aggregated summary reports contain no user identifiers and are retained in aggregate by Google Analytics.',
     ],
     table: {
       headers: ['Data Type', 'Logged to Firebase Analytics?', 'Notes / Protections'],
       rows: [
         ['Scanned Raw Content / Decoded Strings', 'NO — Never logged', 'Raw decoded strings are strictly excluded from all analytics logs.'],
         ['Destination URLs', 'NO — Never logged', 'Scanned or typed URLs are never sent to analytics.'],
-        ['Wi-Fi Passwords & Credentials', 'NO — Never logged', 'Stored locally in Room if history is enabled; never transmitted to analytics.'],
+        ['Wi-Fi Passwords & Credentials', 'NO — Not sent to analytics', 'Stored locally in Room if history is enabled; not intentionally sent to Firebase Analytics.'],
         ['Contact Details / Phone / Email', 'NO — Never logged', 'Personal contact details are never logged.'],
         ['User Account / User ID', 'NO — Never set', 'The app does not call setUserId() or associate data with individuals.'],
         ['Categorical Enums (e.g., "QR_CODE", "WIFI")', 'YES — Pseudonymous Events', 'Logged as categorical metadata associated with installation IDs to generate aggregate statistics.'],
@@ -174,7 +184,7 @@ export const qrScannerSections: QRScannerLegalSection[] = [
   },
   {
     id: 'firebase-crashlytics',
-    number: '9',
+    number: '10',
     title: 'Google Firebase Crashlytics Disclosures',
     paragraphs: [
       'The application incorporates Google Firebase Crashlytics (com.google.firebase:firebase-crashlytics:21.0.1), a real-time crash reporting tool provided by Google LLC.',
@@ -184,17 +194,17 @@ export const qrScannerSections: QRScannerLegalSection[] = [
     ],
     listItems: [
       'Stack traces and relevant runtime exception information indicating the code execution path during failure.',
-      'Pseudonymous Installation Identifiers: Crashlytics Installation UUID and Firebase Installation ID (FID) to distinguish crash occurrences across separate app installations.',
+      'Pseudonymous Installation Identifiers: Crashlytics Installation UUID and Firebase Installation ID (FID) to distinguish crash occurrences across separate app installations. These pseudonymous identifiers are distinct from a person’s real-world identity.',
       'Device hardware specifications (device model, manufacturer, CPU architecture, total RAM, and available disk space).',
       'Operating system details (Android version, build ID, orientation, and rooted-device indicator where collected).',
       'Application runtime state at the instant of the crash (active screen, version code, and version name).',
       'Automated analytics breadcrumbs of recent screen transitions and lifecycle events leading up to the crash.',
-      'Data Retention: In accordance with official Firebase Crashlytics documentation, removal of crash events, stack traces, and associated diagnostic metrics begins after 90 days from Google\'s servers. This removal process applies to live systems and propagates through standard retention cycles.',
+      'Retention Wording: In accordance with official Google Firebase documentation, Crashlytics retains crash traces and associated identifiers for 90 days before starting the removal process from live and backup systems. Deletion is not an instantaneous single-moment event, but rather a progressive removal process governed by Google\'s standard retention cycles.',
     ],
   },
   {
     id: 'advertising-and-admob',
-    number: '10',
+    number: '11',
     title: 'Advertising & Ad-Free Status',
     paragraphs: [
       'QR Scanner & Generator is currently provided without advertisements. The application does not display banner, interstitial or rewarded advertisements and does not integrate Google AdMob or Google User Messaging Platform (UMP) for advertising or advertising consent management.',
@@ -204,10 +214,10 @@ export const qrScannerSections: QRScannerLegalSection[] = [
   },
   {
     id: 'permissions-summary',
-    number: '11',
+    number: '12',
     title: 'Complete Android Permissions Summary',
     paragraphs: [
-      'The table below provides a complete audit of all Android permissions declared or merged into the production release build of QR Scanner & Generator, verified directly from the merged release APK manifest:',
+      'The table below provides a complete audit of all Android permissions declared or merged into the production release build of QR Scanner & Generator. This list was verified directly from both the merged release manifest (app/build/intermediates/packaged_manifests/release/processReleaseManifestForPackage/AndroidManifest.xml) and the compiled release Android App Bundle (app-release.aab) and APK (app-release-unsigned.apk):',
     ],
     table: {
       headers: ['Permission Name', 'Protection Level / Source', 'Actual Operational Purpose in Release Code'],
@@ -224,18 +234,18 @@ export const qrScannerSections: QRScannerLegalSection[] = [
   },
   {
     id: 'data-categories',
-    number: '12',
+    number: '13',
     title: 'Information Not Collected by FuzailVerse',
     paragraphs: [
       'To provide complete clarity and align with Google Play Data Safety standards, we clearly distinguish between local device processing, local database storage, third-party telemetry, and developer-side collection:',
     ],
     listItems: [
-      'Information Processed Locally: Camera optical frames, gallery images selected through the Photo Picker, and contact phone numbers chosen via the system contact picker are processed strictly in volatile device memory and immediately released.',
-      'Information Saved Locally: If "Save Scan History" is enabled, decoded barcode contents (such as text, URLs, contact vCards, or Wi-Fi configurations) are stored locally in the on-device SQLite database (qr_scanner_db). Application settings are stored in local DataStore. This data resides on your physical device.',
-      'Information Sent to Firebase: Only pseudonymous technical telemetry (installation IDs, device hardware/OS specifications, app lifecycle events, screen views, and categorical format descriptors) is transmitted over HTTPS to Google Firebase servers.',
-      'Information Collected by FuzailVerse: Zero. FuzailVerse operates no database, backend servers, or account infrastructure for this application. Raw scan contents, decoded strings, and personal information are never transmitted to, collected by, or received by FuzailVerse.',
-      'Contact Information Processing: The app does not request READ_CONTACTS and does not harvest your address book. When using the optional contact picker during QR code creation, the application delegates selection to the system contact picker (Intent.ACTION_PICK), which returns only the single chosen phone number to local in-memory form state.',
-      'Financial & Payment QR Codes: When a payment-related QR code (e.g., UPI, PayPal, EPC QR, or cryptocurrency address) is scanned, the app decodes and displays the raw textual payload locally. The application does not perform payment processing, handle credit cards, or connect to financial systems. Any transaction occurs only if you choose to open the link in an external banking or payment app.',
+      'Data Processed Locally on Device: Camera optical frames, gallery images selected through the Photo Picker, single contact phone numbers chosen via the system contact picker, and payment QR codes are processed strictly in volatile device memory and immediately released.',
+      'Data Stored Locally by the App: If "Save Scan History" is enabled, decoded barcode contents (such as text, URLs, contact vCards, or Wi-Fi configurations) are stored locally in the on-device SQLite database (qr_scanner_db). Application settings are stored in local DataStore. This data resides on your physical device.',
+      'Data Transmitted to Firebase: Only pseudonymous technical telemetry (installation IDs, device hardware/OS specifications, app lifecycle events, screen views, and categorical format descriptors) is transmitted over HTTPS to Google Firebase servers.',
+      'Data Received by FuzailVerse Directly: Zero. FuzailVerse operates no database, backend servers, or account infrastructure for this application. Raw scan contents, decoded strings, and personal information are never transmitted to, collected by, or received by FuzailVerse.',
+      'Contact Information Processing: The app does not upload the user’s contact book and does not request READ_CONTACTS. When using the optional contact picker during QR code creation, the application delegates selection to Android’s system contact picker (Intent.ACTION_PICK), which returns only the single chosen phone number to local in-memory form state.',
+      'Financial & Payment QR Codes: When a payment-related QR code (e.g., UPI, PayPal, EPC QR, or cryptocurrency address) is scanned, the app decodes and displays the raw textual payload locally. The application does not itself perform payment processing, handle credit cards, or collect banking credentials. Any financial transaction occurs only if you choose to open the link in an external banking or payment app.',
       'Precise Geolocation: The app does not request ACCESS_FINE_LOCATION or ACCESS_COARSE_LOCATION.',
       'Microphone or Audio: The app does not request RECORD_AUDIO. Scan beep sounds are synthesized locally via the Android ToneGenerator API.',
       'Storage Files or Media Libraries: The app does not request READ_EXTERNAL_STORAGE or READ_MEDIA_IMAGES. Image scanning uses the system Photo Picker.',
@@ -245,20 +255,20 @@ export const qrScannerSections: QRScannerLegalSection[] = [
   },
   {
     id: 'retention-and-deletion',
-    number: '13',
+    number: '14',
     title: 'Data Retention and Deletion Practices',
     paragraphs: [
       'Separation of Local Data and Diagnostic Telemetry: Local scan history is stored separately on your device, while diagnostic telemetry is handled by Google Firebase. Their retention models operate as follows:',
       'Local Device Storage Retention: Scan history and application preferences remain stored locally on your device until you choose to delete them. You can delete individual scan items, delete multiple selected items, or clear history at any time using in-app controls. In addition, clearing application storage in Android Settings deletes all local active databases immediately.',
       'Android Cloud Backup: If your device has Android Auto Backup enabled, app data (including local scan history and preferences) may be backed up to your Google Drive backup storage in accordance with Android system settings and your Google Account configuration. Uninstalling the app removes files from your physical device, but cloud-backed data is managed under your Google Account settings and may restore if you reinstall on a device using the same Google Account.',
-      'Firebase Analytics Retention: User-level and event-level data sent to Google Firebase Analytics is retained per project settings in the Google Firebase Console (typically 2 months or 14 months) and is subsequently purged automatically by Google. Aggregated summary reports containing no user identifiers are retained per Google Analytics standard reporting models.',
-      'Firebase Crashlytics Retention: In accordance with official Firebase documentation, removal of crash logs, diagnostic stack traces, and associated device state records begins after 90 days from Google\'s servers.',
-      'Pseudonymous Linkage: Diagnostic telemetry sent to Google Firebase may be associated with pseudonymous app-installation identifiers (Firebase Installation ID, Crashlytics UUID). FuzailVerse does not operate user accounts and does not know the real-world identity associated with those identifiers.',
+      'Firebase Analytics Retention: User-level and event-level data sent to Google Firebase Analytics is retained per project settings in the Google Firebase Console (which offers standard options such as 2 months or 14 months) and is subsequently purged automatically by Google. Aggregated summary reports containing no user identifiers are retained per Google Analytics standard reporting models.',
+      'Firebase Crashlytics Retention: In accordance with official Firebase documentation, Crashlytics retains crash traces and associated identifiers for 90 days before starting the removal process from live and backup systems.',
+      'Pseudonymous Linkage & Deletion Requests: Firebase may associate diagnostic and analytics events with pseudonymous installation identifiers (Firebase Installation ID, Crashlytics UUID). FuzailVerse does not maintain user accounts or personal profiles and does not know the real-world identity of the person behind those identifiers. Because FuzailVerse cannot directly identify or locate data belonging to an individual person within Google\'s pseudonymous backend telemetry, we cannot promise manual deletion of Firebase telemetry on request.',
     ],
   },
   {
     id: 'security-practices',
-    number: '14',
+    number: '15',
     title: 'Security and Data Protection Practices',
     paragraphs: [
       'We employ sensible administrative, technical, and architectural safeguards to protect information handled by the application:',
@@ -269,7 +279,7 @@ export const qrScannerSections: QRScannerLegalSection[] = [
   },
   {
     id: 'childrens-privacy',
-    number: '15',
+    number: '16',
     title: 'Children’s Privacy',
     paragraphs: [
       'QR Scanner & Generator is a general-utility application designed for a general audience and is not directed at children. We do not knowingly collect personal information from children under the minimum age of digital consent established by applicable law in their respective jurisdiction (such as under 13 in the United States under COPPA, or under 13 to 16 in various member states of the European Economic Area under GDPR).',
@@ -278,7 +288,7 @@ export const qrScannerSections: QRScannerLegalSection[] = [
   },
   {
     id: 'user-rights-and-choices',
-    number: '16',
+    number: '17',
     title: 'Your Privacy Rights and Choices',
     paragraphs: [
       'Depending on your jurisdiction (such as under the European General Data Protection Regulation (GDPR), the California Consumer Privacy Act (CCPA/CPRA), or other applicable data protection legislation), you may have specific rights regarding your personal information, including:',
@@ -288,28 +298,19 @@ export const qrScannerSections: QRScannerLegalSection[] = [
       'History Search & Management: You can search your local scan records by keyword, filter favorites, delete individual items, or delete multiple selected items directly in the History screen.',
       'Clear Scan History: You can permanently wipe all local scan records from the active database at any time using the "Clear scan history" option in the History screen.',
       'Disable Scan History: You can prevent the app from saving future scans by toggling off "Save Scan History" in the Settings screen.',
-      'Resetting Local State & Installation IDs: Clearing app storage (Settings > Apps > QR Scanner > Storage > Clear Storage) removes active local application data and resets the Firebase Installation ID. Uninstalling removes local application files. However, Android Auto Backup may restore eligible backed-up data during reinstallation unless you manage or remove backups in your Android device and Google Account settings.',
+      'Resetting Local State & Installation IDs: Clearing app storage (Settings > Apps > QR Scanner > Storage > Clear Storage) removes active local application data and resets the in-app Firebase installation ID. Uninstalling removes local application files from the device. However, Android-managed backup data in Google Drive may remain and could be restored later during reinstallation unless you manage or remove backups in your Android device and Google Account settings.',
+      'Advertising ID Settings: Because the application disables Advertising ID collection and does not include the AD_ID permission, device Advertising ID settings are separate from Firebase installation identifiers and do not manage or reset in-app Firebase telemetry.',
       'Privacy Inquiries: To exercise any applicable legal rights or ask questions about our data practices, email mohdfuzail.dev@gmail.com.',
     ],
   },
   {
     id: 'external-links',
-    number: '17',
+    number: '18',
     title: 'External Links and Destination Websites',
     paragraphs: [
       'The application allows you to scan barcodes and QR codes that may contain web links, URLs, or redirection targets.',
       'When you choose to tap an external link (or if you have explicitly enabled "Auto-open URLs" in Settings), your device opens the URL in your default web browser or third-party application via an Android system Intent.',
       'FuzailVerse does not control, operate, or endorse the external websites or services linked within scanned codes. Any information you provide to or that is collected by third-party destination websites is governed exclusively by their respective privacy policies.',
-    ],
-  },
-  {
-    id: 'changes-to-policy',
-    number: '18',
-    title: 'Changes to This Privacy Policy',
-    paragraphs: [
-      'We may update this Privacy Policy periodically to reflect enhancements to the application, modifications in integrated third-party SDKs, or evolving regulatory requirements.',
-      'Whenever updates are made, we will revise the "Last updated" date displayed at the top of this document. The current, binding version of this policy is always accessible at https://fuzailverse.pages.dev/qr-scanner/privacy-policy/.',
-      'We encourage you to review this Privacy Policy periodically to stay informed about how your information is handled.',
     ],
   },
   {
