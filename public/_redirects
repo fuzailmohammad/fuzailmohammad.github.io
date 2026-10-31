@@ -4,5 +4,7 @@
 /terms-and-conditions   /index.html  200
 /terms-conditions/  /terms-and-conditions/  301
 /terms-conditions  /terms-and-conditions/  301
+/qr-scanner/privacy-policy  /qr-scanner/privacy-policy/  301
+/qr-scanner/privacy-policy/  /index.html  200
 /*  /index.html  200
 
