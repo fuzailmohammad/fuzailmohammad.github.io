@@ -71,16 +71,16 @@ function createStaticRoute(routePath, title, description, canonicalUrl) {
 // 1. /privacy-policy/
 createStaticRoute(
   'privacy-policy',
-  'Privacy Policy | FuzailVerse - Comprehensive Data Governance',
-  'FuzailVerse Privacy Policy: Comprehensive data governance, hardware permissions, offline SQLite persistence, and app-specific privacy disclosures across all mobile systems.',
+  'Privacy Policy | FuzailVerse',
+  'General Privacy Policy for FuzailVerse apps and digital services.',
   'https://fuzailverse.pages.dev/privacy-policy/'
 );
 
 // 2. /terms-and-conditions/
 createStaticRoute(
   'terms-and-conditions',
-  'Terms & Conditions | FuzailVerse - Operational Parameters & License',
-  'FuzailVerse Terms and Conditions: Standard terms of service, role-based access, intellectual property protections, liability disclaimers, and software licensing agreement.',
+  'Terms & Conditions | FuzailVerse',
+  'General Terms & Conditions for FuzailVerse apps and digital services.',
   'https://fuzailverse.pages.dev/terms-and-conditions/'
 );
 

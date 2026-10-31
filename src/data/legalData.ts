@@ -1,89 +1,32 @@
 /**
  * Centralized Legal Documentation Data Layer for FuzailVerse
- * Source of Truth: Production Mobile Architecture and Deployment Records of Mohd Fuzail
+ * General platform policy for FuzailVerse apps and digital services
  * Website: https://fuzailverse.pages.dev/
  * Official Contact: mohdfuzail.dev@gmail.com
  */
-
-export interface AppSpecificDisclosure {
-  id: string;
-  name: string;
-  category: string;
-  platform: string[];
-  purpose: string;
-  operationalContext: string;
-  permissions: Array<{
-    name: string;
-    level: 'Normal' | 'Dangerous / Runtime' | 'System';
-    purpose: string;
-  }>;
-  dataCollected: {
-    personal: string[];
-    technical: string[];
-    transactional: string[];
-    sensitive: string[];
-  };
-  localDataProcessing: string[];
-  externalTransmission: string[];
-  analyticsSdk: string[];
-  crashReportingSdk: string[];
-  advertisingSdk: string[];
-  thirdPartyServices: string[];
-  dataRetention: string;
-  dataDeletion: string;
-  verificationStatus: 'VERIFIED_CODEBASE_ARCHITECTURE' | 'PENDING_OPERATOR_CONFIRMATION';
-  verificationNotes: string;
-}
 
 export interface LegalSection {
   id: string;
   number: string;
   title: string;
-  summary?: string;
   paragraphs: string[];
-  bulletPoints?: string[];
   subsections?: Array<{
     id: string;
     subtitle: string;
     content: string[];
-    bulletPoints?: string[];
   }>;
 }
 
 export interface LegalDocumentMetadata {
   title: string;
-  documentCode: string;
-  version: string;
+  subtitle: string;
   effectiveDate: string;
   lastUpdated: string;
   contactEmail: string;
   websiteUrl: string;
   operatorName: string;
-  operatorRole: string;
-  operatorLocation: string;
   pdfFileName: string;
   pdfPath: string;
-}
-
-export interface PrivacyPolicyData {
-  metadata: LegalDocumentMetadata;
-  intro: {
-    badge: string;
-    headline: string;
-    summary: string;
-  };
-  generalSections: LegalSection[];
-  appDisclosures: AppSpecificDisclosure[];
-}
-
-export interface TermsConditionsData {
-  metadata: LegalDocumentMetadata;
-  intro: {
-    badge: string;
-    headline: string;
-    summary: string;
-  };
-  sections: LegalSection[];
 }
 
 export const legalMetadata = {
@@ -93,997 +36,255 @@ export const legalMetadata = {
   canonicalTermsUrl: 'https://fuzailverse.pages.dev/terms-and-conditions/',
   contactEmail: 'mohdfuzail.dev@gmail.com',
   operatorName: 'Mohammad Fuzail',
-  operatorRole: 'Lead Mobile Systems Architect & Engineering Lead',
-  operatorLocation: 'New Delhi, India',
-  effectiveDate: 'October 31, 2026',
-  lastUpdated: 'October 31, 2026',
-  version: '2.4.0',
+  effectiveDate: '31 October 2026',
+  lastUpdated: '31 October 2026',
 };
 
-export const privacyPolicyData: PrivacyPolicyData = {
+export const privacyPolicyData = {
   metadata: {
     title: 'Privacy Policy',
-    documentCode: 'FV-LEGAL-PP-2026',
-    version: '2.4.0',
-    effectiveDate: 'October 31, 2026',
-    lastUpdated: 'October 31, 2026',
+    subtitle: 'General policy for FuzailVerse apps and digital services',
+    effectiveDate: '31 October 2026',
+    lastUpdated: '31 October 2026',
     contactEmail: 'mohdfuzail.dev@gmail.com',
     websiteUrl: 'https://fuzailverse.pages.dev/privacy-policy/',
     operatorName: 'Mohammad Fuzail',
-    operatorRole: 'Lead Mobile Systems Architect',
-    operatorLocation: 'New Delhi, India',
     pdfFileName: 'FuzailVerse_Privacy_Policy.pdf',
     pdfPath: '/documents/FuzailVerse_Privacy_Policy.pdf',
   },
-  intro: {
-    badge: 'LEGAL NOTICE // PRIVACY POLICY // COMPLIANCE MATRIX ACTIVE',
-    headline: 'Comprehensive Privacy Policy & Mobile Applications Data Governance',
-    summary:
-      'This Privacy Policy governs the collection, processing, local persistence, external transmission, and lifecycle management of data across the FuzailVerse digital portfolio platform and all associated mobile applications engineered, deployed, or maintained by Mohammad Fuzail.',
-  },
-  generalSections: [
+  notice:
+    "This is a platform-wide framework, not a claim that every app collects the same data. Each app's permissions, SDKs, network traffic, storage, retention and deletion apply based on its actual release.",
+  sections: [
     {
-      id: 'introduction-and-scope',
-      number: '01',
-      title: 'Introduction and Scope',
-      summary: 'Scope of governance across web and mobile deployments',
+      id: 'scope-and-operator',
+      number: '1',
+      title: 'Scope and operator',
       paragraphs: [
-        'Welcome to FuzailVerse (accessible at https://fuzailverse.pages.dev/). This Privacy Policy explains with technical fidelity how Mohammad Fuzail ("we", "us", "our", or "Operator"), acting as lead software systems architect, collects, utilizes, safeguards, and disposes of information when you interact with our web platform or utilize any mobile software applications engineered under the FuzailVerse portfolio.',
-        'We believe in radical architectural transparency. Because our software systems range from consumer gamification to enterprise channel loyalty, automotive aftermarket catalogs, healthcare practice tools, and GPS field operations, data collection is strictly tailored to the minimal technical needs of each individual application. No single application implements a blanket tracking policy.',
-        'By accessing the website, installing any FuzailVerse application from the Google Play Store or Apple App Store, or transmitting communications to us, you acknowledge the practices described in this document.',
-      ],
-      bulletPoints: [
-        'Web Platform: https://fuzailverse.pages.dev/ and associated Cloudflare Pages micro-routes.',
-        'Production Mobile Applications: Enterprise, B2B, and consumer mobile software packages engineered for iOS and Android.',
-        'Direct Communications: Technical inquiries, project consultations, and security disclosures sent to mohdfuzail.dev@gmail.com.',
+        'This Privacy Policy applies to mobile applications, websites and related digital services published or operated under the FuzailVerse name (the “Services”). Features and data practices may differ between Services. An app-specific notice, where provided, explains additional details for that app.',
+        'Privacy contact: mohdfuzail.dev@gmail.com. Before publication, the operator should add any full legal name and postal address required by applicable law.',
       ],
     },
     {
-      id: 'information-we-collect',
-      number: '02',
-      title: 'Information We Collect and Technical Categories',
-      summary: 'Voluntary submissions, device metrics, and operational data',
+      id: 'information-processed',
+      number: '2',
+      title: 'Information that may be processed',
       paragraphs: [
-        'We categorize information based on whether it is voluntarily provided by the user, automatically recorded as device runtime telemetry, or generated during in-app operational workflows.',
-      ],
-      subsections: [
-        {
-          id: 'info-voluntarily-provided',
-          subtitle: 'A. Information You Voluntarily Provide',
-          content: [
-            'Depending on which application or service you access, you may voluntarily submit personal data to initiate user accounts, execute business workflows, or contact engineering support:',
-          ],
-          bulletPoints: [
-            'Contact and Identity Information: Full name, professional title, trade affiliation (e.g. contractor, mason, technician, doctor, distributor), telephone number, and email address.',
-            'KYC & Verification Credentials: PAN (Permanent Account Number), Aadhaar verification details, trade licenses, or business registration cards strictly where mandated by enterprise channel loyalty programs.',
-            'Transactional & Disbursement Coordinates: Bank account numbers, IFSC codes, or Unified Payments Interface (UPI) virtual payment addresses submitted solely to fulfill earned loyalty redemptions.',
-            'Operational & Business Submissions: Distributor sales invoices, product serial barcodes, physical shelf inventory photographs, prescription records, and client consultation inquiries.',
-          ],
-        },
-        {
-          id: 'info-device-technical',
-          subtitle: 'B. Technical and Device Telemetry',
-          content: [
-            'When applications interact with network infrastructure, our software and integrated SDKs automatically register essential technical runtime parameters necessary to ensure compatibility, prevent abuse, and diagnose execution faults:',
-          ],
-          bulletPoints: [
-            'Hardware Specifications: Device manufacturer, hardware model, display screen density, CPU architecture, available RAM, and internal storage headroom.',
-            'Software Runtime: Operating system version (Android API level or iOS release), build signature, and application package version.',
-            'Network Diagnostics: IP address, mobile network operator, connection type (Wi-Fi, 4G, 5G), network latency, and carrier country code.',
-            'Stability Telemetry: Crash traces, thread dumps, memory allocation ceilings, and unhandled exception logs recorded at the precise instant of a software failure.',
-          ],
-        },
+        'Information you provide: Depending on the Service, you may submit text, files, images, feedback, support messages, account details or other content needed for a feature.',
+        'Device and technical information: Depending on the app and its SDK configuration, this may include device model, operating system and app version, language, time zone, app-instance identifiers, IP address, diagnostic events, performance information and crash logs.',
+        'Usage information: Analytics tools may record feature use, screens viewed, session events and interactions. The precise events and identifiers depend on the app implementation and consent settings.',
+        'Permissions and sensor data: An app may request camera, microphone, location, photos/media, notifications, Bluetooth or file access when needed for its features. The app should explain the purpose when requesting permission. A permission being available does not necessarily mean the data is uploaded to FuzailVerse.',
+        'Content handled by app features: Content may be stored locally, processed by a FuzailVerse server, or shared with a service you select. The relevant app-specific notice must state which applies.',
       ],
     },
     {
-      id: 'hardware-permissions',
-      number: '03',
-      title: 'Device Permissions and Hardware Access Rationale',
-      summary: 'Strict principle of least privilege for hardware access',
+      id: 'purposes-of-processing',
+      number: '3',
+      title: 'Purposes of processing',
       paragraphs: [
-        'Mobile operating systems enforce runtime sandbox boundaries. FuzailVerse applications request device capabilities strictly when mandatory for user-initiated actions, adhering to the principle of least privilege.',
-      ],
-      subsections: [
-        {
-          id: 'perm-camera',
-          subtitle: 'Camera Access (android.permission.CAMERA / NSCameraUsageDescription)',
-          content: [
-            'Requested only to allow users to scan product QR codes/barcodes in real time, capture photographs of physical paper invoices for trade verification, or scan KYC identification documents.',
-            'Live camera feeds are processed exclusively within the device frame buffer; raw video streams are never recorded, silently monitored, or transmitted to background servers.',
-          ],
-        },
-        {
-          id: 'perm-location',
-          subtitle: 'Location Services (ACCESS_FINE_LOCATION / ACCESS_BACKGROUND_LOCATION)',
-          content: [
-            'Employed exclusively in field execution software (specifically FieldPulse by TASC) to verify that store audit check-ins occur within verified retail coordinate boundaries.',
-            'Background location tracking is activated strictly during authorized duty shifts and incorporates mock-location detection to guarantee operational integrity. Consumer loyalty apps do NOT request continuous GPS tracking.',
-          ],
-        },
-        {
-          id: 'perm-storage',
-          subtitle: 'Storage and Media Files (READ_MEDIA_IMAGES / WRITE_EXTERNAL_STORAGE)',
-          content: [
-            'Utilized to export generated PDF prescriptions, cache automotive parts digital catalogs for offline browsing, and select invoice images from the device gallery for submission.',
-          ],
-        },
-        {
-          id: 'perm-notifications',
-          subtitle: 'Push Notifications (POST_NOTIFICATIONS)',
-          content: [
-            'Utilized via Firebase Cloud Messaging (FCM) to transmit transactional alerts, including reward point redemptions, milestone achievements, and urgent system notices. Users may revoke notification authorization at any time in device system settings.',
-          ],
-        },
-        {
-          id: 'perm-microphone',
-          subtitle: 'Audio and Microphone Access',
-          content: [
-            'FuzailVerse applications do NOT request or utilize microphone access. No background audio recording occurs under any circumstance.',
-          ],
-        },
+        'We may process information, where applicable, to provide app features; save preferences or history; respond to support requests; diagnose crashes and performance issues; maintain security; prevent abuse; understand aggregate usage; improve the Services; and comply with legal obligations.',
       ],
     },
     {
-      id: 'local-storage-architecture',
-      number: '04',
-      title: 'Local Data Storage and Offline-First Architecture',
-      summary: 'Secure device persistence using SQLite, Hive, and Encrypted Storage',
+      id: 'local-storage-servers-sharing',
+      number: '4',
+      title: 'Local storage, servers and sharing',
       paragraphs: [
-        'A hallmark of FuzailVerse engineering is high availability in network-constrained environments. Multiple applications employ offline-first architectures where data is persisted locally on the host device before cloud synchronization.',
-      ],
-      bulletPoints: [
-        'Relational Databases (SQLite / SQFLite): Used in applications such as InClinic Assistant, FieldPulse, and BirlaNu to maintain local transaction queues, appointment records, and offline catalogs. SQLite databases are sandboxed within the private app sandbox and are inaccessible to other third-party apps.',
-        'High-Speed Key-Value Indexing (Hive / SharedPreferences): Employed for sub-second SKU lookups, theme preferences, and user interface state caching.',
-        'Encrypted Secure Storage: Authentication credentials, session JWT refresh tokens, and biometric session tokens are encrypted using the Android Keystore system (AES-256 GCM) and iOS Keychain Services. Plaintext secrets are never stored in unprotected files.',
-        'Offline Transaction Queues: Submissions created without connectivity are queued locally and automatically dispatched with idempotency keys once connectivity is restored, preventing duplicate balance debits or submissions.',
+        'Some apps store settings, history or generated content locally on your device. Other apps may use cloud storage, backend APIs or third-party platforms. Local information may be removed using in-app controls, clearing app data or uninstalling the app, subject to device backup and restore behaviour.',
+        'We do not sell personal information. Information may be disclosed to service providers supporting a Service (such as hosting, analytics, crash reporting, authentication, maps, payments or customer support), when you direct us to share content, when required by law, or to protect users and the Services. The providers actually used must be reflected in the relevant app-specific disclosures.',
       ],
     },
     {
-      id: 'cloud-storage-and-apis',
-      number: '05',
-      title: 'Cloud Storage, Backend APIs, and Data Transmission',
-      summary: 'End-to-end transport security with TLS 1.3 and authenticated REST gateways',
+      id: 'analytics-and-crash-reporting',
+      number: '5',
+      title: 'Analytics and crash reporting',
       paragraphs: [
-        'When data must be synchronized with cloud infrastructure, all external network transmissions take place over authenticated RESTful HTTPS interfaces using Transport Layer Security (TLS 1.3 or TLS 1.2 minimum).',
-        'Payloads are authenticated using JSON Web Tokens (JWT) with short expiration periods and secure refresh mechanisms. Image uploads (such as invoice vouchers or KYC documents) are compressed on-device prior to transmission using memory-optimized downsampling algorithms to conserve user bandwidth and mitigate server load.',
-        'Cloud backends hosting client databases are maintained in enterprise cloud availability regions (primarily Google Cloud Platform and Amazon Web Services data centers in the Asia-Pacific region, including Mumbai, India), adhering to rigorous physical and logical access controls.',
+        'Some FuzailVerse apps may use Google Firebase Analytics and Firebase Crashlytics. Depending on configuration, these services may process app events, app-instance identifiers, device and app information, crash traces and diagnostic data. Not every FuzailVerse app necessarily uses these services.',
+        'See Firebase privacy and security and Google Privacy Policy. Actual collection depends on SDK versions, configuration, consent controls and the released app.',
       ],
     },
     {
-      id: 'firebase-sdk-disclosures',
-      number: '06',
-      title: 'Firebase Suite: Analytics, Crashlytics, and Phone Authentication',
-      summary: 'Telemetry and authentication implementations powered by Google Firebase',
+      id: 'advertising-and-purchases',
+      number: '6',
+      title: 'Advertising and purchases',
       paragraphs: [
-        'Where integrated, Google Firebase SDKs provide observability and secure infrastructure:',
-      ],
-      subsections: [
-        {
-          id: 'firebase-analytics',
-          subtitle: 'Firebase Analytics',
-          content: [
-            'Monitors aggregated behavioral flow, screen navigation milestones, and feature adoption rates to identify UX bottlenecks. Analytics identifiers are pseudonymized and cannot be used by the Operator to independently reconstruct a real-world identity.',
-          ],
-        },
-        {
-          id: 'firebase-crashlytics',
-          subtitle: 'Firebase Crashlytics & Performance Monitoring',
-          content: [
-            'Captures real-time crash stack traces, non-fatal exceptions, and frame-rate rendering metrics across device tiers. This diagnostic telemetry is critical to maintaining a 99.8%+ crash-free session rate across diverse budget hardware.',
-          ],
-        },
-        {
-          id: 'firebase-auth',
-          subtitle: 'Firebase Phone OTP Authentication',
-          content: [
-            'Employed in applications such as InClinic Assistant to facilitate passwordless verification. Phone numbers submitted for SMS OTP verification are processed directly by Google Firebase infrastructure under Google privacy standards and are used exclusively to confirm device possession.',
-          ],
-        },
+        'Some apps or releases may be ad-free; others may use advertising services such as Google AdMob. Where advertising is used, the relevant app-specific notice and app-store disclosures must identify the advertising SDKs and explain applicable data processing and consent choices. Do not assume all FuzailVerse apps display ads.',
+        'If a Service offers in-app purchases or subscriptions, payment details are generally handled by the applicable app store or payment provider, whose terms and privacy policy also apply.',
       ],
     },
     {
-      id: 'advertising-and-monetization',
-      number: '07',
-      title: 'Advertising Practices and Monetization Disclosure',
-      summary: 'Zero third-party programmatic ad networks across enterprise applications',
+      id: 'retention-and-deletion',
+      number: '7',
+      title: 'Retention and deletion',
       paragraphs: [
-        'FuzailVerse maintains a strict operational standard regarding user attention and privacy:',
-        'None of our enterprise, B2B loyalty, automotive catalog, field management, or healthcare applications integrate third-party programmatic advertising networks (such as Google AdMob, Unity Ads, Meta Audience Network, or AppLovin).',
-        'Users are never subjected to behavioral ad tracking, programmatic real-time bidding (RTB) auctions, or cross-app retargeting pixels within FuzailVerse software.',
-        'Promotional feeds present in loyalty apps (such as Classmate Star Club or BirlaNu) represent direct, client-curated product reward catalogs, not third-party commercial advertisements.',
+        'We retain information only for as long as reasonably necessary for the purposes described, unless a longer period is required or permitted by law. Retention varies by app, data type and service provider.',
+        'You may be able to delete local information through app controls or device settings. For account-based Services, use any available in-app account deletion feature. You may also contact us. Uninstalling an app does not necessarily delete information already held by third-party providers or backups.',
       ],
     },
     {
-      id: 'payment-gateways',
-      number: '08',
-      title: 'Payment Processing and Financial Gateways',
-      summary: 'PCI-DSS compliant transaction processing via Razorpay and banking rails',
+      id: 'security-and-international',
+      number: '8',
+      title: 'Security and international processing',
       paragraphs: [
-        'Where applications support digital payments, commercial orders, or monetary incentive disbursements:',
-        'Payment processing is executed through certified, RBI-licensed payment aggregators (predominantly Razorpay). FuzailVerse applications do not directly capture, record, or store raw credit card numbers, debit card CVVs, or net banking passwords on local devices or proprietary servers.',
-        'All payment checkout flows execute inside hardened SDK webviews or API tunnels tokenized directly by the payment processor under PCI-DSS Level 1 certification. Reward disbursements (Direct Bank Transfer / UPI) are processed via validated enterprise corporate disbursement gateways.',
-      ],
-    },
-    {
-      id: 'third-party-services',
-      number: '09',
-      title: 'Third-Party Services and Infrastructure Integrations',
-      summary: 'Trusted platform services and external technical partners',
-      paragraphs: [
-        'Our applications interface with trusted industry infrastructure providers strictly to execute core software capabilities:',
-      ],
-      bulletPoints: [
-        'Google Play Services & Apple App Store: App distribution, version auto-updates, in-app reviews, and integrity attestation.',
-        'Google Cloud Platform (GCP) & Cloudflare: Secure edge CDN delivery, domain routing, and backend server infrastructure.',
-        'Google Maps & Location Services: Geocoding and map rendering for field auditing applications.',
-        'Document OCR & Verification Services: Automated document parsing for KYC validation workflows.',
-      ],
-    },
-    {
-      id: 'data-sharing-and-disclosure',
-      number: '10',
-      title: 'Data Sharing, Disclosures, and Governance',
-      summary: 'Strict non-sale clause and legitimate disclosure criteria',
-      paragraphs: [
-        'WE DO NOT SELL, RENT, MONETIZE, OR TRADE PERSONAL DATA TO THIRD-PARTY DATA BROKERS OR MARKETING FIRMS. EVER.',
-        'Information is shared strictly under the following limited operational conditions:',
-      ],
-      bulletPoints: [
-        'With Enterprise Project Clients: Applications developed for specific enterprise clients (e.g. ITC, Tech Almonds, Spark Minda, BirlaNu, Parker, PepsiCo) transmit operational business data to the respective client organization that commissions and owns the digital ecosystem.',
-        'With Authorized Technical Infrastructure Vendors: Cloud hosting, database management, SMS delivery, and crash analytics providers under strict data processing agreements.',
-        'Legal and Regulatory Obligations: Where required by a valid court order, subpoena, law enforcement inquiry, or statutory regulation under applicable jurisdiction.',
-        'Protection of Vital Rights: When necessary to investigate fraudulent transactions, prevent GPS mock-spoofing, mitigate cyber-attacks, or protect the safety and property of users.',
-      ],
-    },
-    {
-      id: 'data-retention-limits',
-      number: '11',
-      title: 'Data Retention and Storage Limits',
-      summary: 'Definite retention schedules based on technical and statutory necessity',
-      paragraphs: [
-        'We adhere to data minimization principles. Information is retained only as long as necessary to fulfill the operational purpose for which it was gathered:',
-      ],
-      bulletPoints: [
-        'User Account & Profile Data: Retained for the duration of the active business or commercial relationship between the user and the sponsoring enterprise platform.',
-        'Financial & Reward Records: Retained for up to 7 (seven) years to comply with statutory taxation, anti-money laundering (AML), and commercial audit regulations.',
-        'Crash & Diagnostic Telemetry: Retained in Firebase Crashlytics for 90 days before automated system purging.',
-        'Local SQLite & Cache Records: Persisted locally on the user device until the user logs out, uninstalls the software, or clears application data in operating system settings.',
-        'Portfolio Website Inquiries: Contact inquiries sent to mohdfuzail.dev@gmail.com are retained for up to 24 months to maintain engineering dialogue and consultation records.',
-      ],
-    },
-    {
-      id: 'data-deletion-rights',
-      number: '12',
-      title: 'Data Deletion, Account Erasure, and User Control',
-      summary: 'Complete procedures for account closure and data purging',
-      paragraphs: [
-        'Users maintain sovereign control over their personal data. You may request account closure, personal data export, or irrevocable data deletion at any time:',
-      ],
-      bulletPoints: [
-        'Email Request: Submit a deletion request directly to our designated data governance inbox: mohdfuzail.dev@gmail.com with the subject line "Data Deletion Request - [Application Name]". We process verified requests within 30 days.',
-        'In-App Account Closure: In applications supporting self-service account termination, users can initiate deletion via Account Settings > Delete Account.',
-        'Local Data Removal: Users can immediately purge all locally stored database files, cached catalogs, and cached tokens by navigating to Device Settings > Apps > [Application Name] > Clear Storage / Clear Cache, or by uninstalling the application.',
-      ],
-    },
-    {
-      id: 'security-safeguards',
-      number: '13',
-      title: 'Technical and Organizational Security Safeguards',
-      summary: 'Cryptographic defenses, tamper protection, and defense-in-depth',
-      paragraphs: [
-        'FuzailVerse incorporates defense-in-depth architectural principles to protect information against unauthorized access, alteration, disclosure, or destruction:',
-      ],
-      bulletPoints: [
-        'Cryptographic In-Transit Security: Mandatory TLS 1.3 / TLS 1.2 with HSTS for all network communication.',
-        'At-Rest Cryptography: Mobile device secrets encrypted via hardware-backed Android Keystore and iOS Keychain.',
-        'Memory Protection: Proactive buffer management to eliminate memory leaks and ensure sensitive byte buffers are zeroed out after use.',
-        'Anti-Tampering Measures: Integrity verification, signature validation, and mock-location detection in sensitive field and transaction flows.',
-        'Code Reviews & Static Analysis: Regular dependency auditing to identify and patch vulnerable libraries prior to production store deployment.',
-      ],
-    },
-    {
-      id: 'international-data-transfers',
-      number: '14',
-      title: 'International Data Transfers and Cross-Border Processing',
-      summary: 'Safeguards for global cloud infrastructure and data sovereignty',
-      paragraphs: [
-        'While FuzailVerse is operated from New Delhi, India, cloud services utilized (such as Google Cloud, Firebase, and Cloudflare) operate globally distributed networks. Your information may be routed or processed on infrastructure located outside your home state or country.',
-        'Where cross-border transfers occur, they are governed by recognized standard contractual clauses, robust cryptographic transit safeguards, and enterprise data processing agreements ensuring equivalent data protection standards regardless of geographic routing.',
+        'We use reasonable technical and organisational measures appropriate to the nature of the information and Services. No method of electronic storage or transmission is completely secure.',
+        'Service providers may process information in countries other than your own. Where required, appropriate safeguards should be used for international transfers.',
       ],
     },
     {
       id: 'childrens-privacy',
-      number: '15',
-      title: "Children's Privacy and Protection of Minors",
-      summary: "Compliance with COPPA, GDPR Article 8, and India's DPDP Act",
+      number: '9',
+      title: "Children's privacy",
       paragraphs: [
-        'The majority of FuzailVerse software products are enterprise, B2B, or professional healthcare tools intended exclusively for adult commercial users. We do not knowingly collect personal information from children under the age of 13 (or under 18 in jurisdictions where local statutory law defines minority for digital consent, including the Digital Personal Data Protection Act of India).',
-        'Specific Notice for Youth & Student Loyalty Software (e.g. Classmate Star Club): Where an application caters to students and youth, data collection is deliberately constrained to non-sensitive game mechanics (notebook barcode scanning, digital badges, streaks). We do not collect precise GPS coordinates, biometric identifiers, or behavioral tracking profiles from youth users. Where required by applicable law, parental or guardian consent must be provided prior to reward redemptions.',
-        'If you believe a child has provided personal information without requisite consent, notify us immediately at mohdfuzail.dev@gmail.com and we will expeditiously expunge such records from our databases.',
+        'Unless a Service expressly states otherwise and has been designed and reviewed for that purpose, FuzailVerse Services are not directed to children. Store age ratings and target-audience declarations must be accurate. We do not knowingly collect children\'s personal information in a manner prohibited by applicable law. A parent or guardian who believes a child has provided information may contact us.',
       ],
     },
     {
-      id: 'user-privacy-rights',
-      number: '16',
-      title: 'User Privacy Rights (GDPR, CCPA/CPRA, and DPDP Act 2023)',
-      summary: 'Comprehensive legal rights enforceable by users worldwide',
+      id: 'your-rights-and-choices',
+      number: '10',
+      title: 'Your rights and choices',
       paragraphs: [
-        'Depending on your jurisdiction, you possess statutory rights regarding your personal information under regulations including the EU General Data Protection Regulation (GDPR), the California Consumer Privacy Act (CCPA/CPRA), and the Digital Personal Data Protection Act 2023 (DPDP Act, India):',
-      ],
-      bulletPoints: [
-        'Right to Access & Confirmation: You have the right to receive confirmation whether your data is being processed and obtain a portable copy of personal records.',
-        'Right to Rectification: You have the right to correct inaccurate, outdated, or incomplete data maintained in our systems.',
-        'Right to Erasure ("Right to Be Forgotten"): You have the right to request permanent deletion of your personal records, subject to statutory retention mandates.',
-        'Right to Restrict or Object to Processing: You have the right to restrict processing or object to automated decision-making and profiling.',
-        'Right to Data Portability: You have the right to receive your data in a structured, commonly used, and machine-readable format.',
-        'Right to Withdraw Consent: Where processing relies on consent, you may withdraw consent at any time without affecting lawful prior processing.',
-        'Non-Discrimination: We will never deny services, degrade app features, or charge discriminatory rates for exercising your privacy rights.',
+        'Depending on your location and applicable law, you may have rights to request access, correction, deletion, restriction or portability of personal information, or to object to certain processing. You can also control device permissions and use available app controls.',
+        'To make a privacy request, email mohdfuzail.dev@gmail.com and identify the app and nature of your request. We may need to verify your request.',
       ],
     },
     {
-      id: 'changes-to-policy',
-      number: '17',
-      title: 'Modifications and Amendments to This Policy',
-      summary: 'Version tracking and update notification mechanisms',
+      id: 'changes-and-disclosures',
+      number: '11',
+      title: 'Changes and app-specific disclosures',
       paragraphs: [
-        'We may periodically update this Privacy Policy to reflect architectural enhancements, newly published applications, evolving regulatory frameworks, or changes in third-party SDK dependencies.',
-        'When modifications occur, the "Last Updated" timestamp at the top of this document will be updated, and version change notes will be documented in our release logs. For material changes that significantly affect user rights, we will provide prominent in-app notices or direct announcements where feasible.',
-        'Continued usage of our web platform or mobile applications following the publication of revisions constitutes acceptance of the updated terms.',
+        'We may update this policy when Services, SDKs or legal requirements change. The “Last updated” date should be revised when material changes are made. Each app\'s store listing and in-app privacy link should point to an accessible current version.',
+        'Before releasing an app, its permissions, SDKs, collected data, purposes, sharing, storage, retention, deletion and network behaviour must be reviewed. Google Play Data Safety and Apple privacy disclosures must match the actual released build.',
       ],
     },
     {
-      id: 'contact-governance',
-      number: '18',
-      title: 'Direct Privacy Governance and Contact Information',
-      summary: 'Direct contact channels for queries, audits, and data requests',
+      id: 'contact',
+      number: '12',
+      title: 'Contact',
       paragraphs: [
-        'For all inquiries regarding data governance, architectural compliance, account deletion, or the exercise of statutory privacy rights, contact our engineering lead and data governance specialist directly:',
-        'Email: mohdfuzail.dev@gmail.com',
-        'Official Portfolio: https://fuzailverse.pages.dev/',
-        'Operator: Mohammad Fuzail, Lead Mobile Systems Architect',
-        'Physical Base: New Delhi, India',
-        'We endeavor to acknowledge all formal privacy correspondence within 48 business hours and resolve verified requests within 30 calendar days.',
+        'For privacy questions or requests, contact FuzailVerse at mohdfuzail.dev@gmail.com.',
       ],
-    },
-  ],
-  appDisclosures: [
-    {
-      id: 'app-birlanu',
-      name: 'BirlaNu Rewards',
-      category: 'Enterprise Channel Loyalty',
-      platform: ['Android', 'iOS'],
-      purpose:
-        'Channel loyalty and reward distribution platform for contractors and masons across national distribution networks, featuring automated KYC, digital points ledgers, and bank disbursement.',
-      operationalContext:
-        'Engineered for Tech Almonds Solutions Private Limited on behalf of the BirlaNu brand. Deployed to Play Store and App Store.',
-      permissions: [
-        {
-          name: 'Camera (android.permission.CAMERA)',
-          level: 'Dangerous / Runtime',
-          purpose: 'Real-time scanning of product QR codes for point earning and Aadhaar/PAN document capture for KYC.',
-        },
-        {
-          name: 'Storage (READ_EXTERNAL_STORAGE)',
-          level: 'Normal',
-          purpose: 'Temporary caching of compressed KYC identity documents and transaction vouchers prior to upload.',
-        },
-        {
-          name: 'Internet & Network State',
-          level: 'Normal',
-          purpose: 'Secure TLS communication with enterprise points ledger and KYC authentication backends.',
-        },
-      ],
-      dataCollected: {
-        personal: ['Full Name', 'Mobile Telephone Number', 'Trade Role (Contractor/Mason)', 'PAN / Aadhaar ID details for KYC'],
-        technical: ['Device Model', 'OS Version', 'IP Address', 'Push Notification Device Token (FCM)'],
-        transactional: ['Product QR Code Scan Records', 'Earned Reward Points Balance', 'Redemption Bank Account / UPI Coordinates'],
-        sensitive: ['Government Identity Document Scans (Processed exclusively for KYC compliance)'],
-      },
-      localDataProcessing: [
-        'SQLite (SQFLite) offline queue to hold QR scans when offline',
-        'In-memory downsampling of camera capture to 1080p to prevent out-of-memory crashes',
-        'Encrypted JWT storage for session authentication',
-      ],
-      externalTransmission: [
-        'Multipart upload of compressed KYC images over HTTPS TLS 1.3 to verification endpoint',
-        'Encrypted REST API calls for balance reconciliation and redemption processing',
-      ],
-      analyticsSdk: ['Firebase Analytics (User engagement telemetry, screen transition metrics)'],
-      crashReportingSdk: ['Firebase Crashlytics (Real-time crash stack traces, non-fatal exceptions)'],
-      advertisingSdk: ['None (0 third-party advertising SDKs integrated)'],
-      thirdPartyServices: [
-        'Google Firebase (Analytics, Crashlytics, FCM)',
-        'Government / Partner Document OCR & KYC Verification APIs',
-        'Banking / UPI Disbursement Partners',
-      ],
-      dataRetention:
-        'Financial and point redemption ledgers retained for up to 7 years in enterprise databases for tax and statutory audit compliance. Local scan queue purged upon sync.',
-      dataDeletion:
-        'Account deactivation and data deletion coordinated through corporate brand administrator or by emailing mohdfuzail.dev@gmail.com.',
-      verificationStatus: 'VERIFIED_CODEBASE_ARCHITECTURE',
-      verificationNotes:
-        'Source code and production build specifications verified. Implements clean architecture with BLoC and Dio JWT interceptors.',
-    },
-    {
-      id: 'app-digispark',
-      name: 'DIGISPARK (Spark Minda)',
-      category: 'Automotive Aftermarket & E-commerce',
-      platform: ['Android', 'iOS'],
-      purpose:
-        'Official Spark Minda digital catalog and aftermarket e-commerce mobile application servicing thousands of distributors, retailers, and mechanics across 10,000+ auto components.',
-      operationalContext:
-        'Engineered for Tech Almonds Solutions Private Limited for Spark Minda aftermarket operations. Deployed to Play Store and App Store.',
-      permissions: [
-        {
-          name: 'Storage (WRITE_EXTERNAL_STORAGE / Download Manager)',
-          level: 'Normal',
-          purpose: 'Downloading and locally viewing offline high-resolution PDF parts catalogs and schematics.',
-        },
-        {
-          name: 'Internet & Network State',
-          level: 'Normal',
-          purpose: 'Synchronizing part availability, ERP delta updates, and mechanic referral telemetry.',
-        },
-      ],
-      dataCollected: {
-        personal: ['Name', 'Phone Number', 'Workshop / Store Name', 'Distributor / Mechanic Affiliation Code'],
-        technical: ['Device Hardware Model', 'Screen Density', 'Android / iOS Version', 'Local Search Query History'],
-        transactional: ['Parts Inquiries', 'Distributor Order Requests', 'Referral Code Attribution Records'],
-        sensitive: ['None'],
-      },
-      localDataProcessing: [
-        '10,000+ SKU parts index cached locally in SQLite and Hive for sub-second offline search',
-        'In-app PDF viewer rendering technical vehicle schematics from device storage',
-      ],
-      externalTransmission: [
-        'Gzip-compressed RESTful API synchronization with Spark Minda enterprise ERP systems',
-        'Encrypted referral redemption claims over TLS',
-      ],
-      analyticsSdk: ['Custom Usage Telemetry & Search Query Analytics'],
-      crashReportingSdk: ['Proactive Exception Logging & Diagnostics'],
-      advertisingSdk: ['None (0 third-party advertising SDKs integrated)'],
-      thirdPartyServices: ['Enterprise ERP Gateway', 'PDF Rendering Engine', 'Fastlane CI/CD'],
-      dataRetention:
-        'User profile active for duration of technician enrollment. Local catalog cache can be cleared anytime by the user.',
-      dataDeletion:
-        'Technicians can request account removal and referral data de-linking via regional distributor managers or mohdfuzail.dev@gmail.com.',
-      verificationStatus: 'VERIFIED_CODEBASE_ARCHITECTURE',
-      verificationNotes:
-        'Verified against Riverpod state management implementation, Hive SKU indexing, and offline PDF caching modules.',
-    },
-    {
-      id: 'app-parker',
-      name: 'Parker Loyalty Platform',
-      category: 'Enterprise B2B Loyalty',
-      platform: ['Android', 'iOS'],
-      purpose:
-        'Multi-role partner management and sales loyalty system for Parker Hannifin distribution networks, featuring 4 hierarchical role dashboards, invoice verification, and points redemption.',
-      operationalContext:
-        'Engineered for Tech Almonds Solutions Private Limited. Supports Field Sales Reps, Distributors, Retail Partners, and Admins.',
-      permissions: [
-        {
-          name: 'Camera (android.permission.CAMERA)',
-          level: 'Dangerous / Runtime',
-          purpose: 'Field sales representatives photograph physical distributor invoices for points claim validation.',
-        },
-        {
-          name: 'Storage (READ_MEDIA_IMAGES)',
-          level: 'Normal',
-          purpose: 'Selecting stored distributor invoice images from photo gallery.',
-        },
-        {
-          name: 'Internet & Network State',
-          level: 'Normal',
-          purpose: 'Transmitting encrypted multipart invoice payloads and retrieving role-based operational dashboards.',
-        },
-      ],
-      dataCollected: {
-        personal: ['Sales Representative Name', 'Employee Code', 'Distributor Business Name', 'Email and Phone Number'],
-        technical: ['Device Identifier', 'App Build Signature', 'Connection Bandwidth Indicators'],
-        transactional: ['Invoice Photos', 'Claimed Purchase Value', 'Verified Points Ledger', 'Approval / Rejection Audit Logs'],
-        sensitive: ['Commercial Trade Invoices (Treated as confidential corporate business data)'],
-      },
-      localDataProcessing: [
-        'Automated on-device image compression pipeline to reduce 12MB camera photos to under 400KB before upload over 2G/3G',
-        'Encrypted SharedPreferences for role-based access control (RBAC) token cache',
-      ],
-      externalTransmission: [
-        'Multipart HTTP upload service with exponential backoff and resume capabilities over HTTPS TLS 1.3',
-      ],
-      analyticsSdk: ['Enterprise Transaction Telemetry'],
-      crashReportingSdk: ['Custom Diagnostic Logger'],
-      advertisingSdk: ['None (0 third-party advertising SDKs integrated)'],
-      thirdPartyServices: ['Enterprise ERP & Accounting Verification Service', 'Encrypted Cloud Storage'],
-      dataRetention:
-        'Invoices and approval records retained for 7 years in corporate audit archives for enterprise tax compliance.',
-      dataDeletion:
-        'Managed by corporate enterprise system administrators. Inactive accounts archived per corporate retention schedules.',
-      verificationStatus: 'VERIFIED_CODEBASE_ARCHITECTURE',
-      verificationNotes:
-        'Verified against Provider architecture, 4-tier RBAC system, and in-app multi-page invoice compression pipeline.',
-    },
-    {
-      id: 'app-classmate',
-      name: 'Classmate Star Club (ITC)',
-      category: 'Retail Loyalty & Gamification',
-      platform: ['Android', 'iOS'],
-      purpose:
-        'ITC flagship youth engagement and retail loyalty application, blending notebook barcode scan validation, streak mechanics, and reward gamification to boost school and college student retention.',
-      operationalContext:
-        'Engineered for Tech Almonds Solutions Private Limited on behalf of ITC Limited. Deployed to Play Store and App Store.',
-      permissions: [
-        {
-          name: 'Camera (android.permission.CAMERA)',
-          level: 'Dangerous / Runtime',
-          purpose: 'Scanning notebook barcodes and QR codes to credit loyalty points.',
-        },
-        {
-          name: 'Storage (READ_EXTERNAL_STORAGE)',
-          level: 'Normal',
-          purpose: 'Caching gamification visual assets, avatars, and badge graphics.',
-        },
-        {
-          name: 'Internet & Network State',
-          level: 'Normal',
-          purpose: 'Validating barcode scans, updating streak counters, and redeeming digital rewards.',
-        },
-      ],
-      dataCollected: {
-        personal: ['Username / Student Nickname', 'Mobile Phone Number', 'Grade / Educational Tier (Optional)'],
-        technical: ['Device Model', 'Rendering FPS Metrics', 'Firebase Anonymous Instance ID'],
-        transactional: ['Barcode Scan History', 'Daily Challenge Streaks', 'Digital Scratch Card Claims', 'Earned Reward Badges'],
-        sensitive: ['None. No precise geolocation, biometric data, or government IDs collected.'],
-      },
-      localDataProcessing: [
-        'Local streak calculation engine cached in secure SharedPreferences',
-        'Hardware-accelerated 60fps animation cache maintaining fluid UI on budget smartphones',
-      ],
-      externalTransmission: [
-        'Encrypted barcode validation queries via secure RESTful APIs to ITC backend servers',
-      ],
-      analyticsSdk: ['Firebase Analytics (Event tracking, streak milestones, screen flow)'],
-      crashReportingSdk: ['Firebase Crashlytics & Firebase Performance Monitoring'],
-      advertisingSdk: ['None (0 third-party advertising SDKs; in-app brand reward feeds only)'],
-      thirdPartyServices: ['Google Firebase Suite', 'ITC Cloud Infrastructure'],
-      dataRetention:
-        'Retained for duration of active student account. Inactive accounts purged after 24 months of dormancy.',
-      dataDeletion:
-        'Students or parents can request immediate account deletion in app settings or by contacting mohdfuzail.dev@gmail.com.',
-      verificationStatus: 'VERIFIED_CODEBASE_ARCHITECTURE',
-      verificationNotes:
-        'Verified against BLoC reactive architecture, flutter_bloc implementation, and Firebase observability pipelines.',
-    },
-    {
-      id: 'app-fieldpulse',
-      name: 'FieldPulse by TASC',
-      category: 'Field Operations & Retail Intelligence',
-      platform: ['Android', 'iOS'],
-      purpose:
-        'Enterprise field force execution and retail auditing tool empowering field agents to execute store audits, capture inventory shelf-share data, verify presence via GPS geo-fencing, and stream telemetry to supervisors.',
-      operationalContext:
-        'Engineered for Tech Almonds Solutions Private Limited for TASC field execution operations. Deployed to Play Store and App Store.',
-      permissions: [
-        {
-          name: 'Precise Location (ACCESS_FINE_LOCATION & ACCESS_COARSE_LOCATION)',
-          level: 'Dangerous / Runtime',
-          purpose: 'Verifying physical field agent presence within store geo-fence radius during store check-ins.',
-        },
-        {
-          name: 'Background Location (ACCESS_BACKGROUND_LOCATION)',
-          level: 'Dangerous / Runtime',
-          purpose: 'Tracking field agent duty routes between assigned retail audit targets during active work shifts.',
-        },
-        {
-          name: 'Camera (android.permission.CAMERA)',
-          level: 'Dangerous / Runtime',
-          purpose: 'Capturing shelf-share inventory photographs with automated GPS coordinate and timestamp watermarking.',
-        },
-        {
-          name: 'Storage (READ_MEDIA_IMAGES / WRITE_EXTERNAL_STORAGE)',
-          level: 'Normal',
-          purpose: 'Storing offline audit questionnaire forms and photo caches.',
-        },
-      ],
-      dataCollected: {
-        personal: ['Field Agent Name', 'Employee ID', 'Assigned Territory Code', 'Supervisor Contact'],
-        technical: ['High-Accuracy GPS Coordinates', 'Mock-Location Detection Flags', 'Device Battery Level', 'Network State'],
-        transactional: ['Store Check-In / Check-Out Timestamps', 'Retail Audit Answers', 'Competitor Shelf Photographs'],
-        sensitive: ['Precise Duty-Hours Location Telemetry (Collected strictly during active shift execution)'],
-      },
-      localDataProcessing: [
-        'SQLite database storing complete audit questionnaires with sync status flags for 100% offline completion',
-        'Anti-spoofing algorithm verifying GPS accuracy and rejecting simulated/mock developer locations',
-      ],
-      externalTransmission: [
-        'Batched multipart REST API synchronization streaming geo-tagged audit payloads to supervisor portal',
-      ],
-      analyticsSdk: ['Operational Telemetry & Route Optimization Analytics'],
-      crashReportingSdk: ['Enterprise Error & Sync Logging'],
-      advertisingSdk: ['None (0 third-party advertising SDKs integrated)'],
-      thirdPartyServices: ['Google Maps Geolocation Platform', 'Enterprise Supervisor Portal'],
-      dataRetention:
-        'Audit logs and geo-tags retained per corporate employer governance contracts (typically 3 to 5 years).',
-      dataDeletion:
-        'Managed in accordance with corporate employer employment contracts and administrative policies.',
-      verificationStatus: 'VERIFIED_CODEBASE_ARCHITECTURE',
-      verificationNotes:
-        'Verified against Riverpod state management, anti-spoofing GPS filters, and SQLite offline audit queues.',
-    },
-    {
-      id: 'app-pepsico',
-      name: 'PepsiCo Growth Club',
-      category: 'Channel Partner Sales Incentives',
-      platform: ['Android', 'iOS'],
-      purpose:
-        'Sales incentive and partner engagement gateway for PepsiCo channel partners translating quarterly volume targets into daily milestones, visual burn-down charts, and tiered incentive redemptions.',
-      operationalContext:
-        'Engineered for Tech Almonds Solutions Private Limited for PepsiCo distributor ecosystem. Deployed to Play Store and App Store.',
-      permissions: [
-        {
-          name: 'Push Notifications (POST_NOTIFICATIONS)',
-          level: 'Normal',
-          purpose: 'Transmitting target proximity alerts, weekly achievement scorecards, and urgent milestone updates.',
-        },
-        {
-          name: 'Storage (READ_EXTERNAL_STORAGE)',
-          level: 'Normal',
-          purpose: 'Caching achievement certificates and visual sales charts.',
-        },
-        {
-          name: 'Internet & Network State',
-          level: 'Normal',
-          purpose: 'Fetching real-time sales progress data and processing partner incentive disbursements.',
-        },
-      ],
-      dataCollected: {
-        personal: ['Distributor Owner Name', 'Channel Partner Code', 'Territory Name', 'Email and Telephone'],
-        technical: ['Device Identifier', 'OS Version', 'FCM Notification Token'],
-        transactional: ['Sales Volume Milestones', 'Quarterly Target Projections', 'Earned Incentive Tier Points'],
-        sensitive: ['Confidential Commercial Sales Progression Data'],
-      },
-      localDataProcessing: [
-        'Key-value target milestone cache and SQLite chart rendering cache for instantaneous dashboard loads',
-      ],
-      externalTransmission: [
-        'Authenticated RESTful APIs with response caching and payload compression over HTTPS TLS 1.3',
-      ],
-      analyticsSdk: ['Sales Milestone Engagement Telemetry'],
-      crashReportingSdk: ['Performance & Exception Diagnostics'],
-      advertisingSdk: ['None (0 third-party advertising SDKs integrated)'],
-      thirdPartyServices: ['Firebase Cloud Messaging (FCM)', 'Enterprise FMCG Backend'],
-      dataRetention:
-        'Distributor achievement records retained for duration of active commercial franchise agreements.',
-      dataDeletion:
-        'Coordinated through regional PepsiCo channel management representatives or via mohdfuzail.dev@gmail.com.',
-      verificationStatus: 'VERIFIED_CODEBASE_ARCHITECTURE',
-      verificationNotes:
-        'Verified against Clean Architecture with BLoC, custom milestone charting engine, and FCM push pipelines.',
-    },
-    {
-      id: 'app-inclinic',
-      name: 'InClinic Assistant',
-      category: 'Healthcare Management & Offline Records',
-      platform: ['Android'],
-      purpose:
-        'Mission-critical healthcare appointment and clinic management application built to manage doctor schedules, patient medical histories, digital prescriptions, and billing, engineered to remain 100% operational offline.',
-      operationalContext:
-        'Engineered at Teciza Technologies Private Limited for clinical practitioners. Deployed to Google Play Store.',
-      permissions: [
-        {
-          name: 'Storage (WRITE_EXTERNAL_STORAGE / Documents)',
-          level: 'Normal',
-          purpose: 'Exporting digital prescription PDFs and saving clinic backup files locally.',
-        },
-        {
-          name: 'Internet & Network State',
-          level: 'Normal',
-          purpose: 'Firebase Phone OTP authentication and bidirectional cloud synchronization when online.',
-        },
-      ],
-      dataCollected: {
-        personal: ['Practitioner Name', 'Doctor Phone Number', 'Clinic Address', 'Patient Demographic Records (Name, Age, Contact)'],
-        technical: ['Device Identifier', 'Database Schema Version'],
-        transactional: ['Appointment Schedules', 'Consultation Timestamps', 'Fee Collection Notes'],
-        sensitive: [
-          'Patient Clinical Notes, Diagnoses, and Digital Prescriptions (Classified as Sensitive Personal Data / Health Information)',
-        ],
-      },
-      localDataProcessing: [
-        '100% offline-first patient record database stored in encrypted local SQLite (sqflite) database on device',
-        'Local PDF generation engine creating printable digital prescription documents without cloud dependency',
-        'Timestamp-based conflict resolution algorithms for seamless cloud sync upon network recovery',
-      ],
-      externalTransmission: [
-        'Bidirectional REST sync with end-to-end encryption when network connectivity is restored',
-        'SMS OTP verification via Firebase Phone Authentication',
-      ],
-      analyticsSdk: ['None (Zero analytics SDKs tracking patient health records; minimal diagnostic error logs only)'],
-      crashReportingSdk: ['Standard Android System Exception Logger'],
-      advertisingSdk: ['None (0 third-party advertising SDKs integrated)'],
-      thirdPartyServices: ['Google Firebase Phone Auth (Practitioner verification only)'],
-      dataRetention:
-        'Clinical and patient records are maintained in compliance with applicable national medical record retention requirements. Local SQLite database persists until manually wiped or uninstalled by the practitioner.',
-      dataDeletion:
-        'Doctors and clinic administrators have sovereign ability to delete individual patient records or wipe clinic data directly through the local application database settings.',
-      verificationStatus: 'VERIFIED_CODEBASE_ARCHITECTURE',
-      verificationNotes:
-        'Verified against Layered Offline-First Architecture, Provider with ChangeNotifier, and sqflite relational persistence layer.',
-    },
-    {
-      id: 'app-portfolio-web',
-      name: 'FuzailVerse Web Portfolio Platform',
-      category: 'Web Portfolio & Client Terminal',
-      platform: ['Web (Universal Browser)'],
-      purpose:
-        'Official engineering portfolio, technical architecture showcase, and client consultation dispatch terminal hosted at https://fuzailverse.pages.dev/.',
-      operationalContext:
-        'Engineered, owned, and operated directly by Mohammad Fuzail. Deployed globally via Cloudflare Pages edge network.',
-      permissions: [
-        {
-          name: 'Browser Local Storage',
-          level: 'Normal',
-          purpose: 'Persisting client-side visual theme preference (light, dark, or darkest/Gotham mode).',
-        },
-      ],
-      dataCollected: {
-        personal: ['Voluntarily submitted inquiry details: Name, email address, message body sent via email dispatch'],
-        technical: ['Edge server access logs recorded automatically by Cloudflare: IP address, user agent, requested URL'],
-        transactional: ['None'],
-        sensitive: ['None'],
-      },
-      localDataProcessing: [
-        'Browser localStorage item ("portfolio-theme") storing selected visual mode',
-        'Client-side React Router executing single-page application route transitions',
-      ],
-      externalTransmission: [
-        'Direct email dispatch via client mailto: protocol to mohdfuzail.dev@gmail.com',
-        'Zero tracking pixels, zero marketing cookies, zero third-party fonts or trackers loaded outside trusted CDNs',
-      ],
-      analyticsSdk: ['None (Zero third-party tracking scripts or cookie analytics embedded on website)'],
-      crashReportingSdk: ['None'],
-      advertisingSdk: ['None (0 advertising scripts)'],
-      thirdPartyServices: ['Cloudflare Pages (Global edge hosting and DDoS protection)'],
-      dataRetention:
-        'Consultation inquiries retained in email inbox for up to 24 months to facilitate project follow-up.',
-      dataDeletion:
-        'Email mohdfuzail.dev@gmail.com with subject "Purge Web Inquiry" to delete prior consultation correspondence.',
-      verificationStatus: 'VERIFIED_CODEBASE_ARCHITECTURE',
-      verificationNotes:
-        'Verified directly against Vite + React + Tailwind + Cloudflare Pages production deployment configuration.',
     },
   ],
 };
 
-export const termsConditionsData: TermsConditionsData = {
+export const termsConditionsData = {
   metadata: {
     title: 'Terms & Conditions',
-    documentCode: 'FV-LEGAL-TC-2026',
-    version: '2.4.0',
-    effectiveDate: 'October 31, 2026',
-    lastUpdated: 'October 31, 2026',
+    subtitle: 'General terms for FuzailVerse apps and digital services',
+    effectiveDate: '31 October 2026',
+    lastUpdated: '31 October 2026',
     contactEmail: 'mohdfuzail.dev@gmail.com',
     websiteUrl: 'https://fuzailverse.pages.dev/terms-and-conditions/',
     operatorName: 'Mohammad Fuzail',
-    operatorRole: 'Lead Mobile Systems Architect',
-    operatorLocation: 'New Delhi, India',
     pdfFileName: 'FuzailVerse_Terms_and_Conditions.pdf',
     pdfPath: '/documents/FuzailVerse_Terms_and_Conditions.pdf',
   },
-  intro: {
-    badge: 'LEGAL SPECIFICATION // TERMS OF SERVICE // OPERATIONAL PARAMETERS',
-    headline: 'Standard Terms of Service and Software Licensing Agreement',
-    summary:
-      'These Terms and Conditions constitute a legally binding agreement between you and Mohammad Fuzail ("Operator", "FuzailVerse") governing your access to and use of the FuzailVerse web platform and all associated mobile applications, software architectures, and digital services.',
-  },
+  notice:
+    'Confirm the operator\'s legal details, governing law, paid-feature terms and app-specific requirements. This document is a general starting point and is not legal advice.',
   sections: [
     {
-      id: 'acceptance-of-terms',
-      number: '01',
-      title: 'Introduction and Acceptance of Terms',
-      summary: 'Binding agreement upon accessing web or mobile platforms',
+      id: 'agreement-and-scope',
+      number: '1',
+      title: 'Agreement and scope',
       paragraphs: [
-        'By browsing the website https://fuzailverse.pages.dev/, downloading, installing, registering for, or utilizing any mobile application engineered, published, or maintained under the FuzailVerse umbrella, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions ("Terms") and our Privacy Policy.',
-        'If you do not agree with any provision set forth herein, you must immediately refrain from accessing the website, cease using our software, and uninstall all FuzailVerse application packages from your devices.',
+        'These Terms & Conditions (“Terms”) apply to mobile applications, websites and related digital services published or operated under the FuzailVerse name (“Services”). By downloading, accessing or using a Service, you agree to these Terms. If you do not agree, do not use that Service.',
+        'Some Services may have additional terms, purchase conditions or feature-specific rules. Those additional terms apply alongside these Terms and prevail where they expressly address a specific feature.',
       ],
     },
     {
-      id: 'operator-identity',
-      number: '02',
-      title: 'Operator Identity and Legal Status Confirmation',
-      summary: 'Clear identification of the independent software engineering enterprise',
+      id: 'eligibility-and-lawful-use',
+      number: '2',
+      title: 'Eligibility and lawful use',
       paragraphs: [
-        'FuzailVerse is an independent proprietary mobile systems architecture enterprise operated by Mohammad Fuzail, Senior Flutter Developer and Mobile Application Specialist, based in New Delhi, India ("Operator").',
-        'FLAG FOR OPERATOR CONFIRMATION: The software and services are provided under the personal professional identity of Mohammad Fuzail. If a formally registered business entity (such as a Private Limited Company or LLP) is incorporated to succeed this enterprise, this agreement will be updated accordingly without affecting your accrued statutory rights.',
+        'You must be legally permitted to use the Service in your location. If you are a minor, you may use a Service only with the involvement and permission of a parent or legal guardian where required by law.',
+        'You agree to use the Services lawfully and not to misuse or disrupt them, interfere with security, attempt unauthorised access, or use a Service to infringe another person\'s rights. Restrictions on reverse engineering apply only to the extent permitted by applicable law.',
       ],
     },
     {
-      id: 'eligibility-and-capacity',
-      number: '03',
-      title: 'Eligibility and Authority to Contract',
-      summary: 'Age thresholds and legal authority requirements',
+      id: 'features-and-availability',
+      number: '3',
+      title: 'Features and availability',
       paragraphs: [
-        'You represent and warrant that you possess the full legal capacity to enter into these Terms:',
-        '1. Age Threshold: You must be at least 18 years of age, or have reached the legal age of majority in your jurisdiction. Where an application is utilized by a minor under applicable law (such as educational or youth loyalty programs), the user represents that a parent or legal guardian has reviewed and consented to these Terms on their behalf.',
-        '2. Commercial Authority: If you access or register for enterprise software (such as BirlaNu Rewards, Parker Loyalty Platform, FieldPulse, or PepsiCo Growth Club) on behalf of a corporation, partnership, or trade entity, you warrant that you are duly authorized to bind that entity to these Terms.',
+        'Features differ by app and may include scanning, generating, storing or sharing content; productivity tools; games; utilities; or other functions described in the relevant store listing or within the app.',
+        'We may add, change, suspend or discontinue features for maintenance, security, legal, technical or business reasons. We do not guarantee that every feature will always be available, compatible with every device or error-free.',
       ],
     },
     {
-      id: 'license-grant-and-restrictions',
-      number: '04',
-      title: 'Limited License Grant and Intellectual Property Rights',
-      summary: 'Revocable, non-exclusive license and strict protection of proprietary code',
+      id: 'user-content-and-responsibility',
+      number: '4',
+      title: 'User content and responsibility',
       paragraphs: [
-        'Subject to your ongoing compliance with these Terms, the Operator grants you a limited, revocable, non-exclusive, non-transferable, non-sublicensable personal license to install and run the executable binary object code of our applications on authorized personal or commercial mobile devices.',
-        'Proprietary Ownership: All software code, graphical user interfaces, animations, custom illustrations, SVG brand marks, architectural diagrams, system designs, documentation, and database schemas are the valuable intellectual property of Mohammad Fuzail and/or client organizations that have commissioned custom software under commercial contract.',
-        'Third-Party Trademarks: Trademarks, logos, and brand assets belonging to commercial clients (including ITC, Spark Minda, BirlaNu, Parker Hannifin, PepsiCo, and TASC) remain the exclusive property of their respective corporate owners and are referenced solely to describe field deployments and operational responsibilities.',
+        'You are responsible for content you enter, create, scan, upload, store or share using a Service and for ensuring that you have the necessary rights and permissions.',
+        'QR codes, barcodes, links, files and other content may lead to third-party websites or services. Review a destination before opening it, downloading content, making a payment or sharing personal information. FuzailVerse does not control third-party content or guarantee its accuracy, safety or availability.',
       ],
     },
     {
-      id: 'user-responsibilities',
-      number: '05',
-      title: 'User Obligations, Account Security, and Device Integrity',
-      summary: 'Safeguarding credentials and preventing unauthorized access',
+      id: 'intellectual-property-and-licence',
+      number: '5',
+      title: 'Intellectual property and licence',
       paragraphs: [
-        'Users are solely responsible for maintaining the operational security of their accounts and devices:',
-        '1. Credential Confidentiality: You are responsible for safeguarding any passwords, SMS OTP codes, or session tokens utilized to access FuzailVerse software. You agree to notify us immediately at mohdfuzail.dev@gmail.com upon discovering any unauthorized access or compromise of your credentials.',
-        '2. Data Accuracy: You warrant that all information submitted during account registration, KYC verification, invoice uploads, or field audits is truthful, current, and complete.',
-        '3. Device Integrity: You must ensure that your host device complies with minimum operating system security standards. Running FuzailVerse software on jailbroken, rooted, or compromised operating systems invalidates warranty assurances and may trigger automated security lockout.',
+        'The Services, including their software, design, branding, text, graphics and other materials, are owned by or licensed to FuzailVerse and are protected by applicable intellectual-property laws.',
+        'Subject to these Terms, you receive a limited, personal, non-exclusive, non-transferable and revocable licence to use the relevant app for its intended purpose. You may not copy, modify, distribute, sell, lease or create derivative works from the Services except where authorised by us or permitted by applicable law.',
       ],
     },
     {
-      id: 'enterprise-role-access',
-      number: '06',
-      title: 'Enterprise Role-Based Access and Multi-Tier Permissions',
-      summary: 'Granular permissions for sales reps, distributors, and clinic staff',
+      id: 'third-party-services',
+      number: '6',
+      title: 'Third-party services',
       paragraphs: [
-        'Certain FuzailVerse software implements multi-tier Role-Based Access Control (RBAC). For example, Parker Loyalty Platform supports 4 distinct user tiers (Field Sales Reps, Distributors, Retail Partners, Administrators); FieldPulse restricts supervisory dashboards to authorized territory managers.',
-        'You agree strictly to access only the modules, dashboard views, and operational workflows authorized for your designated role. Any attempt to circumvent role restrictions, forge authorization headers, or access administrative portals constitutes a material breach resulting in immediate termination and potential civil or criminal liability.',
+        'A Service may integrate or link to third-party services, SDKs, websites, payment providers, analytics or advertising providers. Those services are governed by their own terms and privacy policies. We are not responsible for third-party services that we do not control.',
       ],
     },
     {
-      id: 'loyalty-points-and-rewards',
-      number: '07',
-      title: 'Loyalty Points, Rewards Ledgers, and Incentive Governance',
-      summary: 'Operational parameters for points accumulation, redemption, and anti-fraud auditing',
+      id: 'advertising-and-purchases',
+      number: '7',
+      title: 'Advertising and purchases',
       paragraphs: [
-        'Applications featuring points ledgers and reward redemptions (including BirlaNu Rewards, Parker Loyalty, Classmate Star Club, and PepsiCo Growth Club) operate under defined operational parameters:',
-        '1. No Inherent Monetary Value: Loyalty points accrued within applications represent promotional engagement units and possess no independent cash or property value outside authorized redemption workflows.',
-        '2. Fraud Auditing & Revocation: The Operator and sponsoring enterprise clients maintain the absolute right to audit all transactions. Submissions involving duplicate QR scans, counterfeit invoices, altered purchase receipts, or collusive transactions will result in the immediate forfeiture of accumulated points and permanent account termination.',
-        '3. Redemption Fulfillment: Cash disbursements (via UPI or Direct Bank Transfer) or gift card redemptions are subject to successful KYC verification and bank processing windows. The Operator is not liable for disbursement delays caused by third-party banking rails, invalid IFSC details, or recipient account restrictions.',
+        'Some apps or versions may display advertising; others may not. Where advertising is present, it should be presented in accordance with applicable law and platform policies. Availability and format may vary by app, region and release.',
+        'Any paid feature, subscription or in-app purchase will be presented with its price, billing period and applicable conditions before purchase. Purchases made through an app store are also subject to that store\'s payment, cancellation and refund rules.',
       ],
     },
     {
-      id: 'prohibited-activities',
-      number: '08',
-      title: 'Prohibited Activities and Security Safeguards',
-      summary: 'Explicit prohibition of reverse engineering, spoofing, and tampering',
+      id: 'disclaimers',
+      number: '8',
+      title: 'Disclaimers',
       paragraphs: [
-        'When interacting with our web platform or applications, you expressly agree NOT to:',
-      ],
-      bulletPoints: [
-        'Reverse Engineer: Decompile, disassemble, reverse engineer, or attempt to derive source code from executable application binaries or byte code.',
-        'GPS Spoofing & Mock Locations: Utilize mock-location mock providers, fake GPS software, or proxy coordinates to spoof attendance, store visits, or audit locations in field applications such as FieldPulse.',
-        'Automated Scraping: Deploy bots, scrapers, crawlers, or automated scripts to harvest catalog SKUs, pricing, contact details, or user records.',
-        'Fraudulent Submissions: Upload forged invoices, manipulated documents, misleading photos, or stolen identification credentials.',
-        'Infrastructure Tampering: Interfere with, overburden, compromise, or bypass any security control, rate limit, or firewall defending our servers.',
-        'Malicious Payloads: Inject viruses, Trojan horses, worms, logic bombs, or other technologically harmful components into our applications or backend APIs.',
-      ],
-    },
-    {
-      id: 'third-party-integrations',
-      number: '09',
-      title: 'Third-Party Services, Stores, and External Hyperlinks',
-      summary: 'Disclaimers regarding app stores, payment gateways, and external APIs',
-      paragraphs: [
-        'FuzailVerse software interfaces with third-party platforms, including Google Play, Apple App Store, Firebase, Razorpay, and enterprise ERP backends. The availability, pricing, terms of service, and privacy policies of third-party platforms govern your relationship with those entities.',
-        'The Operator does not endorse, control, or assume liability for third-party websites, external APIs, or banking gateways. Interacting with third-party services is conducted entirely at your own risk.',
-      ],
-    },
-    {
-      id: 'service-availability-and-updates',
-      number: '10',
-      title: 'Application Availability, Updates, and Maintenance',
-      summary: 'Continuous delivery, feature deprecation, and offline operation',
-      paragraphs: [
-        'We continuously optimize, enhance, and update our software. We reserve the right to issue mandatory application updates via the Google Play Store or Apple App Store to patch security vulnerabilities, enhance features, or resolve operational faults.',
-        'While our offline-first applications (such as InClinic Assistant, DIGISPARK, and FieldPulse) are designed to function without internet connectivity, cloud synchronization and real-time ledger updates require reliable network access.',
-        'We do not guarantee that software or services will remain uninterrupted, completely error-free, or compatible with obsolete operating system versions that have reached end-of-life support by Google or Apple.',
-      ],
-    },
-    {
-      id: 'service-suspension-and-termination',
-      number: '11',
-      title: 'Service Suspension, Deactivation, and Termination',
-      summary: 'Right to terminate access for breach, fraud, or operational discontinuation',
-      paragraphs: [
-        'The Operator and sponsoring enterprise partners reserve the right, in their sole discretion, to suspend, throttle, or terminate your access to any application, points ledger, or service at any time, with or without prior notice, upon:',
-        '1. Any material breach of these Terms or associated application policies;',
-        '2. Suspected fraudulent, abusive, or collusive transactional behavior;',
-        '3. Official request or instruction by a sponsoring enterprise client, commercial partner, or law enforcement agency;',
-        '4. Discontinuation or commercial decommissioning of the specific application or portfolio service.',
-        'Upon termination, all licenses granted under these Terms immediately cease, and you must delete the application from your device.',
-      ],
-    },
-    {
-      id: 'disclaimers-of-warranties',
-      number: '12',
-      title: 'Disclaimers of Warranties ("As-Is" and "As-Available")',
-      summary: 'No warranties of merchantability or uninterrupted perfection',
-      paragraphs: [
-        'TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE FUZAILVERSE WEB PLATFORM, APPLICATIONS, ARCHITECTURAL DESIGNS, AND SERVICES ARE PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITH ALL FAULTS AND DEFECTS.',
-        'MOHAMMAD FUZAIL AND ASSOCIATED PARTNERS EXPRESSLY DISCLAIM ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, ACCURACY, NON-INFRINGEMENT, AND FREEDOM FROM COMPUTER VIRUSES OR OTHER HARMFUL CODE.',
-        'NO ADVICE OR INFORMATION, WHETHER ORAL OR WRITTEN, OBTAINED BY YOU FROM THE OPERATOR OR THROUGH OUR SOFTWARE SHALL CREATE ANY WARRANTY NOT EXPRESSLY STATED HEREIN.',
+        'To the maximum extent permitted by law, the Services are provided “as is” and “as available”, without warranties that cannot legally be excluded. We do not warrant uninterrupted operation, compatibility with every device, error-free results, or that content produced or scanned by an app will be accurate or suitable for a particular purpose.',
+        'An app that scans or interprets codes is a convenience tool. You are responsible for checking destinations and independently verifying important information before acting on it.',
       ],
     },
     {
       id: 'limitation-of-liability',
-      number: '13',
-      title: 'Limitation of Liability',
-      summary: 'Exclusion of consequential damages to maximum extent permissible',
+      number: '9',
+      title: 'Limitation of liability',
       paragraphs: [
-        'TO THE MAXIMUM EXTENT PERMITTED UNDER APPLICABLE LAW, IN NO EVENT SHALL MOHAMMAD FUZAIL, FUZAILVERSE, ITS AFFILIATES, AGENTS, CONTRACTORS, OR CLIENT SPONSORS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, PUNITIVE, OR EXEMPLARY DAMAGES WHATSOEVER.',
-        'THIS EXCLUSION INCLUDES, WITHOUT LIMITATION, DAMAGES FOR LOSS OF PROFITS, LOSS OF REVENUE, LOSS OF GOODWILL, LOSS OF DATA, DEVICE MALFUNCTION, WORK STOPPAGE, OR LOSS OF BUSINESS REPUTATION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR INABILITY TO USE OUR APPLICATIONS, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.',
-        'IN JURISDICTIONS WHERE THE EXCLUSION OR LIMITATION OF LIABILITY FOR CONSEQUENTIAL OR INCIDENTAL DAMAGES IS RESTRICTED BY LAW, OUR TOTAL AGGREGATE LIABILITY ARISING FROM OR RELATED TO THESE TERMS SHALL NOT EXCEED THE TOTAL AMOUNT ACTUALLY PAID BY YOU TO FUZAILVERSE FOR ACCESS TO THE SPECIFIC SOFTWARE IN THE PRECEDING TWELVE (12) MONTHS, OR ONE THOUSAND INDIAN RUPEES (INR 1,000), WHICHEVER IS LESS.',
+        'To the maximum extent permitted by applicable law, FuzailVerse will not be liable for indirect, incidental, special, consequential or punitive loss, or loss of data, profits or goodwill arising from use of a Service.',
+        'Nothing in these Terms excludes or limits liability that cannot be excluded or limited under applicable law. Where liability may legally be limited, it is limited to the minimum extent permitted by law.',
       ],
     },
     {
-      id: 'indemnification',
-      number: '14',
-      title: 'User Indemnification',
-      summary: 'Protection of Operator against third-party claims arising from user violation',
+      id: 'suspension-and-termination',
+      number: '10',
+      title: 'Suspension and termination',
       paragraphs: [
-        'You agree to defend, indemnify, and hold harmless Mohammad Fuzail, FuzailVerse, and their respective officers, agents, contractors, and client partners from and against any claims, liabilities, damages, losses, costs, expenses, or fees (including reasonable legal fees) resulting from:',
-        '1. Your violation or breach of these Terms or any applicable statutory law;',
-        '2. Any fraudulent, deceptive, or misleading documentation, invoices, or KYC credentials submitted by you;',
-        '3. Your infringement of any third-party intellectual property or privacy right;',
-        '4. Your willful misconduct, negligence, or unauthorized tampering with software infrastructure.',
+        'We may suspend or restrict access where reasonably necessary to protect users, the Services or our systems, address misuse, or comply with law. You may stop using a Service at any time by uninstalling it or ceasing access. Terms that by their nature should continue after termination will remain in effect.',
       ],
     },
     {
-      id: 'governing-law-and-disputes',
-      number: '15',
-      title: 'Governing Law, Jurisdiction, and Dispute Resolution',
-      summary: 'Jurisdiction of the courts of New Delhi, India with informal resolution process',
+      id: 'changes-to-terms',
+      number: '11',
+      title: 'Changes to these Terms',
       paragraphs: [
-        'FLAG FOR OPERATOR CONFIRMATION: These Terms and any dispute or claim arising out of or related to them shall be governed by and construed in accordance with the substantive laws of the Republic of India, without giving effect to any principles of conflict of laws.',
-        'Informal Resolution: Prior to initiating formal litigation, the parties agree to seek amicable resolution through good-faith technical consultation. Any notice of dispute must be transmitted to mohdfuzail.dev@gmail.com.',
-        'Exclusive Jurisdiction: If informal discussions fail to resolve the controversy within forty-five (45) business days, you irrevocably consent and submit to the exclusive personal jurisdiction and venue of the competent courts located in New Delhi, India.',
+        'We may revise these Terms from time to time. We will publish the updated version and revise the “Last updated” date. Continued use after an update takes effect means you accept the revised Terms to the extent permitted by law.',
       ],
     },
     {
-      id: 'severability-and-waiver',
-      number: '16',
-      title: 'Severability, Entire Agreement, and Non-Waiver',
-      summary: 'Legal enforceability of remaining provisions if any clause is voided',
+      id: 'governing-law-and-contact',
+      number: '12',
+      title: 'Governing law and contact',
       paragraphs: [
-        'Severability: If any provision of these Terms is determined by a court of competent jurisdiction to be unlawful, void, or unenforceable, that provision shall be enforced to the maximum extent permissible, and the remaining provisions shall continue in full force and effect.',
-        'Entire Agreement: These Terms, together with our Privacy Policy and any application-specific end-user agreements, constitute the entire legal agreement between you and the Operator concerning our software systems.',
-        'Non-Waiver: No failure or delay by the Operator in exercising any right, power, or remedy under these Terms shall operate as a waiver thereof, nor shall any single or partial exercise preclude any other or further exercise of any right.',
-      ],
-    },
-    {
-      id: 'modifications-to-terms',
-      number: '17',
-      title: 'Modifications and Amendments to Terms',
-      summary: 'Procedures for updating operational parameters',
-      paragraphs: [
-        'The Operator reserves the right to revise or amend these Terms at any time to reflect changing legal mandates, architectural advancements, or commercial requirements. Revisions become effective immediately upon being published at https://fuzailverse.pages.dev/terms-and-conditions/.',
-        'Your continued access to the website or applications after updated Terms have been posted constitutes your binding acceptance of the revised provisions.',
-      ],
-    },
-    {
-      id: 'contact-and-legal-notices',
-      number: '18',
-      title: 'Legal Inquiries and Contact Protocols',
-      summary: 'Official channels for legal service, licensing, and compliance correspondence',
-      paragraphs: [
-        'For questions, licensing requests, commercial authorizations, or formal legal correspondence regarding these Terms, contact our engineering lead directly:',
-        'Email: mohdfuzail.dev@gmail.com',
-        'Official Domain: https://fuzailverse.pages.dev/terms-and-conditions/',
-        'Operator: Mohammad Fuzail, Lead Mobile Systems Architect',
-        'Physical Base: New Delhi, India',
+        'These Terms are subject to applicable laws. The operator should confirm the appropriate governing law, jurisdiction and dispute-resolution provisions based on its place of establishment and the markets in which the Services are offered. Do not assume a legal entity or jurisdiction that has not been confirmed.',
+        'Questions about these Terms: mohdfuzail.dev@gmail.com (FuzailVerse).',
       ],
     },
   ],
 };
-
