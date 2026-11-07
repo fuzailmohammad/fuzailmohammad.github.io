@@ -79,6 +79,14 @@ function generateQRScannerFallbackHtml() {
   return html;
 }
 
+function escapeHtml(str) {
+  if (typeof str !== 'string') return str;
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 function generateCalcVerseFallbackHtml() {
   const dataPath = path.join(rootDir, 'src', 'data', 'calcverseLegalData.json');
   if (!fs.existsSync(dataPath)) return '';
@@ -86,26 +94,26 @@ function generateCalcVerseFallbackHtml() {
   let html = `<main style="max-width: 800px; margin: 40px auto; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #e2e8f0; background-color: #0b0f19;">`;
   html += `<header style="margin-bottom: 30px; border-bottom: 1px solid #1e293b; padding-bottom: 20px;">`;
   html += `<p style="font-size: 12px; color: #facc15; font-family: monospace; text-transform: uppercase;">Android Application Privacy Policy</p>`;
-  html += `<h1 style="font-size: 32px; margin: 8px 0; color: #f8fafc;">${data.metadata.appName} — ${data.metadata.title}</h1>`;
-  html += `<p style="font-size: 14px; color: #94a3b8;">${data.metadata.subtitle}</p>`;
-  html += `<p style="font-size: 12px; color: #94a3b8; font-family: monospace;">Application ID: <strong style="color: #f8fafc;">${data.metadata.packageName}</strong> | Effective: ${data.metadata.effectiveDate} | Last Updated: ${data.metadata.lastUpdated}</p>`;
-  html += `<p style="font-size: 12px; color: #94a3b8;">Privacy Contact: <a href="mailto:${data.metadata.contactEmail}" style="color: #facc15;">${data.metadata.contactEmail}</a></p>`;
+  html += `<h1 style="font-size: 32px; margin: 8px 0; color: #f8fafc;">${escapeHtml(data.metadata.appName)} — ${escapeHtml(data.metadata.title)}</h1>`;
+  html += `<p style="font-size: 14px; color: #94a3b8;">${escapeHtml(data.metadata.subtitle)}</p>`;
+  html += `<p style="font-size: 12px; color: #94a3b8; font-family: monospace;">Application ID: <strong style="color: #f8fafc;">${escapeHtml(data.metadata.packageName)}</strong> | Effective: ${escapeHtml(data.metadata.effectiveDate)} | Last Updated: ${escapeHtml(data.metadata.lastUpdated)}</p>`;
+  html += `<p style="font-size: 12px; color: #94a3b8;">Privacy Contact: <a href="mailto:${escapeHtml(data.metadata.contactEmail)}" style="color: #facc15;">${escapeHtml(data.metadata.contactEmail)}</a></p>`;
   html += `</header>`;
 
   html += `<div style="background: #111827; border-left: 4px solid #facc15; padding: 12px 16px; margin-bottom: 30px; font-size: 13px; color: #cbd5e1;">`;
-  html += `<strong>Notice:</strong> ${data.notice}`;
+  html += `<strong>Notice:</strong> ${escapeHtml(data.notice)}`;
   html += `</div>`;
 
   for (const section of data.sections) {
     html += `<section style="margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid #1e293b;">`;
-    html += `<h2 style="font-size: 20px; color: #f8fafc; margin-bottom: 12px;"><span style="color: #facc15; font-family: monospace;">${section.number}.</span> ${section.title}</h2>`;
+    html += `<h2 style="font-size: 20px; color: #f8fafc; margin-bottom: 12px;"><span style="color: #facc15; font-family: monospace;">${section.number}.</span> ${escapeHtml(section.title)}</h2>`;
     for (const p of section.paragraphs) {
-      html += `<p style="font-size: 14px; color: #cbd5e1; margin-bottom: 10px;">${p}</p>`;
+      html += `<p style="font-size: 14px; color: #cbd5e1; margin-bottom: 10px;">${escapeHtml(p)}</p>`;
     }
     if (section.listItems && section.listItems.length > 0) {
       html += `<ul style="font-size: 14px; color: #cbd5e1; margin: 10px 0 10px 20px;">`;
       for (const item of section.listItems) {
-        html += `<li style="margin-bottom: 6px;">${item}</li>`;
+        html += `<li style="margin-bottom: 6px;">${escapeHtml(item)}</li>`;
       }
       html += `</ul>`;
     }
@@ -114,7 +122,7 @@ function generateCalcVerseFallbackHtml() {
       html += `<table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">`;
       html += `<thead><tr style="border-bottom: 1px solid #334155; background: #1e293b;">`;
       for (const h of section.table.headers) {
-        html += `<th style="padding: 8px 12px; color: #facc15;">${h}</th>`;
+        html += `<th style="padding: 8px 12px; color: #facc15;">${escapeHtml(h)}</th>`;
       }
       html += `</tr></thead><tbody>`;
       for (const row of section.table.rows) {
@@ -128,7 +136,7 @@ function generateCalcVerseFallbackHtml() {
               : i === 1 && row[i].startsWith('Signature')
               ? '#38bdf8'
               : '#cbd5e1';
-          html += `<td style="padding: 8px 12px; color: ${color}; white-space: pre-line;">${row[i]}</td>`;
+          html += `<td style="padding: 8px 12px; color: ${color}; white-space: pre-line;">${escapeHtml(row[i])}</td>`;
         }
         html += `</tr>`;
       }
@@ -138,8 +146,8 @@ function generateCalcVerseFallbackHtml() {
   }
 
   html += `<footer style="margin-top: 40px; padding: 20px; background: #111827; border-radius: 8px; font-size: 13px; color: #94a3b8;">`;
-  html += `<p>Questions or requests? Contact <a href="mailto:${data.metadata.contactEmail}" style="color: #facc15;">${data.metadata.contactEmail}</a></p>`;
-  html += `<p>© ${new Date().getFullYear()} ${data.metadata.operatorName} (${data.metadata.developerBrand}). All rights reserved.</p>`;
+  html += `<p>Questions or requests? Contact <a href="mailto:${escapeHtml(data.metadata.contactEmail)}" style="color: #facc15;">${escapeHtml(data.metadata.contactEmail)}</a></p>`;
+  html += `<p>© ${new Date().getFullYear()} ${escapeHtml(data.metadata.operatorName)} (${escapeHtml(data.metadata.developerBrand)}). All rights reserved.</p>`;
   html += `</footer>`;
   html += `</main>`;
   return html;
