@@ -237,7 +237,7 @@ export const CalcVersePrivacyPolicy: React.FC = () => {
                             {row.map((cell, cIdx) => (
                               <td
                                 key={cIdx}
-                                className={`p-3 ${
+                                className={`p-3 whitespace-pre-line ${
                                   cIdx === 0
                                     ? 'font-medium text-bat-offwhite font-mono text-xs break-all sm:break-normal'
                                     : cIdx === 1 && cell.startsWith('Normal')

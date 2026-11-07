@@ -62,7 +62,7 @@ function generateQRScannerFallbackHtml() {
               : i === 1 && (row[i].startsWith('YES') || row[i].startsWith('AUTOMATIC'))
               ? '#facc15'
               : '#cbd5e1';
-          html += `<td style="padding: 8px 12px; color: ${color};">${row[i]}</td>`;
+          html += `<td style="padding: 8px 12px; color: ${color}; white-space: pre-line;">${row[i]}</td>`;
         }
         html += `</tr>`;
       }
@@ -128,7 +128,7 @@ function generateCalcVerseFallbackHtml() {
               : i === 1 && row[i].startsWith('Signature')
               ? '#38bdf8'
               : '#cbd5e1';
-          html += `<td style="padding: 8px 12px; color: ${color};">${row[i]}</td>`;
+          html += `<td style="padding: 8px 12px; color: ${color}; white-space: pre-line;">${row[i]}</td>`;
         }
         html += `</tr>`;
       }

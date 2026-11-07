@@ -122,7 +122,7 @@
         "Individual Deletion: Delete any individual calculation record immediately by tapping its delete icon.",
         "Clear All History: Purge the entire calculation history database in a single action.",
         "Toggle History Display: In Settings, you can disable the \"Show History\" preference at any time.",
-        "Android Auto Backup Disabled: In AndroidManifest.xml, android:allowBackup is explicitly set to \"false\". The application completely opts out of Android Cloud Backup to Google Drive and device-to-device transfer. Your calculation history and preferences remain strictly confined to the private sandbox directory on your physical device and are never backed up to cloud servers."
+        "Android Cloud Backup Configuration: In AndroidManifest.xml, android:allowBackup is explicitly configured as \"false\" alongside custom empty <data-extraction-rules> and <full-backup-content> XML configurations. This setup instructs the standard Android OS to exclude the app's local Room database and DataStore preferences from Google Drive cloud backups and system ADB backups. Note that while standard cloud backup is disabled, physical device-to-device migration or proprietary OEM hardware transfer tools (such as manufacturer device-clone utilities) operate outside cloud backup rules and may transfer on-device sandbox files during direct physical device clones. Users wishing to prevent transfer during device migration should purge their history and clear application storage prior to transferring devices."
       ]
     },
     {
@@ -152,11 +152,12 @@
       "number": "11",
       "title": "Firebase Analytics and Usage Telemetry",
       "paragraphs": [
-        "CalcVerse integrates Google Firebase Analytics (com.google.firebase:firebase-analytics:23.2.0) to understand application adoption, feature engagement, and overall software stability in aggregate.",
-        "Automatically Collected Telemetry: Firebase Analytics automatically records basic technical metrics, including app open events, session durations, device model, operating system version, app version, language preference, and coarse country/region location derived from IP address by Google servers.",
+        "CalcVerse integrates Google Firebase Analytics (com.google.firebase:firebase-analytics:23.2.0) to evaluate application adoption, feature engagement, and overall software stability in aggregate.",
+        "Automatically Collected Telemetry: Firebase Analytics automatically records technical metrics, including app open events, session durations, device model, operating system version, app version, language preference, and coarse geographic region derived by Google from the device's network IP address.",
         "Source Code Audit: The CalcVerse Kotlin source code does not log any custom calculation expressions, mathematical results, financial values, biometric metrics, or personal identifiers to Firebase Analytics.",
-        "Advertising ID Collection Disabled: In AndroidManifest.xml, the application explicitly declares: <meta-data android:name=\"google_analytics_adid_collection_enabled\" android:value=\"false\" />. This configuration turns off Google Advertising ID (AAID) collection, ensuring analytics telemetry cannot be tied to an advertising profile.",
-        "Data Handling: Telemetry is transmitted securely via HTTPS/TLS to Google infrastructure and is processed in accordance with Google’s Privacy Policy. Data is aggregated and cannot be used by FuzailVerse to identify individual users."
+        "Advertising ID Collection Disabled: In AndroidManifest.xml, the application explicitly declares: <meta-data android:name=\"google_analytics_adid_collection_enabled\" android:value=\"false\" />. This configuration turns off Google Advertising ID (AAID) collection by the Firebase Analytics SDK, preventing analytics telemetry from being linked to a personalized advertising profile.",
+        "Pseudonymous Identifiers & Attribution Notice: While Google Advertising ID collection is disabled, Firebase Analytics automatically assigns a randomized, pseudonymous Firebase Installation ID (app-instance identifier) to maintain session continuity and aggregate reporting across app launches. We do not claim that telemetry is completely anonymous or untracked; rather, it is pseudonymized and disassociated from personal identity. Furthermore, store install attribution mechanisms (such as the Google Play Install Referrer) and Android Privacy Sandbox attribution APIs remain integrated at the platform library level to measure Google Play install channels.",
+        "Data Handling & Processing: Telemetry is transmitted securely via HTTPS/TLS to Google infrastructure and is processed in accordance with Google’s Privacy Policy. FuzailVerse receives only aggregate statistical reports and does not receive or maintain individual user identifiers."
       ]
     },
     {
@@ -164,11 +165,15 @@
       "number": "12",
       "title": "Firebase Crashlytics and Performance Monitoring",
       "paragraphs": [
-        "To ensure application reliability across diverse Android hardware, CalcVerse incorporates Firebase Crashlytics (com.google.firebase:firebase-crashlytics:20.0.6) and Firebase Performance Monitoring (com.google.firebase:firebase-perf:22.0.5).",
-        "Crash Diagnostics: In the event of an unexpected crash or application freeze, Crashlytics automatically collects technical diagnostic data, including stack traces, exception messages, device manufacturer and model, operating system version, memory status, and application build version at the time of failure.",
-        "Performance Metrics: Firebase Performance Monitoring measures app startup time and screen transition rendering to diagnose slow user experiences.",
-        "Zero Personal Identifiers: Source code inspection verifies that CalcVerse sets no custom user IDs, email keys, or calculation values in Crashlytics reports.",
-        "Data Retention: Crash diagnostic reports are transmitted securely over TLS to Google servers and retained in accordance with standard Firebase retention periods (up to 90 days for crash logs) before automatic deletion."
+        "To ensure software reliability and high performance across diverse Android devices, CalcVerse incorporates Firebase Crashlytics (com.google.firebase:firebase-crashlytics:20.0.6) and Firebase Performance Monitoring (com.google.firebase:firebase-perf:22.0.5).",
+        "Crash Diagnostics: In the event of an unexpected crash or application freeze, Crashlytics automatically collects technical diagnostic data, including stack traces, exception messages, device manufacturer and model, operating system version, device memory/storage status, and application build version at the moment of failure. Source code inspection confirms that CalcVerse configures no custom user IDs, email tags, or calculation parameters in Crashlytics reports.",
+        "Automated Performance Monitoring Instrumentation: The Firebase Performance Monitoring Gradle plugin and SDK automatically instrument the application at compile time. This telemetry includes:"
+      ],
+      "listItems": [
+        "App Startup Traces: Measuring the duration from process launch until initial application frames render.",
+        "Screen Rendering Traces: Tracking slow-rendering and frozen frames across Jetpack Compose UI transitions.",
+        "App Lifecycle Traces: Measuring the duration of time the application spends active in the foreground versus background.",
+        "Automatic Network Request Monitoring: The Performance SDK automatically instruments standard network client libraries (such as OkHttp and HttpURLConnection) to record the latency, payload size, response code, and destination domain of outbound network requests initiated by active SDKs (such as Firebase telemetry uploads). CalcVerse's own application code contains no custom network clients, but underlying SDK communications are automatically measured for latency and failure rates."
       ]
     },
     {
@@ -191,60 +196,60 @@
       "number": "14",
       "title": "Android Permissions Summary",
       "paragraphs": [
-        "The following table represents an exhaustive audit of all Android permissions declared in the verified release variant merged manifest (AndroidManifest.xml) of CalcVerse. The application declares zero hardware or sensitive runtime permissions for its core calculation features."
+        "The following table represents an exhaustive audit of all Android permissions declared in the verified release variant merged manifest (AndroidManifest.xml) of CalcVerse. The application declares zero hardware or sensitive runtime permissions for its core calculation features. Merged permissions originate exclusively from integrated system libraries and Google SDKs."
       ],
       "table": {
-        "headers": ["Permission", "Type / Level", "Technical Purpose & Usage"],
+        "headers": ["Permission", "Type / Level", "Originating Component & Actual Release Usage"],
         "rows": [
           [
             "android.permission.INTERNET",
             "Normal (Install-Time)",
-            "Enables Firebase SDKs (Crashlytics, Analytics, Performance Monitoring) to securely transmit diagnostic error logs and aggregate telemetry over HTTPS. Not used for calculation features."
+            "Originating Component: Firebase SDKs (Crashlytics, Analytics, Performance Monitoring) and Google Play Services.\nUsage: Used exclusively to transmit diagnostic error logs and aggregate telemetry over HTTPS. CalcVerse calculation features operate offline and do not use internet access."
           ],
           [
             "android.permission.ACCESS_NETWORK_STATE",
             "Normal (Install-Time)",
-            "Allows Firebase SDKs to detect active network connectivity before attempting to transmit crash reports and analytics events."
+            "Originating Component: Firebase SDKs and transport layers (com.google.android.datatransport).\nUsage: Allows Firebase SDKs to detect active network connectivity before attempting to transmit diagnostic logs and performance metrics."
           ],
           [
             "android.permission.POST_NOTIFICATIONS",
             "Runtime (API 33+)",
-            "Merged by the Firebase Cloud Messaging library (firebase-messaging). CalcVerse does not trigger notification permission prompts or display marketing notifications in this release."
+            "Originating Component: Firebase Cloud Messaging (com.google.firebase:firebase-messaging:25.1.0).\nUsage: Merged by the FCM library. In this release, CalcVerse contains no application code requesting this permission at runtime, displays no permission prompts, and delivers no push or marketing notifications."
           ],
           [
             "android.permission.WAKE_LOCK",
             "Normal (Install-Time)",
-            "Merged by Firebase Messaging / Play Services to allow transient CPU execution during internal background message dispatch without sleep interruptions."
+            "Originating Component: Firebase Messaging / Google Play Services.\nUsage: Library-level plumbing to allow transient background CPU execution during internal message dispatch without sleep interruptions."
           ],
           [
             "com.google.android.c2dm.permission.RECEIVE",
             "Signature / Normal",
-            "Merged by Firebase Messaging to support legacy Google Cloud-to-Device messaging delivery."
+            "Originating Component: Firebase Messaging.\nUsage: Merged by Firebase Messaging to support legacy Google Cloud-to-Device messaging delivery routing."
           ],
           [
             "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE",
             "Normal (Install-Time)",
-            "Merged by Google Play Services / Firebase Analytics to measure install attribution from the Google Play Store."
+            "Originating Component: Google Play Services / Firebase Analytics.\nUsage: Used to receive campaign and install attribution data directly from the Google Play Store upon installation."
           ],
           [
             "com.google.android.gms.permission.AD_ID",
             "Normal (Install-Time)",
-            "Merged by Google Analytics dependencies. Note: Advertising ID collection is explicitly disabled in the manifest via google_analytics_adid_collection_enabled = false."
+            "Originating Component: Google Play Services / Firebase Analytics dependencies.\nUsage: Merged as a transitive dependency. Note: Google Advertising ID collection is explicitly disabled in the manifest via <meta-data android:name=\"google_analytics_adid_collection_enabled\" android:value=\"false\" />."
           ],
           [
             "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
             "Normal (Install-Time)",
-            "Merged by Google Play Services for Android Privacy Sandbox attribution measurement on Android 13+."
+            "Originating Component: Google Play Services.\nUsage: Merged for Android Privacy Sandbox attribution measurement on Android 13+ devices."
           ],
           [
             "android.permission.ACCESS_ADSERVICES_AD_ID",
             "Normal (Install-Time)",
-            "Merged by Google Play Services for Android Privacy Sandbox attribution measurement."
+            "Originating Component: Google Play Services.\nUsage: Merged for Android Privacy Sandbox attribution measurement."
           ],
           [
             "com.fuzailverse.calcverse.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
             "Signature",
-            "Automatically generated by AndroidX Core and Startup libraries to secure internal broadcast receivers against inter-app eavesdropping."
+            "Originating Component: AndroidX Core and Startup libraries.\nUsage: Automatically generated to secure internal app broadcast receivers against inter-app eavesdropping."
           ]
         ]
       }
@@ -258,7 +263,7 @@
       ],
       "listItems": [
         "Personal Identification: We do not collect names, email addresses, phone numbers, home addresses, or physical identity details.",
-        "Geographic Location: We do not request or access GPS location, fine location, coarse location, or cell-tower data.",
+        "Geographic Location (GPS vs. IP-Derived): CalcVerse declares zero Android location permissions (ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, ACCESS_BACKGROUND_LOCATION) and never accesses device GPS, Wi-Fi location sensors, or cellular towers. When third-party SDKs (such as Firebase Analytics) communicate over the network, Google servers receive the device's public IP address, from which Google estimates coarse, regional-level geographical metrics (e.g., country or state/city level). This IP-derived estimation occurs on Google's servers and does not constitute device-level precision location access by CalcVerse.",
         "Camera and Microphone: We do not declare, request, or use camera or microphone permissions.",
         "Photos, Media, and Storage: We do not request broad storage permissions (READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, or READ_MEDIA_IMAGES) and cannot access your photos, videos, or documents.",
         "Health & Medical Records: BMI calculations (height, weight, age, gender) are computed in volatile RAM only; we do not collect, store, or share health records.",
@@ -275,7 +280,7 @@
         "Local Calculation History: Stored in the on-device SQLite database until you delete specific calculations, clear all history via the in-app history controls, or uninstall CalcVerse from your device.",
         "Local Preferences: Retained in the on-device DataStore file until you reset app preferences or uninstall the application.",
         "Android Cloud Backup: Because android:allowBackup=\"false\" is configured, local calculation history and preferences are excluded from Google Drive backups.",
-        "Third-Party Diagnostic Telemetry: Firebase Analytics retains aggregated event data for standard retention windows (typically up to 14 months). Firebase Crashlytics retains crash logs for up to 90 days before automatic deletion by Google. Because diagnostic telemetry is aggregated without personal identifiers, FuzailVerse cannot manually query or delete individual telemetry records.",
+        "Third-Party Telemetry Retention: Data collected by Google Firebase SDKs is governed by Google’s lifecycle retention policies. Crashlytics logs are typically retained by Google for up to 90 days before automated deletion. Firebase Analytics event data is retained according to Google's standard rolling retention schedules (configured for standard aggregation periods, up to 14 months). We do not promise instantaneous or permanent deletion after fixed intervals beyond Google's published lifecycle policies. Because telemetry is pseudonymous and not linked to individual user accounts or email addresses, FuzailVerse possesses no technical mechanism to search, identify, or delete individual telemetry records upon request.",
         "Complete Local Deletion: You can completely purge all local CalcVerse data at any time through Android System Settings: Settings → Apps → CalcVerse → Storage & Cache → Clear Storage."
       ]
     },
@@ -288,7 +293,7 @@
       ],
       "listItems": [
         "Android Application Sandbox: Local database files and preferences are stored exclusively within the private internal application directory (/data/data/com.fuzailverse.calcverse/), isolated by Linux UID permissions so other apps cannot inspect them.",
-        "Cleartext Traffic Strictly Prohibited: In AndroidManifest.xml, android:usesCleartextTraffic is set to \"false\", enforcing that any network communication initiated by third-party SDKs must use modern encrypted TLS/HTTPS.",
+        "Cleartext Traffic Policy: In AndroidManifest.xml, android:usesCleartextTraffic is explicitly configured as \"false\". This instructs the Android operating system's network security config to reject unencrypted HTTP traffic from standard system APIs and compliant networking libraries (such as OkHttp). While this attribute configures platform network components, it does not independently dictate low-level socket behaviors of non-compliant native code. CalcVerse integrates no custom HTTP clients or proprietary native network libraries; all outbound connections are strictly performed by official Google Firebase SDKs using modern encrypted TLS/HTTPS.",
         "Zero Custom Backend Exposure: CalcVerse does not maintain custom cloud servers, REST APIs, or cloud databases. There is no central server infrastructure containing your calculations that could be compromised.",
         "Realistic Security Disclaimer: While we enforce modern Android security best practices, no software or operating system can guarantee absolute invulnerability against device-level rooting, hardware compromise, or OS-level tampering."
       ]
@@ -347,4 +352,3 @@
     }
   ]
 }
-
