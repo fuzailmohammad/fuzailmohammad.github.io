@@ -15,6 +15,7 @@ import { ProjectDetail } from './components/ProjectDetail';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { TermsConditions } from './components/TermsConditions';
 import { QRScannerPrivacyPolicy } from './components/QRScannerPrivacyPolicy';
+import { CalcVersePrivacyPolicy } from './components/CalcVersePrivacyPolicy';
 
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
@@ -57,6 +58,8 @@ function App() {
           <Route path="/privacy-policy/*" element={<PrivacyPolicy />} />
           <Route path="/qr-scanner/privacy-policy" element={<QRScannerPrivacyPolicy />} />
           <Route path="/qr-scanner/privacy-policy/*" element={<QRScannerPrivacyPolicy />} />
+          <Route path="/calcverse/privacy-policy" element={<CalcVersePrivacyPolicy />} />
+          <Route path="/calcverse/privacy-policy/*" element={<CalcVersePrivacyPolicy />} />
           <Route path="/terms-and-conditions" element={<TermsConditions />} />
           <Route path="/terms-and-conditions/*" element={<TermsConditions />} />
           <Route path="/terms-conditions" element={<TermsConditions />} />

@@ -1,0 +1,350 @@
+{
+  "metadata": {
+    "title": "Privacy Policy",
+    "appName": "CalcVerse",
+    "packageName": "com.fuzailverse.calcverse",
+    "subtitle": "Application-Specific Privacy Policy for Android",
+    "effectiveDate": "8 November 2026",
+    "lastUpdated": "8 November 2026",
+    "contactEmail": "mohdfuzail.dev@gmail.com",
+    "canonicalUrl": "https://fuzailverse.pages.dev/calcverse/privacy-policy/",
+    "operatorName": "Mohammad Fuzail",
+    "developerBrand": "FuzailVerse"
+  },
+  "notice": "This privacy policy applies exclusively to the native Android application \"CalcVerse\" (package: com.fuzailverse.calcverse). It details our privacy-by-design architecture, on-device calculation operations, local data storage and backup rules, third-party diagnostic and telemetry SDKs, and the verified permissions declared in the release build.",
+  "sections": [
+    {
+      "id": "scope-and-identity",
+      "number": "1",
+      "title": "Scope and Application Identity",
+      "paragraphs": [
+        "This Privacy Policy specifically governs the native Android mobile application \"CalcVerse\" (Application ID / Package Name: com.fuzailverse.calcverse), developed and published by Mohammad Fuzail under the FuzailVerse brand (\"we\", \"us\", or \"our\").",
+        "This document outlines how CalcVerse handles calculation inputs, mathematical operations, local device storage, operating system permissions, and third-party diagnostic telemetry. For any inquiries regarding our privacy standards or data practices, contact us at mohdfuzail.dev@gmail.com.",
+        "This privacy policy applies exclusively to CalcVerse and does not extend to other applications, digital services, or websites published under the FuzailVerse brand (such as QR Scanner & Generator) or any external third-party services.",
+        "This document reflects the verified technical implementation of CalcVerse release build version 1.0.0 (versionCode 2) compiled for Android 14+ (targetSdk 37, minSdk 24)."
+      ]
+    },
+    {
+      "id": "core-privacy-principles",
+      "number": "2",
+      "title": "Core Privacy Principles",
+      "paragraphs": [
+        "CalcVerse is engineered around strict on-device computation and privacy-first architectural standards:"
+      ],
+      "listItems": [
+        "On-Device Calculation Architecture: All mathematical calculations, unit conversions, financial projections, and health metric calculations are executed 100% locally on your device hardware.",
+        "Zero Transmission of Calculation Data: Numeric entries, formulas, intermediate results, BMI values, loan amounts, and tax figures never leave your device and are never transmitted to FuzailVerse or remote servers.",
+        "No User Account Required: CalcVerse functions completely without user registration, sign-up forms, email credentials, social logins, or profile creation.",
+        "No Data Sale or Commercial Brokering: We do not sell, rent, monetize, or trade any user information, device identifiers, or usage logs with third parties or data brokers.",
+        "Transparent Diagnostic Telemetry: The application utilizes standard Google Firebase libraries solely to monitor technical stability, app crashes, and aggregate performance metrics, with advertising identifier collection explicitly disabled."
+      ]
+    },
+    {
+      "id": "standard-scientific-calculator",
+      "number": "3",
+      "title": "Standard and Scientific Calculator",
+      "paragraphs": [
+        "The Standard and Scientific Calculator modules process everyday arithmetic and advanced mathematical operations (including trigonometry, logarithms, powers, factorials, and constants).",
+        "Input & Evaluation Handling: When you type digits, operators, or scientific functions, the mathematical expression is evaluated locally in volatile system memory (RAM) using a custom mathematical evaluation engine with high-precision decimal representation (BigDecimal).",
+        "Real-Time State: Intermediate calculations and preview results are generated dynamically in memory as you type and are not written to disk until evaluated.",
+        "Local History Storage: Upon tapping the equal button (\"=\"), the evaluated expression and its result are recorded locally on your device to enable the calculation history feature.",
+        "Stored History Attributes: Stored history records contain only the expression string, result string, category (\"Standard\" or \"Scientific\"), timestamp, and favorite flag. Calculation expressions and results are never transmitted off your device."
+      ]
+    },
+    {
+      "id": "unit-converter",
+      "number": "4",
+      "title": "Unit Converter",
+      "paragraphs": [
+        "The Unit Converter allows you to convert measurement values across 12 distinct metric and imperial categories: Length, Area, Volume, Weight (Mass), Temperature, Speed, Time, Data Storage, Pressure, Energy, Power, and Angle.",
+        "Local Formulaic Conversion: All unit conversions are computed purely on-device using fixed mathematical conversion factors and exact decimal formulas. Conversion inputs and results remain strictly in volatile memory.",
+        "No External APIs or Network Requests: The Unit Converter operates completely offline and makes zero API calls or network connections to remote servers.",
+        "Currency Conversion Clarification: Live currency conversion and exchange-rate synchronization are temporarily disabled in this release. The application does not fetch currency market feeds or connect to financial rate APIs."
+      ]
+    },
+    {
+      "id": "bmi-calculator",
+      "number": "5",
+      "title": "BMI Calculator",
+      "paragraphs": [
+        "The BMI Calculator enables you to calculate Body Mass Index (BMI) by entering your height (centimeters), weight (kilograms), age, and gender.",
+        "Volatile In-Memory Processing: Your biometric inputs (height, weight, age, gender) and calculated BMI values exist solely within temporary UI memory (RAM) during your active session. They are immediately recomputed or cleared when you modify values or leave the screen.",
+        "No Disk Persistence: BMI inputs, categories, and healthy weight ranges are never saved to the local Room database, DataStore preferences, or device storage.",
+        "Zero External Transmission: None of the entered biometrics or results are transmitted to any server or third party.",
+        "Informational Medical Disclaimer: The BMI Calculator is provided strictly for educational and general fitness reference. It does not constitute medical advice, health diagnosis, or treatment recommendations, and does not serve as a clinical medical device."
+      ]
+    },
+    {
+      "id": "age-calculator",
+      "number": "6",
+      "title": "Age Calculator",
+      "paragraphs": [
+        "The Age Calculator computes your exact chronological age in years, months, and days, along with a detailed total duration breakdown (total months, weeks, days, hours, minutes, seconds), next birthday countdown, day of the week born, and astrological zodiac sign.",
+        "Processing Model: Date of birth (DOB) and reference target dates are selected locally and calculated entirely in volatile memory using native Android calendar APIs.",
+        "No Local Storage: Your date of birth is processed ephemerally and is not saved to any database, file, or preferences cache on your device.",
+        "Zero External Transmission: Dates entered in the Age Calculator are never sent to external servers or logged in diagnostic telemetry."
+      ]
+    },
+    {
+      "id": "gst-calculator",
+      "number": "7",
+      "title": "GST Calculator",
+      "paragraphs": [
+        "The GST Calculator computes Goods and Services Tax for financial transactions based on the entered base amount, tax rate percentage (standard 3%, 5%, 12%, 18%, 28% slabs, or custom rates), tax mode (GST Exclusive / GST Inclusive), and interstate transaction designation.",
+        "On-Device Calculation: Tax calculations derive the net amount, GST amount, gross total, and tax breakdown splits (CGST + SGST or IGST) entirely within local device memory.",
+        "No Financial Transactions: CalcVerse is purely an arithmetic calculator. It does not link to bank accounts, process payment cards, initiate financial transfers, or store invoices.",
+        "No Data Retention: Entered transaction amounts and tax calculations are processed ephemerally in RAM and are not written to device storage or transmitted to any external server."
+      ]
+    },
+    {
+      "id": "emi-calculator",
+      "number": "8",
+      "title": "EMI Calculator",
+      "paragraphs": [
+        "The EMI Calculator allows you to project monthly loan installments based on principal amount, annual interest rate, and loan tenure (in years or months), generating an estimated monthly amortization schedule.",
+        "Local Mathematical Processing: All EMI formulas, principal-versus-interest ratios, and monthly amortization installment schedules are generated locally on-device using standard financial math formulas.",
+        "No Persistence or Transmission: Loan amounts, interest figures, and schedule records exist only in transient memory during screen usage and are not stored in local databases or transmitted externally.",
+        "Financial Disclaimer: EMI calculations and amortization schedules are estimates intended solely for personal budgeting and illustrative purposes. They do not constitute a loan offer, pre-approval, credit guarantee, or professional financial advice."
+      ]
+    },
+    {
+      "id": "local-storage-and-history",
+      "number": "9",
+      "title": "Local Storage and Calculation History",
+      "paragraphs": [
+        "CalcVerse provides an on-device calculation history feature powered by an embedded SQLite database managed via Android Jetpack Room (database name: \"calcverse_db\", table: \"calculation_history\").",
+        "What Is Stored: Only completed Standard and Scientific calculations evaluated using the equal button (\"=\") are stored. Each record includes the mathematical expression, computed result, category, timestamp, and a favorite flag.",
+        "User History Management: You maintain total control over your calculation history directly within the app:"
+      ],
+      "listItems": [
+        "View & Search: Filter history entries by category (All, Standard, Scientific, etc.) or search specific expressions and results using the built-in search bar.",
+        "Favorites: Star calculations to keep them bookmarked in a dedicated Favorites view.",
+        "Individual Deletion: Delete any individual calculation record immediately by tapping its delete icon.",
+        "Clear All History: Purge the entire calculation history database in a single action.",
+        "Toggle History Display: In Settings, you can disable the \"Show History\" preference at any time.",
+        "Android Auto Backup Disabled: In AndroidManifest.xml, android:allowBackup is explicitly set to \"false\". The application completely opts out of Android Cloud Backup to Google Drive and device-to-device transfer. Your calculation history and preferences remain strictly confined to the private sandbox directory on your physical device and are never backed up to cloud servers."
+      ]
+    },
+    {
+      "id": "settings-and-preferences",
+      "number": "10",
+      "title": "Application Settings and Preferences",
+      "paragraphs": [
+        "To provide a personalized user experience, CalcVerse stores configuration preferences locally using Android Jetpack DataStore Preferences (\"calcverse_preferences.preferences_pb\") in your device’s private app sandbox.",
+        "Verified Locally Persisted Preferences in Current Release:"
+      ],
+      "listItems": [
+        "Theme Mode: Dark (Charcoal), Light (Clean White), or AMOLED (Pure Black).",
+        "Accent Color: Chosen interface accent color (Neon Green, Cyan, Amber, Purple, Rose, etc.).",
+        "Thousands Separator: Toggle to display comma separators for large numbers (default: enabled).",
+        "Decimal Precision: Custom decimal rounding precision (0 to 10 decimal places, default: 4).",
+        "Haptic Feedback: Vibration feedback on key presses (default: enabled).",
+        "Button Sound: Audible click sounds on key presses (default: disabled).",
+        "Auto Calculate: Live expression evaluation during typing (default: enabled).",
+        "Show History: Display history entry points and records (default: enabled).",
+        "Remember Last Calculator: Re-open the last active calculator upon app launch (default: disabled).",
+        "Favorite Calculators: Shortcut preferences for pinned calculator tools.",
+        "Recent Searches: The top 10 search queries entered in the home screen search bar (can be cleared in-app at any time)."
+      ]
+    },
+    {
+      "id": "firebase-analytics",
+      "number": "11",
+      "title": "Firebase Analytics and Usage Telemetry",
+      "paragraphs": [
+        "CalcVerse integrates Google Firebase Analytics (com.google.firebase:firebase-analytics:23.2.0) to understand application adoption, feature engagement, and overall software stability in aggregate.",
+        "Automatically Collected Telemetry: Firebase Analytics automatically records basic technical metrics, including app open events, session durations, device model, operating system version, app version, language preference, and coarse country/region location derived from IP address by Google servers.",
+        "Source Code Audit: The CalcVerse Kotlin source code does not log any custom calculation expressions, mathematical results, financial values, biometric metrics, or personal identifiers to Firebase Analytics.",
+        "Advertising ID Collection Disabled: In AndroidManifest.xml, the application explicitly declares: <meta-data android:name=\"google_analytics_adid_collection_enabled\" android:value=\"false\" />. This configuration turns off Google Advertising ID (AAID) collection, ensuring analytics telemetry cannot be tied to an advertising profile.",
+        "Data Handling: Telemetry is transmitted securely via HTTPS/TLS to Google infrastructure and is processed in accordance with Google’s Privacy Policy. Data is aggregated and cannot be used by FuzailVerse to identify individual users."
+      ]
+    },
+    {
+      "id": "firebase-crashlytics",
+      "number": "12",
+      "title": "Firebase Crashlytics and Performance Monitoring",
+      "paragraphs": [
+        "To ensure application reliability across diverse Android hardware, CalcVerse incorporates Firebase Crashlytics (com.google.firebase:firebase-crashlytics:20.0.6) and Firebase Performance Monitoring (com.google.firebase:firebase-perf:22.0.5).",
+        "Crash Diagnostics: In the event of an unexpected crash or application freeze, Crashlytics automatically collects technical diagnostic data, including stack traces, exception messages, device manufacturer and model, operating system version, memory status, and application build version at the time of failure.",
+        "Performance Metrics: Firebase Performance Monitoring measures app startup time and screen transition rendering to diagnose slow user experiences.",
+        "Zero Personal Identifiers: Source code inspection verifies that CalcVerse sets no custom user IDs, email keys, or calculation values in Crashlytics reports.",
+        "Data Retention: Crash diagnostic reports are transmitted securely over TLS to Google servers and retained in accordance with standard Firebase retention periods (up to 90 days for crash logs) before automatic deletion."
+      ]
+    },
+    {
+      "id": "advertising-and-monetization",
+      "number": "13",
+      "title": "Advertising and Monetization",
+      "paragraphs": [
+        "Verified Release Build State: CalcVerse is currently distributed as a completely free, ad-free application."
+      ],
+      "listItems": [
+        "No Displayed Advertisements: CalcVerse displays zero banner ads, interstitial pop-ups, native ads, or rewarded video advertisements.",
+        "No Active AdMob Integration: In app/build.gradle.kts, the Google Mobile Ads dependency is commented out and disabled. In CalcVerseApplication.kt, MobileAds.initialize() is commented out and inactive.",
+        "No UMP Consent Collection: Because advertisements are disabled, no Google User Messaging Platform (UMP) advertising consent SDK is active.",
+        "No In-App Purchases or Subscriptions: CalcVerse does not integrate the Google Play Billing library. All features and customization options are temporarily unlocked for all users without fees, subscriptions, or payment requirements.",
+        "Future Policy Update Guarantee: If advertising, monetization, or paid subscriptions are introduced in any future release, this Privacy Policy and the Google Play Data Safety declaration will be updated prior to publishing that update."
+      ]
+    },
+    {
+      "id": "android-permissions-summary",
+      "number": "14",
+      "title": "Android Permissions Summary",
+      "paragraphs": [
+        "The following table represents an exhaustive audit of all Android permissions declared in the verified release variant merged manifest (AndroidManifest.xml) of CalcVerse. The application declares zero hardware or sensitive runtime permissions for its core calculation features."
+      ],
+      "table": {
+        "headers": ["Permission", "Type / Level", "Technical Purpose & Usage"],
+        "rows": [
+          [
+            "android.permission.INTERNET",
+            "Normal (Install-Time)",
+            "Enables Firebase SDKs (Crashlytics, Analytics, Performance Monitoring) to securely transmit diagnostic error logs and aggregate telemetry over HTTPS. Not used for calculation features."
+          ],
+          [
+            "android.permission.ACCESS_NETWORK_STATE",
+            "Normal (Install-Time)",
+            "Allows Firebase SDKs to detect active network connectivity before attempting to transmit crash reports and analytics events."
+          ],
+          [
+            "android.permission.POST_NOTIFICATIONS",
+            "Runtime (API 33+)",
+            "Merged by the Firebase Cloud Messaging library (firebase-messaging). CalcVerse does not trigger notification permission prompts or display marketing notifications in this release."
+          ],
+          [
+            "android.permission.WAKE_LOCK",
+            "Normal (Install-Time)",
+            "Merged by Firebase Messaging / Play Services to allow transient CPU execution during internal background message dispatch without sleep interruptions."
+          ],
+          [
+            "com.google.android.c2dm.permission.RECEIVE",
+            "Signature / Normal",
+            "Merged by Firebase Messaging to support legacy Google Cloud-to-Device messaging delivery."
+          ],
+          [
+            "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE",
+            "Normal (Install-Time)",
+            "Merged by Google Play Services / Firebase Analytics to measure install attribution from the Google Play Store."
+          ],
+          [
+            "com.google.android.gms.permission.AD_ID",
+            "Normal (Install-Time)",
+            "Merged by Google Analytics dependencies. Note: Advertising ID collection is explicitly disabled in the manifest via google_analytics_adid_collection_enabled = false."
+          ],
+          [
+            "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+            "Normal (Install-Time)",
+            "Merged by Google Play Services for Android Privacy Sandbox attribution measurement on Android 13+."
+          ],
+          [
+            "android.permission.ACCESS_ADSERVICES_AD_ID",
+            "Normal (Install-Time)",
+            "Merged by Google Play Services for Android Privacy Sandbox attribution measurement."
+          ],
+          [
+            "com.fuzailverse.calcverse.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+            "Signature",
+            "Automatically generated by AndroidX Core and Startup libraries to secure internal broadcast receivers against inter-app eavesdropping."
+          ]
+        ]
+      }
+    },
+    {
+      "id": "categories-not-collected",
+      "number": "15",
+      "title": "Categories of Data Not Collected",
+      "paragraphs": [
+        "To ensure complete clarity regarding your privacy, CalcVerse distinguishes clearly between data processed locally, data saved on-device, and data transmitted externally:"
+      ],
+      "listItems": [
+        "Personal Identification: We do not collect names, email addresses, phone numbers, home addresses, or physical identity details.",
+        "Geographic Location: We do not request or access GPS location, fine location, coarse location, or cell-tower data.",
+        "Camera and Microphone: We do not declare, request, or use camera or microphone permissions.",
+        "Photos, Media, and Storage: We do not request broad storage permissions (READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, or READ_MEDIA_IMAGES) and cannot access your photos, videos, or documents.",
+        "Health & Medical Records: BMI calculations (height, weight, age, gender) are computed in volatile RAM only; we do not collect, store, or share health records.",
+        "Financial & Payment Credentials: GST and EMI calculations are computed in volatile RAM only; we do not collect or process bank account numbers, credit cards, or financial transaction logs.",
+        "User Accounts & Authentication: We do not maintain user databases, passwords, or authentication profiles.",
+        "Advertising Identifiers: We explicitly disable Google Advertising ID collection via manifest metadata."
+      ]
+    },
+    {
+      "id": "data-retention-and-deletion",
+      "number": "16",
+      "title": "Data Retention and Deletion",
+      "paragraphs": [
+        "Local Calculation History: Stored in the on-device SQLite database until you delete specific calculations, clear all history via the in-app history controls, or uninstall CalcVerse from your device.",
+        "Local Preferences: Retained in the on-device DataStore file until you reset app preferences or uninstall the application.",
+        "Android Cloud Backup: Because android:allowBackup=\"false\" is configured, local calculation history and preferences are excluded from Google Drive backups.",
+        "Third-Party Diagnostic Telemetry: Firebase Analytics retains aggregated event data for standard retention windows (typically up to 14 months). Firebase Crashlytics retains crash logs for up to 90 days before automatic deletion by Google. Because diagnostic telemetry is aggregated without personal identifiers, FuzailVerse cannot manually query or delete individual telemetry records.",
+        "Complete Local Deletion: You can completely purge all local CalcVerse data at any time through Android System Settings: Settings → Apps → CalcVerse → Storage & Cache → Clear Storage."
+      ]
+    },
+    {
+      "id": "security-safeguards",
+      "number": "17",
+      "title": "Security and Data Protection",
+      "paragraphs": [
+        "We implement rigorous defense-in-depth technical safeguards to protect your data:"
+      ],
+      "listItems": [
+        "Android Application Sandbox: Local database files and preferences are stored exclusively within the private internal application directory (/data/data/com.fuzailverse.calcverse/), isolated by Linux UID permissions so other apps cannot inspect them.",
+        "Cleartext Traffic Strictly Prohibited: In AndroidManifest.xml, android:usesCleartextTraffic is set to \"false\", enforcing that any network communication initiated by third-party SDKs must use modern encrypted TLS/HTTPS.",
+        "Zero Custom Backend Exposure: CalcVerse does not maintain custom cloud servers, REST APIs, or cloud databases. There is no central server infrastructure containing your calculations that could be compromised.",
+        "Realistic Security Disclaimer: While we enforce modern Android security best practices, no software or operating system can guarantee absolute invulnerability against device-level rooting, hardware compromise, or OS-level tampering."
+      ]
+    },
+    {
+      "id": "childrens-privacy",
+      "number": "18",
+      "title": "Children’s Privacy",
+      "paragraphs": [
+        "CalcVerse is a general-purpose mathematical calculation utility intended for general audiences. The application does not knowingly target, solicit, or collect personal data from children under the age of 13 (or the applicable legal age in your jurisdiction).",
+        "Because all calculations occur locally on-device without user registration, children may safely use the calculator without transmitting personal data. If you believe any personal information has inadvertently been submitted to us, contact mohdfuzail.dev@gmail.com and we will take immediate corrective action."
+      ]
+    },
+    {
+      "id": "user-rights-and-choices",
+      "number": "19",
+      "title": "User Rights and Choices",
+      "paragraphs": [
+        "CalcVerse respects your autonomy and provides direct in-app and system-level controls:"
+      ],
+      "listItems": [
+        "History Management: Delete individual calculation records or purge your entire calculation history with a single tap in the History screen.",
+        "Disable History: Turn off the \"Show History\" toggle in Settings to prevent calculation history from appearing.",
+        "Manage Preferences: Customize themes, accent colors, decimal precision, haptics, and sounds directly in Settings.",
+        "Clear Search Queries: Tap \"Clear\" in the home search view to remove your recent calculator search history.",
+        "Device Storage Reset: Erase all local preferences and databases instantly via Android Settings → Apps → CalcVerse → Storage → Clear Storage.",
+        "Permission Management: Review or revoke any optional permissions (such as notifications on Android 13+) via Android System Settings.",
+        "Direct Contact: Reach our privacy team at mohdfuzail.dev@gmail.com for any privacy inquiries, clarifications, or feedback."
+      ]
+    },
+    {
+      "id": "policy-changes",
+      "number": "20",
+      "title": "Changes to This Privacy Policy",
+      "paragraphs": [
+        "We may update this Privacy Policy from time to time to reflect modifications in application functionality, SDK updates, Android platform requirements, or applicable legal obligations.",
+        "When revisions are made, the \"Last Updated\" date at the top of this document will be revised accordingly. We encourage you to review this policy periodically.",
+        "Substantive updates regarding data processing or monetization will be posted directly to this canonical URL prior to the deployment of corresponding application releases."
+      ]
+    },
+    {
+      "id": "developer-contact",
+      "number": "21",
+      "title": "Developer Contact Information",
+      "paragraphs": [
+        "For any questions, concerns, or requests regarding this Privacy Policy or CalcVerse data practices, please contact us:"
+      ],
+      "listItems": [
+        "Developer / Publisher: Mohammad Fuzail",
+        "Brand: FuzailVerse",
+        "Application: CalcVerse",
+        "Application ID (Package Name): com.fuzailverse.calcverse",
+        "Privacy Email: mohdfuzail.dev@gmail.com",
+        "Publisher Website: https://fuzailverse.pages.dev/"
+      ]
+    }
+  ]
+}
+
